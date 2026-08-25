@@ -1,0 +1,4 @@
+interface:
+  display_name: "HW04 Playwright Automation"
+  short_description: "Build and review HW04 Playwright evidence"
+  default_prompt: "Use $hw04-playwright-automation to automate and document one HW04 EShop web feature."
