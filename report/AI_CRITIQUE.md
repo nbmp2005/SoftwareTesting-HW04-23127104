@@ -13,3 +13,5 @@ Trong bài tập này, tôi dùng [tên công cụ AI] để hỗ trợ phân t�
 - [ ] Nêu correction và verification thật.
 - [ ] Nêu nguyên tắc cộng tác rút ra.
 - [ ] 200–300 words theo cách đếm nhất quán; không còn placeholder.
+
+- Phần agent ban đầu hiểu sai đọc src code thay vì là blackbox testing
