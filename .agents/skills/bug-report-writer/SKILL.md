@@ -42,8 +42,8 @@ This skill is not a background process and cannot trigger merely because Playwri
 - Use the actual HTML report, trace, video, or log paths when available.
 - Record the reproduction timestamp from the real run or artifact. Do not substitute the current time unless the reproduction is happening now and the user confirms it.
 - Record reproducibility only from observed attempts, such as `3/3`. Never infer it from a single failure.
-- Use real SUT and test-repository commits obtained from the relevant repositories. Do not guess hashes.
-- Require a public GitHub Issue URL for a completed report. Creating an issue is an external action and requires explicit user authorization. If it is unavailable, keep the report as a clearly identified draft only when the user asks for a draft.
+- Use real SUT and test-repository commits obtained from the relevant repositories. Do not guess hashes. If a commit is not exposed by the black-box SUT or the run used a dirty worktree, record that exact limitation instead of blocking the local report.
+- A public GitHub Issue URL is optional for the local Markdown report. When a verified URL exists, record it. Otherwise write `Chưa tạo` and still append the confirmed bug. Never invent a URL or create an Issue without explicit user authorization.
 
 If the screenshot or product-defect triage is missing, pause and request the missing evidence instead of appending an entry.
 
@@ -56,7 +56,7 @@ If the screenshot or product-defect triage is missing, pause and request the mis
 5. Explain triage: isolated rerun, manual confirmation, cross-browser comparison when performed, and why script/data/environment causes were excluded.
 6. Replace the placeholder Summary row if it is still present, or append a new Summary row for the bug.
 7. Append the detailed section at the end of `report/BUG_REPORT.md` using the exact structure below.
-8. Re-read the appended entry and verify that every factual value is supported by evidence. Do not mark TODO fields as complete.
+8. Re-read the appended entry and verify that every factual value is supported by evidence. Replace unavailable GitHub Issue or commit values with explicit factual limitations such as `Chưa tạo` or `Không được SUT công khai trong artifact`; never leave ambiguous TODOs or invent values.
 
 ## Required format
 
@@ -71,7 +71,7 @@ If the screenshot or product-defect triage is missing, pause and request the mis
 | Environment/browser | [TODO] |
 | Severity / priority | [TODO + rationale] |
 | Reproducibility | [e.g. 3/3; do not guess] |
-| GitHub Issue | [TODO: public URL] |
+| GitHub Issue | [Public URL nếu có; nếu chưa có ghi `Chưa tạo`] |
 
 ### Preconditions
 
@@ -107,4 +107,4 @@ If the screenshot or product-defect triage is missing, pause and request the mis
 [TODO]
 ```
 
-For a final report, replace every TODO with verified information. A draft must be labeled `Draft — evidence incomplete` and must never be presented as a confirmed bug.
+For a final report, replace every TODO with verified information or an explicit verified limitation. `GitHub Issue: Chưa tạo` does not make an otherwise evidence-complete local bug report a draft. A draft is required only when product-defect evidence itself is incomplete.

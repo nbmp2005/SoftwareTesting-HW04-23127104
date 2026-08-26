@@ -1,4 +1,4 @@
 interface:
   display_name: "Bug Report Writer"
   short_description: "Append evidence-backed product bugs to BUG_REPORT.md"
-  default_prompt: "Review the latest completed Playwright run, triage every failure, and append only verified product bugs with real evidence to BUG_REPORT.md."
+  default_prompt: "Review the latest completed Playwright run, triage every failure, and append verified product bugs with real local evidence to BUG_REPORT.md; use 'Chưa tạo' when no GitHub Issue exists."
