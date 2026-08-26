@@ -46,33 +46,33 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 ### 2.3. Danh sách Test Case (≥12)
 
-| ID | Loại | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
-|---|---|---|---|---|---|
-| TC01 | Positive | Nhập email hợp lệ ở Bước 1 | email đã đăng ký | Hiện OTP + chuyển sang Bước 2 | ✅ |
-| TC02 | Positive | Nhập đúng OTP + mật khẩu hợp lệ + khớp | OTP đúng, pass hợp lệ | Đặt lại mật khẩu thành công | ✅ |
-| TC03 | Negative | Nhập email không tồn tại | email lạ | Báo lỗi email không tồn tại | ✅ |
-| TC04 | Negative | Nhập sai OTP | OTP sai | Báo lỗi OTP không hợp lệ | ✅ |
-| TC05 | Negative | Mật khẩu mới và xác nhận không khớp | pass1 ≠ pass2 | Báo lỗi không khớp | ✅ |
-| TC06 | Negative | Mật khẩu mới không đủ điều kiện (theo FR-01) | pass yếu | Báo lỗi validate | ✅ |
-| TC07 | Edge | Dùng OTP của email A cho email B | OTP chéo | Từ chối, báo lỗi | ✅ |
-| TC08 | Edge | Email để trống | "" | Báo lỗi bắt buộc nhập | ✅ |
-| TC09 | Edge | OTP hết hạn (nếu có cơ chế hết hạn) | OTP cũ | Báo lỗi hết hạn | ⬜ *(giải thích lý do không automate nếu có)* |
-| TC10 | Edge | Nhấn "Quay lại đăng nhập" ở Bước 1 | - | Điều hướng về trang login | ✅ |
-| TC11 | Positive | Kiểm tra Step Indicator hiển thị đúng "Bước 1/2" và "Bước 2/2" | - | Hiển thị đúng | ✅ |
-| TC12 | Negative | Nhập lại email không đúng định dạng | "abc" | Báo lỗi định dạng email | ✅ |
-
-*(Bổ sung thêm case nếu cần; đảm bảo tổng ≥12 và đủ 3 loại.)*
+| ID | Loại | Mô tả | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
+|---|---|---|---|---|---|---|
+| TC01 | Positive | Nhập email hợp lệ ở Bước 1 | Vào /forgot-password; Nhập email; Bấm Lấy mã OTP | `admin@test.com` | Gửi OTP thành công, chuyển sang Step 2 | ✅ |
+| TC02 | Positive | Nhập đúng OTP + mật khẩu mới hợp lệ | Vào Bước 2; Nhập OTP; Nhập pass mới mạnh; Xác nhận pass; Bấm Xác nhận | OTP đúng, pass: `Abc@12345` | Cập nhật mật khẩu thành công | ✅ |
+| TC03 | Positive | Bấm Quay lại đăng nhập | Vào /forgot-password; Bấm Quay lại đăng nhập | - | Chuyển về /login | ✅ |
+| TC04 | Positive | Kiểm tra Step Indicator | Vào /forgot-password; Quan sát UI | - | Hiển thị chữ Bước 1/2 | ✅ |
+| TC05 | Negative | Email không được để trống | Để trống email; Bấm Lấy mã OTP | `""` | Lỗi: Email không được để trống | ✅ |
+| TC06 | Negative | Email sai định dạng | Nhập "abc"; Bấm Lấy mã OTP | `"abc"` | Lỗi: Email không hợp lệ | ✅ |
+| TC07 | Negative | OTP sai | Vào Bước 2; Nhập OTP "000000"; Bấm Xác nhận | `"000000"` | Lỗi: OTP không chính xác | ✅ |
+| TC08 | Negative | Mật khẩu và xác nhận không khớp | Vào Bước 2; Nhập OTP; Pass 1 khác Pass 2 | Pass 2 ≠ Pass 1 | Lỗi: Mật khẩu không khớp | ✅ |
+| TC09 | Negative | Email không tồn tại (chưa đăng ký) | Nhập email lạ; Bấm Lấy mã OTP | `"notexist@test.com"` | Lỗi [Cần verify tay] | ✅ |
+| TC10 | Edge | Mật khẩu mới quá yếu (vi phạm FR-01) | Nhập pass "123" ở Bước 2 | `"123"` | Lỗi [Cần verify tay] | ✅ |
+| TC11 | Edge | Dùng OTP của email A cho email B | Đảo OTP giữa 2 quá trình | - | Lỗi [Cần verify tay] | ⬜ (Setup 2 luồng khó) |
+| TC12 | Edge | OTP hết hạn | Chờ 30 phút rồi nhập OTP | - | Lỗi [Cần verify tay] | ⬜ (Chờ thời gian lâu) |
+| TC13 | Edge | Nhập OTP không phải số | Nhập "abcdef" | `"abcdef"` | Lỗi hoặc bị chặn nhập | ✅ |
 
 ### 2.4. Data-driven test data
-- File: `automation/data/fr03-reset-password.json`
-- Loại dữ liệu: ...........................................
+- File: `automation/data/fr03-testcases-draft.json`
+- Loại dữ liệu: email, OTP, password (new & confirm), expected error/success messages
+- Import trong spec: `import testData from '../data/fr03-testcases-draft.json'`
 
 ### 2.5. Assertion patterns sử dụng (≥3 loại)
 | Loại assertion | Ví dụ dùng trong test |
 |---|---|
-| Visibility/state | ... |
-| Text/content | ... |
-| URL/navigation | ... |
+| Visibility/state | `await expect(page.getByPlaceholder('Nhập Email của bạn')).toBeVisible()` |
+| Text/content | `await expect(page.locator('body')).toContainText('OTP không chính xác')` |
+| URL/navigation | `await expect(page).toHaveURL(/login/)` |
 
 ### 2.6. Kết quả chạy multi-browser
 

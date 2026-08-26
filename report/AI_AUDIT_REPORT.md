@@ -486,3 +486,108 @@ description: Cấu hình Playwright chạy trên 3 trình duyệt (Chromium/Fire
 ```
 Đã đọc toàn bộ 8 file trong folder report/ để xác định mapping đầy đủ, sau đó cập nhật 3 skill với section "Ghi kết quả vào Report" mở rộng: (1) testcase-generator → thêm TEST_CASE_CATALOG.md (điền bảng catalog với cột Requirement/Technique/Preconditions/Cleanup/Automated spec/title). (2) playwright-script-writer → thêm TEST_CASE_CATALOG.md (cập nhật Status từ Planned→Scripted) + BUG_REPORT.md (nếu phát hiện potential bug khi review script, cần verify tay trước). (3) multibrowser-runner-report → thêm TEST_CASE_CATALOG.md (Scripted→Passed/Failed) + BUG_REPORT.md đầy đủ format (chỉ sau khi confirm bằng tay) + Gap Analysis trong MAIN_REPORT.md mục 2.7/3.7/4.7 + SUBMISSION_CHECKLIST.md (tick các mục sau khi hoàn thành mỗi FR).
 ```
+
+## Prompt 17
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T08:48:43+07:00
+- **Prompt:**
+```
+/ai-audit-logger hãy đọc lại toàn bộ đề và source, đối chiếu và kiểm tra từng agent xem làm đúng bước và update đúng file chưa
+```
+- **AI Output:**
+```
+Đã rà soát toàn bộ repo theo docs/02-per-fr-workflow.md và homework4.md. Kết quả: Các agent chỉ mới hoàn thành khâu chuẩn bị (Documentation templates + Agent Skills kit). Chưa có bước automation thực tế nào được chạy — thư mục automation/ trống, chưa có playwright.config.ts, chưa có docs/fr-context/. Bước tiếp theo: gọi fr-context-explorer để bắt đầu tiến trình thực tế cho 1 FR cụ thể.
+```
+
+## Prompt 18
+- **Name of the AI tool:** Claude Sonnet 4.6 (Thinking)
+- **Date/time:** 2026-08-26T08:52:24+07:00
+- **Prompt:**
+```
+/ai-audit-logger playwright.config.ts file này là gì, cập nhật thế nào, cập nhật lúc trước khi chạy fr hay trong lúc chạy fr
+```
+- **AI Output:**
+```
+Giải thích playwright.config.ts: file cấu hình trung tâm của Playwright (browser, URL, timeout, reporter). Cập nhật 1 lần duy nhất ở Bước 6 TRƯỚC khi chạy FR đầu tiên — dùng chung cho cả 3 FR, không cần tạo lại. Yêu cầu bắt buộc: tên project phải chứa "Run by: 23127104" + ISO timestamp để hiện trong HTML report.
+```
+
+## Prompt 20
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T09:04:21+07:00
+- **Prompt:**
+```
+/fr-context-explorer /ai-audit-logger  khám phá fr03; url: http://localhost:5173/; mô tả nghiệp vụ:  FR-03: Quên mật khẩu & Đặt lại mật khẩu (2 bước)
+Bước 1 — Lấy mã OTP:
+
+Người dùng nhập địa chỉ Email đã đăng ký.
+Hệ thống sinh mã OTP 6 chữ số ngẫu nhiên và gửi qua Email (trong môi trường demo: hiển thị trực tiếp trên màn hình).
+Giao diện phải hiển thị chỉ báo bước (Step Indicator) — ví dụ: "Bước 1 / 2".
+Có nút Quay lại đăng nhập.
+Bước 2 — Đặt lại mật khẩu:
+
+Người dùng nhập OTP, Mật khẩu mới, và Xác nhận mật khẩu mới.
+Mật khẩu mới phải tuân thủ điều kiện như FR-01.
+Hai trường mật khẩu phải khớp nhau.
+OTP chỉ hợp lệ cho email đã yêu cầu, không thể dùng cho email khác.
+```
+- **AI Output:**
+```
+Đã kích hoạt `fr-context-explorer`. Đã thử khám phá SUT bằng Playwright browser subagent nhưng gặp lỗi Playwright driver từ hệ thống. Sau đó đã thử viết local script (scrape.js) để chạy trên SUT. Dựa vào kết quả scrape thành công một phần và mô tả nghiệp vụ chi tiết của bạn, tôi đã tổng hợp thành công file `docs/fr-context/fr03-context.md`. File này chứa đầy đủ thông tin về URL, form fields (selector mẫu), rule nghiệp vụ đã xác nhận, và gợi ý test case. Bước tiếp theo, bạn có thể xem qua file context này và dùng `/testcase-generator` để sinh test case cho FR-03.
+```
+
+## Prompt 21
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T09:11:39+07:00
+- **Prompt:**
+```
+/testcase-generator /ai-audit-logger  fr3
+```
+- **AI Output:**
+```
+Đã hoàn thành sinh 13 test cases cho FR-03 (4 Positive, 5 Negative, 4 Edge) dựa trên `fr03-context.md`. Đã xuất file JSON draft vào `automation/data/fr03-testcases-draft.json` để chuẩn bị cho Playwright script writer. Đồng thời, đã cập nhật bảng Markdown trong `report/MAIN_REPORT.md` (Mục 2.3) và `report/TEST_CASE_CATALOG.md`. Có 2 test cases (TC11, TC12) thuộc dạng Edge được đánh dấu Không tự động hóa do yêu cầu luồng tương tác quá phức tạp hoặc chờ thời gian thực. Xin mời bạn review bảng Test Case, nếu đồng ý, hãy gọi `/playwright-script-writer` để sinh script tự động hóa.
+```
+
+## Prompt 22
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T09:11:39+07:00
+- **Prompt:**
+```
+  playwright-script-writer
+ hãy sinh Playwright script cho FR-03 dựa vào file json data và context
+```
+- **AI Output:**
+```
+✅ Đã sinh script cho FR-03:
+📄 Output: 
+
+fr03-forgot-password.spec.ts
+
+Tổng quan:
+
+Số test case tự động: 11 (bỏ qua 2 case manual: TC11, TC12)
+Loại assertion đã dùng: toBeVisible ✅ | toContainText ✅ | toHaveURL ✅
+Import 100% từ JSON: fr03-testcases-draft.json ✅
+playwright.config.ts đã cập nhật baseURL: http://localhost:5173 và tên project có Run by: 23127104 ✅
+⚠️ Self-review Checklist — Những điểm bạn PHẢI kiểm tra tay
+Rủi ro về Selector
+ .error, [class*="error"] — Selector generic; cần mở DevTools → kích hoạt lỗi → inspect phần tử chứa text lỗi → lấy đúng class/id thực tế và thay vào script
+ page.getByPlaceholder(/OTP/i) — Cần xác nhận placeholder thật của field OTP ở Bước 2 (chưa cào được từ DOM thực tế)
+ page.getByPlaceholder(/Xác nhận/i) — Tương tự
+Rủi ro về Assertion text
+ TC01: success message 'Gửi OTP thành công' — cần verify nguyên văn trên UI
+ TC02: success 'Cập nhật mật khẩu thành công' + redirect /login — verify thực tế
+ TC09, TC10, TC13: errorMessage đang là [Cần verify tay] — phải chạy tay, xem UI báo gì, rồi update file JSON và assertion
+Rủi ro về Logic
+ TC02 (happy path Bước 2): Hàm goToStep2() đọc OTP từ element trên màn hình demo; nếu SUT không có [data-testid="otp-display"] hay .otp-display, test sẽ timeout → phải cập nhật selector đúng sau khi xem DOM thực tế
+ TC05 (email rỗng): HTML5 required validation popup của browser không phải DOM element → toContainText sẽ không bắt được → có thể cần page.on('dialog') hoặc tắt native validation
+Case không automate
+ TC11: OTP cross-email — cần 2 luồng page riêng biệt
+ TC12: OTP hết hạn — time-dependent
+Bước tiếp theo (BẠN làm, không phải AI):
+
+Mở app http://localhost:5173/forgot-password → mở DevTools → kích hoạt từng lỗi → lấy đúng selector và text lỗi
+Update lại fr03-testcases-draft.json: điền errorMessage thật vào TC09, TC10, TC13
+Chạy thử: npx playwright test automation/tests/fr03-forgot-password.spec.ts --headed --project "chromium | Run by: 23127104"
+Xem lỗi nào fail → sửa selector/text
+Sau khi tất cả pass: npx playwright test automation/tests/fr03-forgot-password.spec.ts (chạy 3 browser)
+```

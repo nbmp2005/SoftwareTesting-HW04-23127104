@@ -1,0 +1,26 @@
+{
+  "name": "softwaretesting-hw04-23127104",
+  "version": "1.0.0",
+  "description": "**Student ID:** 23127104   **Student name:** [TODO]   **Class:** [TODO]   **Public repository:** [TODO: URL]   **Demo video:** [TODO: unlisted YouTube URL]   **Skill demo video:** [TODO: URL; may be the same video only if it fully demonstrates the skill requirement]",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nbmp2005/SoftwareTesting-HW04-23127104.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues"
+  },
+  "homepage": "https://github.com/nbmp2005/SoftwareTesting-HW04-23127104#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^26.3.0"
+  }
+}

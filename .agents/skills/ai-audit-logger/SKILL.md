@@ -24,3 +24,4 @@ Khi được người dùng gọi, Agent phải thực hiện các bước sau:
 1. **Thu thập**: Tổng hợp lại các prompt/output quan trọng trong phiên làm việc hiện tại (từ transcript hoặc context hiện tại).
 2. **Ghi log**: Định dạng các mục này theo Format bắt buộc ở trên và **chèn nối tiếp** (append) vào file `report/AI_AUDIT_REPORT.md`.
 3. **Cảnh báo**: Sau khi ghi xong, LUÔN nhắc nhở người dùng: "KHÔNG được để AI tự bịa timestamp — phải đảm bảo thời gian ghi nhận là thời gian thật của phiên làm việc."
+4. **Lưu ý**: Chỉ dùng skill /ai-audit-logger khi được người dùng gọi trong câu lệnh, không tự ý thêm các câu chat không được gọi skill này vào.

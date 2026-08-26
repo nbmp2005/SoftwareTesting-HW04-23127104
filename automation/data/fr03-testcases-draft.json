@@ -1,0 +1,281 @@
+[
+  {
+    "id": "TC01",
+    "type": "positive",
+    "description": "Nhập email hợp lệ ở Bước 1",
+    "steps": [
+      "Vào /forgot-password",
+      "Nhập email hợp lệ",
+      "Click nút Lấy mã OTP"
+    ],
+    "input": {
+      "email": "admin@test.com"
+    },
+    "expected": {
+      "message": "Gửi OTP thành công",
+      "behavior": "Chuyển sang Step 2, hiển thị Step Indicator Bước 1/2"
+    },
+    "automate": true,
+    "selector_hints": {
+      "email_field": "getByPlaceholder('Nhập Email của bạn')",
+      "submit_btn": "getByRole('button', { name: 'Lấy mã OTP' })"
+    }
+  },
+  {
+    "id": "TC02",
+    "type": "positive",
+    "description": "Nhập đúng OTP + mật khẩu mới hợp lệ",
+    "steps": [
+      "Vào Bước 2",
+      "Nhập OTP đúng",
+      "Nhập pass mới mạnh",
+      "Nhập xác nhận pass giống pass mới",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "123456",
+      "new_pass": "Abc@12345",
+      "confirm_pass": "Abc@12345"
+    },
+    "expected": {
+      "message": "Cập nhật mật khẩu thành công",
+      "behavior": "Chuyển về màn hình Login"
+    },
+    "automate": true,
+    "selector_hints": {
+      "otp_field": "getByPlaceholder(/OTP/i)",
+      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)",
+      "confirm_pass_field": "getByPlaceholder(/Xác nhận/i)",
+      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
+    }
+  },
+  {
+    "id": "TC03",
+    "type": "positive",
+    "description": "Bấm Quay lại đăng nhập",
+    "steps": [
+      "Vào /forgot-password",
+      "Click nút Quay lại đăng nhập"
+    ],
+    "input": {},
+    "expected": {
+      "behavior": "Chuyển về màn hình /login"
+    },
+    "automate": true,
+    "selector_hints": {
+      "back_btn": "getByRole('button', { name: /Quay lại/i })"
+    }
+  },
+  {
+    "id": "TC04",
+    "type": "positive",
+    "description": "Kiểm tra Step Indicator",
+    "steps": [
+      "Vào /forgot-password",
+      "Quan sát Step Indicator"
+    ],
+    "input": {},
+    "expected": {
+      "behavior": "Hiển thị chữ Bước 1/2 hoặc tương tự"
+    },
+    "automate": true,
+    "selector_hints": {
+      "indicator": "getByText(/Bước 1/i)"
+    }
+  },
+  {
+    "id": "TC05",
+    "type": "negative",
+    "description": "Email không được để trống",
+    "steps": [
+      "Vào /forgot-password",
+      "Để trống email",
+      "Click nút Lấy mã OTP"
+    ],
+    "input": {
+      "email": ""
+    },
+    "expected": {
+      "errorMessage": "Email không được để trống"
+    },
+    "automate": true,
+    "selector_hints": {
+      "email_field": "getByPlaceholder('Nhập Email của bạn')",
+      "submit_btn": "getByRole('button', { name: 'Lấy mã OTP' })"
+    }
+  },
+  {
+    "id": "TC06",
+    "type": "negative",
+    "description": "Email sai định dạng",
+    "steps": [
+      "Vào /forgot-password",
+      "Nhập email sai format",
+      "Click nút Lấy mã OTP"
+    ],
+    "input": {
+      "email": "abc"
+    },
+    "expected": {
+      "errorMessage": "Email không hợp lệ"
+    },
+    "automate": true,
+    "selector_hints": {
+      "email_field": "getByPlaceholder('Nhập Email của bạn')",
+      "submit_btn": "getByRole('button', { name: 'Lấy mã OTP' })"
+    }
+  },
+  {
+    "id": "TC07",
+    "type": "negative",
+    "description": "OTP sai",
+    "steps": [
+      "Vào Bước 2",
+      "Nhập OTP sai",
+      "Nhập pass mới và xác nhận",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "000000",
+      "new_pass": "Abc@12345",
+      "confirm_pass": "Abc@12345"
+    },
+    "expected": {
+      "errorMessage": "OTP không chính xác"
+    },
+    "automate": true,
+    "selector_hints": {
+      "otp_field": "getByPlaceholder(/OTP/i)",
+      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
+    }
+  },
+  {
+    "id": "TC08",
+    "type": "negative",
+    "description": "Mật khẩu và xác nhận không khớp",
+    "steps": [
+      "Vào Bước 2",
+      "Nhập OTP đúng",
+      "Nhập pass mới",
+      "Nhập xác nhận pass khác pass mới",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "123456",
+      "new_pass": "Abc@12345",
+      "confirm_pass": "Def@54321"
+    },
+    "expected": {
+      "errorMessage": "Mật khẩu không khớp"
+    },
+    "automate": true,
+    "selector_hints": {
+      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)",
+      "confirm_pass_field": "getByPlaceholder(/Xác nhận/i)",
+      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
+    }
+  },
+  {
+    "id": "TC09",
+    "type": "negative",
+    "description": "Email không tồn tại (chưa đăng ký)",
+    "steps": [
+      "Vào /forgot-password",
+      "Nhập email chưa đăng ký",
+      "Click nút Lấy mã OTP"
+    ],
+    "input": {
+      "email": "notexist@test.com"
+    },
+    "expected": {
+      "errorMessage": "[Cần verify tay]"
+    },
+    "automate": true,
+    "selector_hints": {
+      "email_field": "getByPlaceholder('Nhập Email của bạn')"
+    }
+  },
+  {
+    "id": "TC10",
+    "type": "edge",
+    "description": "Mật khẩu mới quá yếu (vi phạm FR-01)",
+    "steps": [
+      "Vào Bước 2",
+      "Nhập OTP đúng",
+      "Nhập pass mới yếu",
+      "Nhập xác nhận pass yếu",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "123456",
+      "new_pass": "123",
+      "confirm_pass": "123"
+    },
+    "expected": {
+      "errorMessage": "[Cần verify tay]"
+    },
+    "automate": true,
+    "selector_hints": {
+      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)"
+    }
+  },
+  {
+    "id": "TC11",
+    "type": "edge",
+    "description": "Dùng OTP của email A cho email B",
+    "steps": [
+      "Yêu cầu OTP cho email A",
+      "Yêu cầu OTP cho email B",
+      "Ở bước 2 của email B, nhập OTP của email A",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "email_A": "user1@test.com",
+      "email_B": "user2@test.com"
+    },
+    "expected": {
+      "errorMessage": "[Cần verify tay]"
+    },
+    "automate": false,
+    "manual_reason": "Cần setup 2 account liên tục trên 2 luồng trình duyệt khác nhau"
+  },
+  {
+    "id": "TC12",
+    "type": "edge",
+    "description": "OTP hết hạn",
+    "steps": [
+      "Yêu cầu OTP",
+      "Chờ 30 phút",
+      "Nhập OTP",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "123456"
+    },
+    "expected": {
+      "errorMessage": "[Cần verify tay]"
+    },
+    "automate": false,
+    "manual_reason": "Time-dependent, test chậm quá sẽ nghẽn CI/CD, nên bỏ qua automation"
+  },
+  {
+    "id": "TC13",
+    "type": "edge",
+    "description": "Nhập OTP không phải số",
+    "steps": [
+      "Vào Bước 2",
+      "Nhập OTP là chữ cái",
+      "Click Xác nhận"
+    ],
+    "input": {
+      "otp": "abcdef"
+    },
+    "expected": {
+      "errorMessage": "[Cần verify tay]"
+    },
+    "automate": true,
+    "selector_hints": {
+      "otp_field": "getByPlaceholder(/OTP/i)"
+    }
+  }
+]
