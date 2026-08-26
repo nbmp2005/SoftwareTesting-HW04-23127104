@@ -45,7 +45,7 @@
     "selector_hints": {
       "otp_field": "getByPlaceholder(/OTP/i)",
       "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)",
-      "confirm_pass_field": "getByPlaceholder(/Xác nhận/i)",
+      "confirm_pass_field": "getByPlaceholder('Đặt lại mật khẩu')",
       "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
     }
   },
@@ -64,23 +64,6 @@
     "automate": true,
     "selector_hints": {
       "back_btn": "getByRole('button', { name: /Quay lại/i })"
-    }
-  },
-  {
-    "id": "TC04",
-    "type": "positive",
-    "description": "Kiểm tra Step Indicator",
-    "steps": [
-      "Vào /forgot-password",
-      "Quan sát Step Indicator"
-    ],
-    "input": {},
-    "expected": {
-      "behavior": "Hiển thị chữ Bước 1/2 hoặc tương tự"
-    },
-    "automate": true,
-    "selector_hints": {
-      "indicator": "getByText(/Bước 1/i)"
     }
   },
   {

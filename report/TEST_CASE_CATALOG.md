@@ -9,7 +9,6 @@
 | FR03-01 | FR-03 (Bước 1) | Positive / EP | High | App running, user exists | TC01 | Vào /forgot-password, Nhập email, Submit | OTP displayed, redirect to Step2 | None | TC01 - Nhập email hợp lệ ở Bước 1 | Planned |
 | FR03-02 | FR-03 (Bước 2) | Positive | High | App running, user exists, has OTP | TC02 | Vào Bước 2, Nhập OTP, Nhập pass, Submit | Password updated, redirect to Login | None | TC02 - Nhập đúng OTP + mật khẩu mới hợp lệ | Planned |
 | FR03-03 | FR-03 (Bước 1) | Positive | Medium | App running | TC03 | Vào /forgot-password, Click Back | Redirect to /login | None | TC03 - Bấm Quay lại đăng nhập | Planned |
-| FR03-04 | FR-03 (Bước 1) | Positive | Low | App running | TC04 | Vào /forgot-password, View UI | Step Indicator "Bước 1/2" displayed | None | TC04 - Kiểm tra Step Indicator | Planned |
 | FR03-05 | FR-03 (Bước 1) | Negative / EP | High | App running | TC05 | Submit empty email | Error: Email không được để trống | None | TC05 - Email không được để trống | Planned |
 | FR03-06 | FR-03 (Bước 1) | Negative / EP | High | App running | TC06 | Submit invalid email format | Error: Email không hợp lệ | None | TC06 - Email sai định dạng | Planned |
 | FR03-07 | FR-03 (Bước 2) | Negative | High | App running, user exists | TC07 | Submit invalid OTP | Error: OTP không chính xác | None | TC07 - OTP sai | Planned |

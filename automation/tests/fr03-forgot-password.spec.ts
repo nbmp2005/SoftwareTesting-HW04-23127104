@@ -87,7 +87,7 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
 
     await page.getByPlaceholder(/OTP/i).fill(otpToUse);
     await page.getByPlaceholder(/Mật khẩu mới/i).fill(tc.input.new_pass);
-    await page.getByPlaceholder(/Xác nhận/i).fill(tc.input.confirm_pass);
+    await page.getByPlaceholder('Đặt lại mật khẩu').fill(tc.input.confirm_pass);
     await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
 
     // R2: Text/Content — success message
@@ -108,17 +108,6 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
 
     // R2: URL/Navigation — phải về /login
     await expect(page).toHaveURL(/login/);
-  });
-
-  test('TC04 - Kiểm tra Step Indicator hiển thị Bước 1/2', async ({ page }) => {
-    await page.goto('/forgot-password');
-
-    // R2: Visibility — Step Indicator phải xuất hiện (selector từ fr03-context.md mục 2)
-    const indicator = page.getByText(/Bước 1/i);
-    await expect(indicator).toBeVisible();
-
-    // R2: Text/Content — kiểm tra nội dung step indicator
-    await expect(indicator).toContainText(/1/);
   });
 
   // ── Bước 1: Negative ─────────────────────────
@@ -200,7 +189,7 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
 
     await page.getByPlaceholder(/OTP/i).fill(tc.input.otp); // '123456'
     await page.getByPlaceholder(/Mật khẩu mới/i).fill(tc.input.new_pass);     // Abc@12345
-    await page.getByPlaceholder(/Xác nhận/i).fill(tc.input.confirm_pass);      // Def@54321
+    await page.getByPlaceholder('Đặt lại mật khẩu').fill(tc.input.confirm_pass);   // Def@54321
     await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
 
     // R2: Visibility — error
@@ -222,7 +211,7 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
     // Dùng OTP đúng (lấy từ màn hình) — placeholder: '123456'
     await page.getByPlaceholder(/OTP/i).fill(tc.input.otp);
     await page.getByPlaceholder(/Mật khẩu mới/i).fill(tc.input.new_pass); // '123'
-    await page.getByPlaceholder(/Xác nhận/i).fill(tc.input.confirm_pass);  // '123'
+    await page.getByPlaceholder('Đặt lại mật khẩu').fill(tc.input.confirm_pass);  // '123'
     await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
 
     // R2: Visibility — error phải hiện (vi phạm rule mật khẩu)

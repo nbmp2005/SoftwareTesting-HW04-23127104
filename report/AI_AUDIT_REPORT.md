@@ -591,3 +591,23 @@ Chạy thử: npx playwright test automation/tests/fr03-forgot-password.spec.ts 
 Xem lỗi nào fail → sửa selector/text
 Sau khi tất cả pass: npx playwright test automation/tests/fr03-forgot-password.spec.ts (chạy 3 browser)
 ```
+
+## Prompt 23
+- **Name of the AI tool:** Claude Sonnet 4.6 (Thinking)
+- **Date/time:** 2026-08-26T09:49:08+07:00
+- **Prompt:**
+```
+/ai-audit-logger context tôi phát hiện fr03-context bị sai một vài chỗ, hãy sửa lại giúp tôi file fr3-context và sửa luôn những file liên quan (test case và spec.ts và các file trong folder reports)
+ 1. Trên màn hình chính không có 2 dòng này (Back to Login và Step Indicator)
+ 2. Xác nhận mật khẩu placeholder thực tế là 'Đặt lại mật khẩu'
+ 3. giao diện chính không hiện số bước — RULE-02 sai
+```
+- **AI Output:**
+```
+Đã sửa 5 file liên quan:
+1. docs/fr-context/fr03-context.md: xóa 2 dòng Back to Login và Step Indicator khỏi Form Bước 1, sửa placeholder Xác nhận mật khẩu thành 'Đặt lại mật khẩu', cập nhật RULE-02 thành ❌ Không xác nhận.
+2. automation/tests/fr03-forgot-password.spec.ts: xóa test TC04 (Step Indicator), cập nhật tất cả getByPlaceholder(/Xác nhận/i) → getByPlaceholder('Đặt lại mật khẩu').
+3. automation/data/fr03-testcases-draft.json: xóa TC04 object, cập nhật confirm_pass_field selector.
+4. report/MAIN_REPORT.md: xóa dòng TC04 khỏi bảng danh sách test case.
+5. report/TEST_CASE_CATALOG.md: xóa dòng FR03-04.
+```

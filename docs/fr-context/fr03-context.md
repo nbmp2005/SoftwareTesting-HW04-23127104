@@ -9,10 +9,10 @@
 
 ## 1. Danh sách URL & màn hình liên quan
 
-| URL | Mô tả màn hình | Screenshot |
-|---|---|---|
-| `/forgot-password` | Form nhập email bước 1 (Lấy mã OTP) | screenshot-step1.png |
-| `/forgot-password` | Form nhập OTP + mật khẩu mới (Bước 2) | screenshot-step2.png |
+| URL | Mô tả màn hình |
+|---|---|
+| `/forgot-password` | Form nhập email bước 1 (Lấy mã OTP) |
+| `/forgot-password` | Form nhập OTP + mật khẩu mới (Bước 2) | 
 
 ---
 
@@ -24,8 +24,8 @@
 |---|---|---|---|---|---|
 | Email | `getByPlaceholder('Nhập Email của bạn')` | email/text | `Nhập Email của bạn` | ✅ | Định dạng email hợp lệ |
 | Submit | `getByRole('button', { name: 'Lấy mã OTP' })` | submit | — | — | — |
-| Back to Login | `getByRole('button', { name: /Quay lại/i })` | button | — | — | Trở về trang login |
-| Step Indicator | `getByText(/Bước 1/i)` | text | — | — | Hiển thị Bước 1 |
+
+> ⚠️ Ghi chú: Không có nút "Quay lại đăng nhập" hay Step Indicator trên giao diện thực tế (đã xác nhận bởi người dùng).
 
 ### Form: Đặt lại mật khẩu (Bước 2)
 
@@ -33,7 +33,7 @@
 |---|---|---|---|---|---|
 | OTP | `getByPlaceholder(/OTP/i)` | text | — | ✅ | Độ dài 6 chữ số |
 | Mật khẩu mới | `getByPlaceholder(/Mật khẩu mới/i)` | password | — | ✅ | Tuân thủ FR-01 |
-| Xác nhận mật khẩu | `getByPlaceholder(/Xác nhận/i)` | password | — | ✅ | Phải khớp với Mật khẩu mới |
+| Xác nhận mật khẩu | `getByPlaceholder('Đặt lại mật khẩu')` | password | `Đặt lại mật khẩu` | ✅ | Phải khớp với Mật khẩu mới |
 | Submit | `getByRole('button', { name: /Xác nhận|Lưu/i })` | submit | — | — | — |
 
 ---
@@ -43,7 +43,7 @@
 | Rule ID | Mô tả rule | Bằng chứng (URL + hành động thực hiện) | Mức độ chắc chắn |
 |---|---|---|---|
 | RULE-01 | Email lấy OTP phải là email đã đăng ký trong hệ thống | User provided | ✅ Xác nhận |
-| RULE-02 | Giao diện phải hiển thị chỉ báo bước (VD: "Bước 1 / 2") | User provided | ✅ Xác nhận |
+| RULE-02 | ~~Giao diện phải hiển thị chỉ báo bước (VD: "Bước 1 / 2")~~ | Người dùng xác nhận: UI thực tế KHÔNG hiển thị step indicator | ❌ Không xác nhận |
 | RULE-03 | Hệ thống sinh mã OTP 6 chữ số ngẫu nhiên và hiển thị trên màn hình demo | User provided | ✅ Xác nhận |
 | RULE-04 | Hai trường mật khẩu (mật khẩu mới và xác nhận) phải khớp nhau | User provided | ✅ Xác nhận |
 | RULE-05 | OTP chỉ hợp lệ cho email đã yêu cầu | User provided | ✅ Xác nhận |
@@ -84,7 +84,7 @@
 
 ## 7. Gợi ý test case từ khám phá
 
-- TC: Nhập email hợp lệ → hiển thị OTP và chuyển sang Bước 2, có Step Indicator
+- TC: Nhập email hợp lệ → hiển thị OTP và chuyển sang Bước 2
 - TC: Nhập email sai định dạng (VD "abc") → báo lỗi
 - TC: Để trống email → báo lỗi yêu cầu nhập
 - TC: Đặt lại pass thành công với OTP đúng và pass hợp lệ
