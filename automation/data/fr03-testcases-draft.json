@@ -9,11 +9,10 @@
       "Click nút Lấy mã OTP"
     ],
     "input": {
-      "email": "admin@test.com"
+      "email": "admin@eshop.com"
     },
     "expected": {
-      "message": "Gửi OTP thành công",
-      "behavior": "Chuyển sang Step 2, hiển thị Step Indicator Bước 1/2"
+      "behavior": "Chuyển sang Bước 2"
     },
     "automate": true,
     "selector_hints": {

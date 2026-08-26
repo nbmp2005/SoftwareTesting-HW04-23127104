@@ -625,3 +625,52 @@ Sau khi tất cả pass: npx playwright test automation/tests/fr03-forgot-passwo
 ```
 Đã sửa TypeScript error (ts2352) trong spec.ts: đổi kiểu `input` từ `Record<string, string>` thành `Record<string, string | undefined>` để tương thích với các TC có input field optional. Đồng thời cập nhật 4 chỗ trong spec.ts: (1) TC07 đổi getByPlaceholder(/Xác nhận/i) → getByPlaceholder('Đặt lại mật khẩu'); (2) TC09 thêm assertion toContainText('Lỗi: User not found'); (3) TC10 thêm assertion toContainText với error message đã xác nhận; (4) TC13 đơn giản hóa logic thành toContainText('OTP phải là số'). Cập nhật expected result trong MAIN_REPORT.md (5 dòng TC09-TC13) và TEST_CASE_CATALOG.md (5 dòng FR03-09 đến FR03-13) với error message thực tế đã xác nhận.
 ```
+
+## Prompt 25
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T10:16:11+07:00
+- **Prompt:**
+```
+Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.ts(2345) file spec.ts còn lỗi đỏ, hãy sửa lại giúp tôi
+[kèm log lỗi fail của playwright]
+```
+- **AI Output:**
+```
+Đã khắc phục hoàn toàn lỗi đỏ TypeScript bằng cách thêm toán tử nullish coalescing (`?? ''`) vào tất cả các tham số truyền vào hàm `fill()`. Đồng thời, đã điều tra DOM thực tế và sửa các test fail (timeout): 
+1. `getByPlaceholder('Nhập Email của bạn')` timeout vì UI thực tế dùng `<label>` text nhưng không có liên kết for/id, và thẻ `<input>` không có thuộc tính placeholder. Đã sửa thành `page.locator('input[type="text"]')`.
+2. Sửa TC03 "Bấm Quay lại đăng nhập" từ việc tìm nút "Quay lại" thành việc bấm vào thẻ link `<a>Đăng nhập</a>` trên header.
+3. TC05 lỗi `locator('.error')` không hiển thị vì hệ thống dùng HTML5 validation (`required`) native của trình duyệt. Đã sửa test để lấy validity state thông qua `evaluate(el => !el.validity.valid)`.
+Lưu ý: API Backend localhost:3000 hiện tại luôn trả về 404 "User not found" với tất cả các email test, do đó app không bao giờ đi tới được màn hình Bước 2 (OTP). Các TC Bước 2 vẫn sẽ thất bại vì lý do từ Backend.
+```
+
+## Prompt 26
+- **Name of the AI tool:** Gemini 3.1 Pro (High)
+- **Date/time:** 2026-08-26T11:30:12+07:00
+- **Prompt:**
+```
+[$multibrowser-runner-report](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\multibrowser-runner-report\SKILL.md) fr3
+```
+- **AI Output:**
+````
+Đã cấu hình multi-browser cho FR-03:
+- [playwright.config.ts (line 4)](C:/Users/cpshc/Y3/SoftwareTesting/SoftwareTesting-HW04/SoftwareTesting-HW04-23127104/playwright.config.ts:4): Chromium, Firefox, WebKit; có MSSV, ISO timestamp, screenshot/trace/video.
+- [package.json (line 10)](C:/Users/cpshc/Y3/SoftwareTesting/SoftwareTesting-HW04/SoftwareTesting-HW04-23127104/package.json:10): thêm các script chạy test và xem report.
+- Kiểm tra --list thành công: 10 testcase × 3 browser = 30 lượt.
+Theo ràng buộc anti-cheat, mình không chạy test và không sinh report. Bạn tự chạy:
+npm run test:fr03
+npm run report
+Sau đó xác nhận HTML report hiển thị Run by: 23127104 | <ISO timestamp> và cập nhật số Pass/Fail thật vào báo cáo. AI_AUDIT_REPORT.md chưa được ghi thêm vì skill audit yêu cầu bạn gọi trực tiếp /ai-audit-logger.
+````
+
+## Prompt 27
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T15:56:56.1316443+07:00
+- Prompt: 
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) cái này sai ở đâu vậy
+```
+- AI Output: 
+```
+TC02 đã chuyển được sang Bước 2 nhưng timeout vì script dùng getByPlaceholder(/OTP/i), trong khi ô OTP thực tế không có placeholder/accessibility name. Helper cũng tìm OTP bằng các selector không tồn tại nên không lấy được mã 4 số đang hiển thị. Các locator tiếp theo tiếp tục lệch UI: ô mật khẩu không có placeholder, không có trường xác nhận mật khẩu, và nút submit thực tế tên "Đặt lại mật khẩu" thay vì "Xác nhận/Lưu". Đây là lỗi test script/selector, chưa phải product bug.
+```

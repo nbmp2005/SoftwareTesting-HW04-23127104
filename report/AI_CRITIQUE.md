@@ -15,3 +15,6 @@ Trong bài tập này, tôi dùng [tên công cụ AI] để hỗ trợ phân t�
 - [ ] 200–300 words theo cách đếm nhất quán; không còn placeholder.
 
 - Phần agent ban đầu hiểu sai đọc src code thay vì là blackbox testing
+- Dù đã cho sẵn data nhưng test script vẫn tự chế, sai data email
+- Vì web sai nhiều (mô tả nghiệp vụ trong readme và tự học trên màn hình) nên test script khá confuse, dẫn đến test script viết sai nhiều nơi
+- Có nhiều chỗ box cần verify lại

@@ -48,7 +48,7 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | ID | Loại | Mô tả | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
 |---|---|---|---|---|---|---|
-| TC01 | Positive | Nhập email hợp lệ ở Bước 1 | Vào /forgot-password; Nhập email; Bấm Lấy mã OTP | `admin@test.com` | Gửi OTP thành công, chuyển sang Step 2 | ✅ |
+| TC01 | Positive | Nhập email hợp lệ ở Bước 1 | Vào /forgot-password; Nhập email; Bấm Lấy mã OTP | `admin@eshop.com` | Chuyển sang Bước 2 | ✅ |
 | TC02 | Positive | Nhập đúng OTP + mật khẩu mới hợp lệ | Vào Bước 2; Nhập OTP; Nhập pass mới mạnh; Xác nhận pass; Bấm Xác nhận | OTP đúng, pass: `Abc@12345` | Cập nhật mật khẩu thành công | ✅ |
 | TC03 | Positive | Bấm Quay lại đăng nhập | Vào /forgot-password; Bấm Quay lại đăng nhập | - | Chuyển về /login | ✅ |
 | TC05 | Negative | Email không được để trống | Để trống email; Bấm Lấy mã OTP | `""` | Lỗi: Email không được để trống | ✅ |
