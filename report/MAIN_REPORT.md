@@ -55,11 +55,11 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | TC06 | Negative | Email sai định dạng | Nhập "abc"; Bấm Lấy mã OTP | `"abc"` | Lỗi: Email không hợp lệ | ✅ |
 | TC07 | Negative | OTP sai | Vào Bước 2; Nhập OTP "000000"; Bấm Xác nhận | `"000000"` | Lỗi: OTP không chính xác | ✅ |
 | TC08 | Negative | Mật khẩu và xác nhận không khớp | Vào Bước 2; Nhập OTP; Pass 1 khác Pass 2 | Pass 2 ≠ Pass 1 | Lỗi: Mật khẩu không khớp | ✅ |
-| TC09 | Negative | Email không tồn tại (chưa đăng ký) | Nhập email lạ; Bấm Lấy mã OTP | `"notexist@test.com"` | Lỗi [Cần verify tay] | ✅ |
-| TC10 | Edge | Mật khẩu mới quá yếu (vi phạm FR-01) | Nhập pass "123" ở Bước 2 | `"123"` | Lỗi [Cần verify tay] | ✅ |
-| TC11 | Edge | Dùng OTP của email A cho email B | Đảo OTP giữa 2 quá trình | - | Lỗi [Cần verify tay] | ⬜ (Setup 2 luồng khó) |
-| TC12 | Edge | OTP hết hạn | Chờ 30 phút rồi nhập OTP | - | Lỗi [Cần verify tay] | ⬜ (Chờ thời gian lâu) |
-| TC13 | Edge | Nhập OTP không phải số | Nhập "abcdef" | `"abcdef"` | Lỗi hoặc bị chặn nhập | ✅ |
+| TC09 | Negative | Email không tồn tại (chưa đăng ký) | Nhập email lạ; Bấm Lấy mã OTP | `"notexist@test.com"` | Lỗi: `Lỗi: User not found` | ✅ |
+| TC10 | Edge | Mật khẩu mới quá yếu (vi phạm FR-01) | Nhập pass "123" ở Bước 2 | `"123"` | Lỗi: `Mật khẩu quá yếu! Phải dài tối thiểu 8 ký tự...` | ✅ |
+| TC11 | Edge | Dùng OTP của email A cho email B | Đảo OTP giữa 2 quá trình | - | Lỗi: `Sai otp` | ⬜ (Setup 2 luồng khó) |
+| TC12 | Edge | OTP hết hạn | Chờ 30 phút rồi nhập OTP | - | Lỗi: `OTP hết hạn` | ⬜ (Chờ thời gian lâu) |
+| TC13 | Edge | Nhập OTP không phải số | Nhập "abcdef" | `"abcdef"` | Lỗi: `OTP phải là số` | ✅ |
 
 ### 2.4. Data-driven test data
 - File: `automation/data/fr03-testcases-draft.json`

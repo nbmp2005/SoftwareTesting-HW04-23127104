@@ -611,3 +611,17 @@ Sau khi tất cả pass: npx playwright test automation/tests/fr03-forgot-passwo
 4. report/MAIN_REPORT.md: xóa dòng TC04 khỏi bảng danh sách test case.
 5. report/TEST_CASE_CATALOG.md: xóa dòng FR03-04.
 ```
+
+## Prompt 24
+- **Name of the AI tool:** Claude Sonnet 4.6 (Thinking)
+- **Date/time:** 2026-08-26T10:01:49+07:00
+- **Prompt:**
+```
+/ai-audit-logger 
+1. tôi mới sửa lại một số chỗ ở test case, hãy cập nhật những file liên quan (trong report và spec.ts)
+2. trong file spec.ts cũng đang có lỗi, hãy sửa lại
+```
+- **AI Output:**
+```
+Đã sửa TypeScript error (ts2352) trong spec.ts: đổi kiểu `input` từ `Record<string, string>` thành `Record<string, string | undefined>` để tương thích với các TC có input field optional. Đồng thời cập nhật 4 chỗ trong spec.ts: (1) TC07 đổi getByPlaceholder(/Xác nhận/i) → getByPlaceholder('Đặt lại mật khẩu'); (2) TC09 thêm assertion toContainText('Lỗi: User not found'); (3) TC10 thêm assertion toContainText với error message đã xác nhận; (4) TC13 đơn giản hóa logic thành toContainText('OTP phải là số'). Cập nhật expected result trong MAIN_REPORT.md (5 dòng TC09-TC13) và TEST_CASE_CATALOG.md (5 dòng FR03-09 đến FR03-13) với error message thực tế đã xác nhận.
+```

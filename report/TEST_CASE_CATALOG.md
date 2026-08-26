@@ -13,11 +13,11 @@
 | FR03-06 | FR-03 (Bước 1) | Negative / EP | High | App running | TC06 | Submit invalid email format | Error: Email không hợp lệ | None | TC06 - Email sai định dạng | Planned |
 | FR03-07 | FR-03 (Bước 2) | Negative | High | App running, user exists | TC07 | Submit invalid OTP | Error: OTP không chính xác | None | TC07 - OTP sai | Planned |
 | FR03-08 | FR-03 (Bước 2) | Negative | High | App running, user exists | TC08 | Submit mismatched passwords | Error: Mật khẩu không khớp | None | TC08 - Mật khẩu và xác nhận không khớp | Planned |
-| FR03-09 | FR-03 (Bước 1) | Negative | High | App running | TC09 | Submit unregistered email | Error: Email không tồn tại | None | TC09 - Email không tồn tại (chưa đăng ký) | Planned |
-| FR03-10 | FR-03 (Bước 2) | Edge / BVA | High | App running, user exists | TC10 | Submit weak password | Validation error | None | TC10 - Mật khẩu mới quá yếu (vi phạm FR-01) | Planned |
-| FR03-11 | FR-03 (Bước 2) | Edge | Low | 2 active users | TC11 | Use OTP of User A for User B | Error displayed | None | Không tự động hóa | Planned |
-| FR03-12 | FR-03 (Bước 2) | Edge | Low | User requested OTP | TC12 | Wait 30m, submit OTP | Error displayed | None | Không tự động hóa | Planned |
-| FR03-13 | FR-03 (Bước 2) | Edge | Medium | App running, user exists | TC13 | Input alphabetic characters in OTP | Error or blocked | None | TC13 - Nhập OTP không phải số | Planned |
+| FR03-09 | FR-03 (Bước 1) | Negative | High | App running | TC09 | Submit unregistered email | Error: `Lỗi: User not found` | None | TC09 - Email không tồn tại (chưa đăng ký) | Planned |
+| FR03-10 | FR-03 (Bước 2) | Edge / BVA | High | App running, user exists | TC10 | Submit weak password | Error: `Mật khẩu quá yếu!...` | None | TC10 - Mật khẩu mới quá yếu (vi phạm FR-01) | Planned |
+| FR03-11 | FR-03 (Bước 2) | Edge | Low | 2 active users | TC11 | Use OTP of User A for User B | Error: `Sai otp` | None | Không tự động hóa | Planned |
+| FR03-12 | FR-03 (Bước 2) | Edge | Low | User requested OTP | TC12 | Wait 30m, submit OTP | Error: `OTP hết hạn` | None | Không tự động hóa | Planned |
+| FR03-13 | FR-03 (Bước 2) | Edge | Medium | App running, user exists | TC13 | Input alphabetic characters in OTP | Error: `OTP phải là số` | None | TC13 - Nhập OTP không phải số | Planned |
 
 ## Coverage review
 

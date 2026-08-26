@@ -9,7 +9,7 @@ interface TestCase {
   type: 'positive' | 'negative' | 'edge';
   description: string;
   steps: string[];
-  input: Record<string, string>;
+  input: Record<string, string | undefined>;
   expected: {
     message?: string;
     errorMessage?: string;
@@ -156,8 +156,8 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
     const errorLocator = page.locator('.error, [class*="error"], [class*="Error"]').first();
     await expect(errorLocator).toBeVisible();
 
-    // ⚠️ expected.errorMessage = "[Cần verify tay]" — assertion text sẽ được update sau khi verify tay
-    // Hiện tại chỉ kiểm tra sự tồn tại của error, không kiểm tra text chính xác
+    // R2: Text/Content — nguyên văn đã được xác nhận: "Lỗi: User not found"
+    await expect(page.locator('body')).toContainText(tc.expected.errorMessage!);
   });
 
   // ── Bước 2: Negative ─────────────────────────
@@ -168,9 +168,9 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
     // Tiền điều kiện: sang Bước 2
     await goToStep2(page, 'admin@test.com');
 
-    await page.getByPlaceholder(/OTP/i).fill(tc.input.otp); // '000000'
-    await page.getByPlaceholder(/Mật khẩu mới/i).fill(tc.input.new_pass);
-    await page.getByPlaceholder(/Xác nhận/i).fill(tc.input.confirm_pass);
+    await page.getByPlaceholder(/OTP/i).fill(tc.input.otp ?? ''); // '000000'
+    await page.getByPlaceholder(/Mật khẩu mới/i).fill(tc.input.new_pass ?? '');
+    await page.getByPlaceholder('Đặt lại mật khẩu').fill(tc.input.confirm_pass ?? '');
     await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
 
     // R2: Visibility — error phải hiện
@@ -218,31 +218,25 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
     const errorLocator = page.locator('.error, [class*="error"], [class*="Error"]').first();
     await expect(errorLocator).toBeVisible();
 
-    // ⚠️ expected.errorMessage = "[Cần verify tay]" — cần xác nhận rule FR-01 rồi update text
+    // R2: Text/Content — nguyên văn đã được xác nhận
+    await expect(page.locator('body')).toContainText(tc.expected.errorMessage!);
   });
 
   test('TC13 - Nhập OTP không phải số', async ({ page }) => {
-    const tc = typedData.find(t => t.id === 'TC13')!;
+    const tc = (typedData as any).find((t: any) => t.id === 'TC13')!;
 
     // Tiền điều kiện: sang Bước 2
     await goToStep2(page, 'admin@test.com');
 
-    await page.getByPlaceholder(/OTP/i).fill(tc.input.otp); // 'abcdef'
+    await page.getByPlaceholder(/OTP/i).fill(tc.input.otp ?? ''); // 'abcdef'
     await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
 
-    // R2: Visibility — hoặc field bị block nhập (không có text 'abcdef'), hoặc hiện error
-    // Kiểm tra: field không có value 'abcdef' NẾU SUT chặn input non-numeric
-    const otpField = page.getByPlaceholder(/OTP/i);
-    const fieldValue = await otpField.inputValue();
+    // R2: Visibility — error phải hiện (OTP không phải số)
+    const errorLocator = page.locator('.error, [class*="error"], [class*="Error"]').first();
+    await expect(errorLocator).toBeVisible();
 
-    if (fieldValue !== tc.input.otp) {
-      // SUT chặn ký tự non-numeric → PASS
-      expect(fieldValue).not.toBe('abcdef');
-    } else {
-      // SUT không chặn → phải có error khi submit
-      const errorLocator = page.locator('.error, [class*="error"], [class*="Error"]').first();
-      await expect(errorLocator).toBeVisible();
-    }
+    // R2: Text/Content — nguyên văn đã xác nhận: "OTP phải là số"
+    await expect(page.locator('body')).toContainText(tc.expected.errorMessage!);
   });
 
   // ── TC11, TC12: Manual (automate: false, bỏ qua) ──────────
