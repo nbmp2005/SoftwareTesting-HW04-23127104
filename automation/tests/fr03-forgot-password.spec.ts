@@ -227,8 +227,21 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
     // Tiền điều kiện: sang Bước 2
     await goToStep2(page, validEmail);
 
-    await page.getByPlaceholder(/OTP/i).fill(tc.input.otp ?? ''); // 'abcdef'
-    await page.getByRole('button', { name: /Xác nhận|Lưu/i }).click();
+    const otpInput = page
+      .getByText(/Mã OTP \(\d+ số\)/)
+      .locator('..')
+      .locator('input');
+    await otpInput.fill(tc.input.otp ?? '');
+
+    const newPasswordInput = page
+      .getByText('Mật khẩu mới', { exact: true })
+      .locator('..')
+      .locator('input');
+    await newPasswordInput.fill(tc.input.new_pass ?? '');
+
+    await page
+      .getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })
+      .click();
 
     // R2: Visibility — error phải hiện (OTP không phải số)
     const errorLocator = page.locator('.error, [class*="error"], [class*="Error"]').first();

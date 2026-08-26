@@ -1,0 +1,4 @@
+interface:
+  display_name: "Bug Report Writer"
+  short_description: "Append evidence-backed product bugs to BUG_REPORT.md"
+  default_prompt: "Create or append a verified bug report using real execution evidence."

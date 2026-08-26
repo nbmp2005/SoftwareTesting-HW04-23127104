@@ -31,10 +31,10 @@
 
 | Field | id / data-testid / role | type | placeholder | required | Constraint phát hiện |
 |---|---|---|---|---|---|
-| OTP | `getByPlaceholder(/OTP/i)` | text | — | ✅ | Độ dài 6 chữ số |
-| Mật khẩu mới | `getByPlaceholder(/Mật khẩu mới/i)` | password | — | ✅ | Tuân thủ FR-01 |
+| OTP | `getByText(/Mã OTP \(\d+ số\)/).locator('..').locator('input')` | text | — | ✅ | Nghiệp vụ yêu cầu 6 chữ số; UI hiện quan sát thấy 4 chữ số (potential bug riêng) |
+| Mật khẩu mới | `getByText('Mật khẩu mới', { exact: true }).locator('..').locator('input')` | password | — | ✅ | Tuân thủ FR-01 |
 | Xác nhận mật khẩu | `getByPlaceholder('Đặt lại mật khẩu')` | password | `Đặt lại mật khẩu` | ✅ | Phải khớp với Mật khẩu mới |
-| Submit | `getByRole('button', { name: /Xác nhận|Lưu/i })` | submit | — | — | — |
+| Submit | `getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })` | submit | — | — | — |
 
 ---
 
@@ -59,6 +59,7 @@
 | Email sai định dạng | `Email không hợp lệ` | `.error` |
 | Pass mới và xác nhận không khớp | `Mật khẩu không khớp` | `.error` |
 | OTP sai | `OTP không chính xác` | `.error` |
+| OTP chứa chữ cái | `OTP phải là số` | `.error` |
 
 *(Lưu ý: Các câu thông báo lỗi trên cần xác minh nguyên văn lại khi chạy automation, vì quá trình Playwright MCP bị lỗi browser context chưa extract được text thực tế)*
 

@@ -666,11 +666,27 @@ Sau đó xác nhận HTML report hiển thị Run by: 23127104 | <ISO timestamp>
 ## Prompt 27
 - Name of the AI tool: OpenAI Codex (GPT-5)
 - Date/time: 2026-08-26T15:56:56.1316443+07:00
-- Prompt: 
+- Prompt:
 ```
 [$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) cái này sai ở đâu vậy
 ```
-- AI Output: 
+- AI Output:
 ```
 TC02 đã chuyển được sang Bước 2 nhưng timeout vì script dùng getByPlaceholder(/OTP/i), trong khi ô OTP thực tế không có placeholder/accessibility name. Helper cũng tìm OTP bằng các selector không tồn tại nên không lấy được mã 4 số đang hiển thị. Các locator tiếp theo tiếp tục lệch UI: ô mật khẩu không có placeholder, không có trường xác nhận mật khẩu, và nút submit thực tế tên "Đặt lại mật khẩu" thay vì "Xác nhận/Lưu". Đây là lỗi test script/selector, chưa phải product bug.
+```
+
+## Prompt 28
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T16:03:56.6173527+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) hãy viết giúp tôi một agent skill để viết bug report mỗi khi tìm thấy lỗi với forrmat &#x20;
+
+
+
+## BUG-[NNN] – [Concise title]| Field | Value ||---|---|| Feature / test ID | [TODO] || SUT build/commit | [TODO] || Test repo commit | [TODO] || Environment/browser | [TODO] || Severity / priority | [TODO + rationale] || Reproducibility | [e.g. 3/3; do not guess] || GitHub Issue | [TODO: public URL] |### Preconditions[TODO]### Steps to reproduce1. [TODO]2. [TODO]3. [TODO]### Expected result[TODO: requirement-based oracle]### Actual result[TODO: exact observation]### Evidence- Screenshot: [TODO: path/URL]- HTML report: [TODO]- Trace/video/log: [TODO]- ISO reproduction time: [TODO]### Triage notes[TODO: isolated rerun, cross-browser comparison, data/environment checks, why this is a product defect.]### Workaround/impact[TODO], mỗi bug phải có screenshot thật, viết append vào bug\_report.md
+```
+- AI Output:
+```
+Đã tạo project skill `.agents/skills/bug-report-writer` để triage lỗi và append bug report theo đúng format HW04. Skill bắt buộc xác minh product defect, kiểm tra screenshot thật, không đoán commit/reproducibility/timestamp, xác định BUG ID kế tiếp, cập nhật Summary và append entry vào `report/BUG_REPORT.md`. Nếu thiếu evidence thì skill dừng và yêu cầu bổ sung thay vì bịa dữ liệu. Đã chạy quick_validate và nhận kết quả `Skill is valid!`.
 ```

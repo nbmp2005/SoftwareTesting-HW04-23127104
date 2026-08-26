@@ -250,14 +250,17 @@
       "Click Xác nhận"
     ],
     "input": {
-      "otp": "abcdef"
+      "otp": "abcdef",
+      "new_pass": "Abc@12345"
     },
     "expected": {
       "errorMessage": "OTP phải là số"
     },
     "automate": true,
     "selector_hints": {
-      "otp_field": "getByPlaceholder(/OTP/i)"
+      "otp_field": "getByText(/Mã OTP \\(\\d+ số\\)/).locator('..').locator('input')",
+      "new_pass_field": "getByText('Mật khẩu mới', { exact: true }).locator('..').locator('input')",
+      "submit_btn": "getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })"
     }
   }
 ]
