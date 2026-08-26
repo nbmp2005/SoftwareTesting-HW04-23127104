@@ -690,3 +690,39 @@ TC02 đã chuyển được sang Bước 2 nhưng timeout vì script dùng getBy
 ```
 Đã tạo project skill `.agents/skills/bug-report-writer` để triage lỗi và append bug report theo đúng format HW04. Skill bắt buộc xác minh product defect, kiểm tra screenshot thật, không đoán commit/reproducibility/timestamp, xác định BUG ID kế tiếp, cập nhật Summary và append entry vào `report/BUG_REPORT.md`. Nếu thiếu evidence thì skill dừng và yêu cầu bổ sung thay vì bịa dữ liệu. Đã chạy quick_validate và nhận kết quả `Skill is valid!`.
 ```
+
+## Prompt 29
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T16:20:16.1131237+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) kiểm tra giúp tôi xem có test case nào đang để button là "xác nhận/lưu" thành "Đặt lại mật khẩu"
+```
+- AI Output:
+```
+Đã tìm thấy và thay 4 selector nút sai trong Playwright spec (TC02, TC07, TC08, TC10) từ `/Xác nhận|Lưu/i` thành `getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })`. Đồng thời đã đồng bộ các `submit_btn` và mô tả bước trong JSON test data, cùng hai dòng liên quan trong MAIN_REPORT.md. Rà soát cuối không còn `Xác nhận|Lưu`, `Click Xác nhận` hoặc `Bấm Xác nhận` trong các file FR-03; JSON hợp lệ và Playwright `--list` nhận đủ 30 lượt test.
+```
+
+## Prompt 30
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T16:23:51.6173883+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) sửa skill bug report sau khi tôi chạy test xong thì khi có lỗi tự viết vào report được không
+```
+- AI Output:
+```
+Đã cập nhật `bug-report-writer` với chế độ post-run auto-triage: sau khi người dùng tự chạy Playwright và gọi skill, skill tự tìm artifacts mới nhất trong `test-results/` và `playwright-report/`, duyệt mọi failure, đối chiếu JSON/spec/context, phân loại product bug với lỗi script/data/environment, chống ghi trùng và tự append các product bug đủ evidence vào `report/BUG_REPORT.md`. Skill không chạy hoặc rerun test, không tự kích hoạt nền khi Playwright kết thúc, và không ghi failure thiếu screenshot/triage thành bug. Đã cập nhật default prompt và validator trả về `Skill is valid!`.
+```
+
+## Prompt 31
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T16:24:39.5737045+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) selector/assertion sai vẫn phải bị loại trừ tại sao lại loại trừ? 
+```
+- AI Output:
+```
+“Loại trừ” chỉ có nghĩa là không ghi selector/assertion sai thành product bug trong `BUG_REPORT.md`, vì lỗi nằm ở test code chứ không nằm ở SUT. Các lỗi này vẫn phải được giữ lại, sửa trong spec/data/context và ghi vào Gap Analysis hoặc AI_CRITIQUE. Ví dụ `getByPlaceholder(/OTP/i)` timeout vì UI không có placeholder là test-script defect; ngược lại SUT sinh OTP 4 số khi nghiệp vụ yêu cầu 6 số mới là potential product bug cần triage và evidence.
+```

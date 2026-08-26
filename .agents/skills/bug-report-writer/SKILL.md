@@ -1,6 +1,6 @@
 ---
 name: bug-report-writer
-description: Triage a failed test or manually observed defect, verify real evidence, and append a complete HW04 product-bug entry to report/BUG_REPORT.md. Use only when a potential SUT defect needs formal reporting; do not use for unverified failures, test-script defects, or environment/configuration errors.
+description: Review the latest completed Playwright run or a manually observed defect, triage failures, verify real evidence, and append confirmed HW04 product bugs to report/BUG_REPORT.md. Use after the user has run tests; do not report test-script, data, or environment failures as product bugs.
 ---
 
 # Bug Report Writer
@@ -18,6 +18,24 @@ Do not append a bug merely because an automated test failed. First establish tha
 
 Treat selector/assertion mistakes, stale test data, missing services, timeouts without a demonstrated SUT defect, and Playwright configuration failures as test or environment issues. Explain those findings instead of writing a product bug.
 
+## Post-run auto-triage mode
+
+When invoked after the user finishes a Playwright run, automatically inspect the latest local artifacts without asking the user to paste each failure:
+
+1. Confirm the run has finished. Do not start or rerun tests.
+2. Locate the newest available run state and evidence under `test-results/` and `playwright-report/`, including `.last-run.json`, `error-context.md`, screenshots, traces, videos, and report data.
+3. Enumerate the failed tests from that run and process every failure once.
+4. Compare each failure with its JSON test data, Playwright spec, `docs/fr-context/`, and requirement oracle.
+5. Classify each failure as one of:
+   - `Product bug confirmed` — append it when all mandatory evidence is available.
+   - `Potential product bug` — request the missing manual reproduction, screenshot, or run facts; do not append a final bug.
+   - `Test script/data issue` — explain the selector, assertion, or data problem; do not append.
+   - `Environment/configuration issue` — explain the setup problem; do not append.
+6. Avoid duplicates by checking existing bug entries for the same feature/test and symptom before assigning a new ID.
+7. At the end, report counts for confirmed bugs appended, potential bugs awaiting evidence, and non-product failures excluded.
+
+This skill is not a background process and cannot trigger merely because Playwright exits. The user or an authorized workflow must invoke `$bug-report-writer` after the run. Once invoked, artifact discovery and triage are automatic.
+
 ## Evidence rules
 
 - Verify that the screenshot file exists and inspect it before citing it. Never generate, alter, or fabricate evidence.
@@ -29,7 +47,7 @@ Treat selector/assertion mistakes, stale test data, missing services, timeouts w
 
 If the screenshot or product-defect triage is missing, pause and request the missing evidence instead of appending an entry.
 
-## Write workflow
+## Write workflow for each confirmed bug
 
 1. Read `report/BUG_REPORT.md` and preserve all existing content.
 2. Find the highest existing concrete heading matching `BUG-[0-9][0-9][0-9]`; ignore the template heading `BUG-[NNN]`. Assign the next zero-padded ID.

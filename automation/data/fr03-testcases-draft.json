@@ -28,13 +28,10 @@
       "Vào Bước 2",
       "Nhập OTP đúng",
       "Nhập pass mới mạnh",
-      "Nhập xác nhận pass giống pass mới",
-      "Click Xác nhận"
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
-      "otp": "123456",
-      "new_pass": "Abc@12345",
-      "confirm_pass": "Abc@12345"
+      "new_pass": "Abc@12345"
     },
     "expected": {
       "message": "Cập nhật mật khẩu thành công",
@@ -42,10 +39,10 @@
     },
     "automate": true,
     "selector_hints": {
-      "otp_field": "getByPlaceholder(/OTP/i)",
-      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)",
-      "confirm_pass_field": "getByPlaceholder('Đặt lại mật khẩu')",
-      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
+      "otp_display": "getByText(/^Mã OTP của bạn là:\\s*\\d+$/)",
+      "otp_field": "getByText(/^Mã OTP \\(\\d+ số\\)$/).locator('..').locator('input')",
+      "new_pass_field": "getByText(/^Mật khẩu mới$/).locator('..').locator('input')",
+      "submit_btn": "getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })"
     }
   },
   {
@@ -63,6 +60,28 @@
     "automate": true,
     "selector_hints": {
       "back_btn": "getByRole('button', { name: /Quay lại/i })"
+    }
+  },
+  {
+    "id": "TC04",
+    "type": "positive",
+    "description": "OTP được sinh đúng 6 chữ số",
+    "steps": [
+      "Vào /forgot-password",
+      "Nhập email hợp lệ",
+      "Click nút Lấy mã OTP",
+      "Kiểm tra OTP được sinh gồm đúng 6 chữ số"
+    ],
+    "input": {
+      "expected_otp_length": "6"
+    },
+    "expected": {
+      "behavior": "OTP hiển thị gồm đúng 6 chữ số"
+    },
+    "automate": true,
+    "selector_hints": {
+      "otp_display": "getByText(/^Mã OTP của bạn là:\\s*\\d+$/)",
+      "otp_field": "getByText(/^Mã OTP \\(\\d+ số\\)$/).locator('..').locator('input')"
     }
   },
   {
@@ -99,7 +118,7 @@
       "email": "abc"
     },
     "expected": {
-      "errorMessage": "Email không hợp lệ"
+      "behavior": "Từ chối email sai định dạng, giữ người dùng ở Bước 1 và không sinh OTP"
     },
     "automate": true,
     "selector_hints": {
@@ -114,48 +133,36 @@
     "steps": [
       "Vào Bước 2",
       "Nhập OTP sai",
-      "Nhập pass mới và xác nhận",
-      "Click Xác nhận"
+      "Nhập mật khẩu mới",
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
-      "otp": "000000",
-      "new_pass": "Abc@12345",
-      "confirm_pass": "Abc@12345"
+      "otp_strategy": "different_same_length",
+      "new_pass": "Abc@12345"
     },
     "expected": {
-      "errorMessage": "OTP không chính xác"
+      "behavior": "Từ chối OTP sai cùng độ dài, giữ người dùng ở Bước 2 và không báo thành công"
     },
     "automate": true,
     "selector_hints": {
-      "otp_field": "getByPlaceholder(/OTP/i)",
-      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
+      "otp_field": "getByText(/^Mã OTP \\(\\d+ số\\)$/).locator('..').locator('input')",
+      "new_pass_field": "getByText(/^Mật khẩu mới$/).locator('..').locator('input')",
+      "submit_btn": "getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })"
     }
   },
   {
     "id": "TC08",
     "type": "negative",
-    "description": "Mật khẩu và xác nhận không khớp",
+    "description": "Mật khẩu và xác nhận không khớp (không áp dụng với UI hiện tại)",
     "steps": [
-      "Vào Bước 2",
-      "Nhập OTP đúng",
-      "Nhập pass mới",
-      "Nhập xác nhận pass khác pass mới",
-      "Click Xác nhận"
+      "Không thực hiện: UI hiện tại không có trường xác nhận mật khẩu"
     ],
-    "input": {
-      "otp": "123456",
-      "new_pass": "Abc@12345",
-      "confirm_pass": "Def@54321"
-    },
+    "input": {},
     "expected": {
-      "errorMessage": "Mật khẩu không khớp"
+      "behavior": "Không áp dụng với UI hiện tại"
     },
-    "automate": true,
-    "selector_hints": {
-      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)",
-      "confirm_pass_field": "getByPlaceholder(/Xác nhận/i)",
-      "submit_btn": "getByRole('button', { name: /Xác nhận|Lưu/i })"
-    }
+    "automate": false,
+    "manual_reason": "UI thực tế không có trường xác nhận mật khẩu nên testcase này không áp dụng"
   },
   {
     "id": "TC09",
@@ -170,7 +177,7 @@
       "email": "notexist@test.com"
     },
     "expected": {
-      "errorMessage": "Lỗi: User not found"
+      "behavior": "Từ chối email chưa đăng ký, giữ người dùng ở Bước 1 và không sinh OTP"
     },
     "automate": true,
     "selector_hints": {
@@ -185,20 +192,20 @@
       "Vào Bước 2",
       "Nhập OTP đúng",
       "Nhập pass mới yếu",
-      "Nhập xác nhận pass yếu",
-      "Click Xác nhận"
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
-      "otp": "123456",
-      "new_pass": "123",
-      "confirm_pass": "123"
+      "new_pass": "123"
     },
     "expected": {
-      "errorMessage": "Mật khẩu quá yếu! Phải dài tối thiểu 8 ký tự, gồm chữ hoa, chữ thường, số và KÝ TỰ ĐẶC BIỆT."
+      "behavior": "Từ chối mật khẩu yếu, giữ người dùng ở Bước 2 và không báo thành công"
     },
     "automate": true,
     "selector_hints": {
-      "new_pass_field": "getByPlaceholder(/Mật khẩu mới/i)"
+      "otp_display": "getByText(/^Mã OTP của bạn là:\\s*\\d+$/)",
+      "otp_field": "getByText(/^Mã OTP \\(\\d+ số\\)$/).locator('..').locator('input')",
+      "new_pass_field": "getByText(/^Mật khẩu mới$/).locator('..').locator('input')",
+      "submit_btn": "getByRole('button', { name: 'Đặt lại mật khẩu', exact: true })"
     }
   },
   {
@@ -209,7 +216,7 @@
       "Yêu cầu OTP cho email A",
       "Yêu cầu OTP cho email B",
       "Ở bước 2 của email B, nhập OTP của email A",
-      "Click Xác nhận"
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
       "email_A": "user1@test.com",
@@ -229,7 +236,7 @@
       "Yêu cầu OTP",
       "Chờ 30 phút",
       "Nhập OTP",
-      "Click Xác nhận"
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
       "otp": "123456"
@@ -247,14 +254,14 @@
     "steps": [
       "Vào Bước 2",
       "Nhập OTP là chữ cái",
-      "Click Xác nhận"
+      "Click Đặt lại mật khẩu"
     ],
     "input": {
       "otp": "abcdef",
       "new_pass": "Abc@12345"
     },
     "expected": {
-      "errorMessage": "OTP phải là số"
+      "behavior": "Từ chối OTP chữ, giữ người dùng ở Bước 2 và không báo thành công"
     },
     "automate": true,
     "selector_hints": {

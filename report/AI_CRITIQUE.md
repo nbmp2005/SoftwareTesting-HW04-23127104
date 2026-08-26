@@ -16,5 +16,6 @@ Trong bài tập này, tôi dùng [tên công cụ AI] để hỗ trợ phân t�
 
 - Phần agent ban đầu hiểu sai đọc src code thay vì là blackbox testing
 - Dù đã cho sẵn data nhưng test script vẫn tự chế, sai data email
-- Vì web sai nhiều (mô tả nghiệp vụ trong readme và tự học trên màn hình) nên test script khá confuse, dẫn đến test script viết sai nhiều nơi
+- Vì web sai nhiều (mô tả nghiệp vụ trong readme và tự học trên màn hình) nên test script khá confuse, dẫn đến test script viết sai nhiều nơi. Đặc biệt ở fr3, khi otp là 6 số nhưng thực tế web là 4 số, khiến test script sai dây chuyền, phải sửa rất nhiều lần để không ảnh hưởng lỗi không liên quan đến otp
 - Có nhiều chỗ box cần verify lại
+- Phần fr context explorer làm khá fail, lẫn lộn rất nhiều giữa placeholder và button, dẫn đến test case bị lỗi assertion, phải sửa lại nhiều lần

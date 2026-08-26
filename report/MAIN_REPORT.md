@@ -28,8 +28,8 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 ## 2. Feature A — FR-03: Quên mật khẩu & Đặt lại mật khẩu
 
 ### 2.1. Mô tả chức năng
-- **Bước 1 — Lấy mã OTP:** người dùng nhập email đã đăng ký → hệ thống sinh OTP 6 số, hiển thị trực tiếp trên màn hình (demo). UI có Step Indicator "Bước 1/2" và nút "Quay lại đăng nhập".
-- **Bước 2 — Đặt lại mật khẩu:** nhập OTP + mật khẩu mới + xác nhận mật khẩu. Mật khẩu mới phải theo điều kiện FR-01. Hai trường mật khẩu phải khớp. OTP chỉ hợp lệ cho đúng email đã yêu cầu.
+- **Bước 1 — Lấy mã OTP:** người dùng nhập email đã đăng ký → hệ thống sinh OTP và hiển thị trực tiếp trên màn hình demo.
+- **Bước 2 — Đặt lại mật khẩu:** nhập OTP + mật khẩu mới rồi bấm `Đặt lại mật khẩu`. UI hiện tại không có trường xác nhận mật khẩu. Mật khẩu mới phải theo điều kiện FR-01 và OTP chỉ hợp lệ cho đúng email đã yêu cầu.
 
 ### 2.2. Quy trình dùng AI (AI-first, từng bước)
 
@@ -49,28 +49,29 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | ID | Loại | Mô tả | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
 |---|---|---|---|---|---|---|
 | TC01 | Positive | Nhập email hợp lệ ở Bước 1 | Vào /forgot-password; Nhập email; Bấm Lấy mã OTP | `admin@eshop.com` | Chuyển sang Bước 2 | ✅ |
-| TC02 | Positive | Nhập đúng OTP + mật khẩu mới hợp lệ | Vào Bước 2; Nhập OTP; Nhập pass mới mạnh; Xác nhận pass; Bấm Xác nhận | OTP đúng, pass: `Abc@12345` | Cập nhật mật khẩu thành công | ✅ |
+| TC02 | Positive | Nhập đúng OTP + mật khẩu mới hợp lệ | Vào Bước 2; Nhập OTP; Nhập mật khẩu mới mạnh; Bấm Đặt lại mật khẩu | OTP đúng, pass: `Abc@12345` | Cập nhật mật khẩu thành công | ✅ |
 | TC03 | Positive | Bấm Quay lại đăng nhập | Vào /forgot-password; Bấm Quay lại đăng nhập | - | Chuyển về /login | ✅ |
+| TC04 | Positive / BVA | OTP được sinh đúng 6 chữ số | Nhập email hợp lệ; Bấm Lấy mã OTP; Đếm số chữ số của OTP hiển thị | Độ dài mong đợi: `6` | OTP hiển thị gồm đúng 6 chữ số | ✅ |
 | TC05 | Negative | Email không được để trống | Để trống email; Bấm Lấy mã OTP | `""` | Lỗi: Email không được để trống | ✅ |
-| TC06 | Negative | Email sai định dạng | Nhập "abc"; Bấm Lấy mã OTP | `"abc"` | Lỗi: Email không hợp lệ | ✅ |
-| TC07 | Negative | OTP sai | Vào Bước 2; Nhập OTP "000000"; Bấm Xác nhận | `"000000"` | Lỗi: OTP không chính xác | ✅ |
-| TC08 | Negative | Mật khẩu và xác nhận không khớp | Vào Bước 2; Nhập OTP; Pass 1 khác Pass 2 | Pass 2 ≠ Pass 1 | Lỗi: Mật khẩu không khớp | ✅ |
-| TC09 | Negative | Email không tồn tại (chưa đăng ký) | Nhập email lạ; Bấm Lấy mã OTP | `"notexist@test.com"` | Lỗi: `Lỗi: User not found` | ✅ |
-| TC10 | Edge | Mật khẩu mới quá yếu (vi phạm FR-01) | Nhập pass "123" ở Bước 2 | `"123"` | Lỗi: `Mật khẩu quá yếu! Phải dài tối thiểu 8 ký tự...` | ✅ |
+| TC06 | Negative | Email sai định dạng | Nhập "abc"; Bấm Lấy mã OTP | `"abc"` | Vẫn ở Bước 1 và không sinh OTP | ✅ |
+| TC07 | Negative | OTP sai | Vào Bước 2; nhập OTP khác OTP thật nhưng cùng độ dài; Bấm Đặt lại mật khẩu | OTP được dẫn xuất động | Vẫn ở Bước 2 và không báo thành công | ✅ |
+| TC08 | Negative | Mật khẩu và xác nhận không khớp | Không thực hiện được trên UI hiện tại | UI không có trường xác nhận mật khẩu | Không áp dụng với UI hiện tại | ⬜ (Không có trường xác nhận) |
+| TC09 | Negative | Email không tồn tại (chưa đăng ký) | Nhập email lạ; Bấm Lấy mã OTP | `"notexist@test.com"` | Vẫn ở Bước 1 và không sinh OTP | ✅ |
+| TC10 | Edge | Mật khẩu mới quá yếu (vi phạm FR-01) | Nhập pass "123" ở Bước 2 | `"123"` | Vẫn ở Bước 2 và không báo thành công | ✅ |
 | TC11 | Edge | Dùng OTP của email A cho email B | Đảo OTP giữa 2 quá trình | - | Lỗi: `Sai otp` | ⬜ (Setup 2 luồng khó) |
 | TC12 | Edge | OTP hết hạn | Chờ 30 phút rồi nhập OTP | - | Lỗi: `OTP hết hạn` | ⬜ (Chờ thời gian lâu) |
-| TC13 | Edge | Nhập OTP không phải số | Nhập "abcdef" | `"abcdef"` | Lỗi: `OTP phải là số` | ✅ |
+| TC13 | Edge | Nhập OTP không phải số | Nhập "abcdef"; Bấm Đặt lại mật khẩu | `"abcdef"` | Từ chối OTP chữ, vẫn ở Bước 2 và không báo thành công | ✅ |
 
 ### 2.4. Data-driven test data
 - File: `automation/data/fr03-testcases-draft.json`
-- Loại dữ liệu: email, OTP, password (new & confirm), expected error/success messages
+- Loại dữ liệu: email, OTP, mật khẩu mới, expected behavior/error/success messages
 - Import trong spec: `import testData from '../data/fr03-testcases-draft.json'`
 
 ### 2.5. Assertion patterns sử dụng (≥3 loại)
 | Loại assertion | Ví dụ dùng trong test |
 |---|---|
 | Visibility/state | `await expect(page.getByPlaceholder('Nhập Email của bạn')).toBeVisible()` |
-| Text/content | `await expect(page.locator('body')).toContainText('OTP không chính xác')` |
+| Text/content | `await expect(page.locator('body')).toContainText(tc.expected.message!)` |
 | URL/navigation | `await expect(page).toHaveURL(/login/)` |
 
 ### 2.6. Kết quả chạy multi-browser
@@ -95,7 +96,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 ### 2.8. Test case không automate được
 | TC | Lý do |
 |---|---|
-| TC09 | ... |
+| TC08 | UI hiện tại không có trường xác nhận mật khẩu nên testcase mật khẩu không khớp không áp dụng. |
+| TC11 | Cần hai tài khoản và hai luồng OTP độc lập để kiểm tra OTP chéo email. |
+| TC12 | Phụ thuộc thời gian hết hạn OTP thực tế, không phù hợp chạy tự động trong suite hiện tại. |
 
 ### 2.9. Bug phát hiện (nếu có)
 | Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
