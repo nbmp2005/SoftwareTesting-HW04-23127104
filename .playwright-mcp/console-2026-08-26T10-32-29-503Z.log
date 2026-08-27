@@ -1,3 +1,0 @@
-[     133ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/react-dom_client.js?v=8b342087:14337
-[     149ms] [WARNING] No routes matched location "/products"  @ http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=8b342087:164
-[     150ms] [WARNING] No routes matched location "/products"  @ http://localhost:5173/node_modules/.vite/deps/react-router-dom.js?v=8b342087:164

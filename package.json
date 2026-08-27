@@ -11,9 +11,10 @@
     "test:chromium": "node automation/run-playwright.cjs --project=chromium*",
     "test:firefox": "node automation/run-playwright.cjs --project=firefox*",
     "test:webkit": "node automation/run-playwright.cjs --project=webkit*",
-    "test:fr03": "node automation/run-playwright.cjs automation/tests/fr03-forgot-password.spec.ts",
-    "test:fr11": "node automation/run-playwright.cjs automation/tests/fr11-order-history.spec.ts",
-    "test:fr17": "node automation/run-playwright.cjs automation/tests/fr17-coupon-crud.spec.ts",
+    "test:fr03": "set PLAYWRIGHT_HTML_REPORT=playwright-report/fr03&& set PLAYWRIGHT_OUTPUT_DIR=test-results/fr03&& node automation/run-playwright.cjs automation/tests/fr03-forgot-password.spec.ts",
+    "test:fr11": "set PLAYWRIGHT_HTML_REPORT=playwright-report/fr11&& set PLAYWRIGHT_OUTPUT_DIR=test-results/fr11&& node automation/run-playwright.cjs automation/tests/fr11-order-history.spec.ts",
+    "test:fr14": "set PLAYWRIGHT_HTML_REPORT=playwright-report/fr14&& set PLAYWRIGHT_OUTPUT_DIR=test-results/fr14&& node automation/run-playwright.cjs automation/tests/fr14-category-crud.spec.ts",
+    "test:fr17": "set PLAYWRIGHT_HTML_REPORT=playwright-report/fr17&& set PLAYWRIGHT_OUTPUT_DIR=test-results/fr17&& node automation/run-playwright.cjs automation/tests/fr17-coupon-crud.spec.ts",
     "report": "playwright show-report"
   },
   "repository": {

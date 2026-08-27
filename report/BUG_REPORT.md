@@ -6,15 +6,15 @@
 
 | Bug ID | Title | Feature/test ID | Severity | Reproducibility | GitHub Issue | Status |
 |---|---|---|---|---|---|---|
-| BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | FR-03 / TC04 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
-| BUG-002 | User vẫn có thể hủy đơn đang giao | FR-11 / TC07 | Major / High | 2/3 browser projects có evidence trực tiếp | Chưa tạo | Confirmed locally |
-| BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | FR-11 / TC10 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
-| BUG-004 | Hệ thống chấp nhận discount_value không dương | FR-17 / TC10, TC11 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
-| BUG-005 | Hệ thống chấp nhận min_order_amount âm | FR-17 / TC12 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
-| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | FR-17 / TC16 | Major / High | Confirmed by run evidence | Chưa tạo | Confirmed locally |
-| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | FR-17 / TC17 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
-| BUG-008 | Xóa coupon không có confirm dialog | FR-17 / TC19 | Major / Medium | 3/3 browser projects | Chưa tạo | Confirmed locally |
-| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | FR-03 / TC02 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
+| BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | FR-03 / TC04 | Major / High | 3/3 browser projects | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/1 | Confirmed locally |
+| BUG-002 | User vẫn có thể hủy đơn đang giao | FR-11 / TC07 | Major / High | 3/3 browser projects | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/2 | Confirmed locally |
+| BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | FR-11 / TC10 | Major / High | 3/3 browser projects | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/3 | Confirmed locally |
+| BUG-004 | Hệ thống chấp nhận discount_value không dương | FR-17 / TC10, TC11 | Major / High | Confirmed by run evidence + FR17 context | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/4 | Confirmed locally |
+| BUG-005 | Hệ thống chấp nhận min_order_amount âm | FR-17 / TC12 | Major / High | Confirmed by run evidence + FR17 context | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/5 | Confirmed locally |
+| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | FR-17 / TC16 | Major / High | Confirmed by run evidence | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/6 | Confirmed locally |
+| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | FR-17 / TC17 | Major / High | Confirmed by run evidence + FR17 context | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/7 | Confirmed locally |
+| BUG-008 | Xóa coupon không có confirm dialog | FR-17 / TC19 | Major / Medium | 3/3 browser projects | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/8 | Confirmed locally |
+| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | FR-03 / TC02 | Major / High | 3/3 browser projects | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/9 | Confirmed locally |
 
 ## BUG-001 – Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số
 
@@ -26,7 +26,7 @@
 | Environment/browser | Microsoft Windows NT 10.0.26200.0; Playwright 1.62.1; Chromium, Firefox và WebKit; base URL `http://localhost:5173` |
 | Severity / priority | Major / High — vi phạm trực tiếp quy tắc OTP 6 chữ số của luồng đặt lại mật khẩu và xuất hiện trên cả ba trình duyệt |
 | Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/1 |
 
 ### Preconditions
 
@@ -49,10 +49,10 @@ Hệ thống chỉ sinh OTP 4 chữ số trên cả ba trình duyệt trong lầ
 
 ### Evidence
 
-- Screenshot: `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-firefox-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-webkit-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T10:58:56+07:00`)
+- Screenshot: ![Chromium](../test-results/fr03/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) <br/> ![Firefox](../test-results/fr03/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-firefox-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) <br/> ![WebKit](../test-results/fr03/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-webkit-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png)
+- HTML report: `playwright-report/fr03/index.html`
 - Trace/video/log: ba file `error-context.md` nằm cùng thư mục với các screenshot nêu trên; lần chạy này không tạo trace hoặc video.
-- ISO reproduction time: `2026-08-27T03:58:12.611Z`
+- ISO reproduction time: `2026-08-27T14:15:18.930Z`
 
 ### Triage notes
 
@@ -71,8 +71,8 @@ Không có workaround đáng tin cậy trên UI vì người dùng không kiểm
 | Test repo commit | `074beed7b1c4940e1f7f2e54bd53f6bf907e6c7e` (working tree dirty/uncommitted tại thời điểm triage) |
 | Environment/browser | Playwright multi-browser run; user app `http://localhost:5173`; Chromium và WebKit có screenshot xác nhận defect |
 | Severity / priority | Major / High — vi phạm state machine FR-11, cho phép user thao tác hủy khi đơn đã sang trạng thái đang giao |
-| Reproducibility | 2/3 browser projects có evidence trực tiếp: Chromium và WebKit. Firefox failure cùng TC bị loại khỏi reproducibility vì screenshot chỉ hiển thị màn hình "Vui lòng đăng nhập" |
-| GitHub Issue | Chưa tạo |
+| Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/2 |
 
 ### Preconditions
 
@@ -96,14 +96,14 @@ Dòng đơn `#3` trạng thái `Đang giao` vẫn hiển thị nút `Hủy đơn
 
 ### Evidence
 
-- Screenshot: `test-results/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-chromium-Run-by-23127104-2026-08-27T02-44-10-270Z/test-failed-1.png`; `test-results/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-webkit-Run-by-23127104-2026-08-27T02-44-10-270Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T02:45:06.9436332Z`)
-- Trace/video/log: `error-context.md` trong hai thư mục screenshot nêu trên; lần chạy này không thấy trace/video riêng trong artifact.
-- ISO reproduction time: `2026-08-27T02:44:10.270Z`
+- Screenshot: ![Chromium](../test-results/fr11/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-chromium-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png) <br/> ![Firefox](../test-results/fr11/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-firefox-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png) <br/> ![WebKit](../test-results/fr11/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-webkit-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png)
+- HTML report: `playwright-report/fr11/index.html`
+- Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên; lần chạy này không thấy trace/video riêng trong artifact.
+- ISO reproduction time: `2026-08-27T14:32:16.541Z`
 
 ### Triage notes
 
-TC07 dùng selector theo row thật của đơn `#3` và assertion `toHaveCount(0)` cho button `Hủy đơn`. Screenshot Chromium và WebKit đều cho thấy bảng lịch sử đơn hàng đã tải đúng, user `test@eshop.com` đã đăng nhập, dòng `#3` có trạng thái `Đang giao`, và nút `Hủy đơn` xuất hiện. Do đó lỗi không đến từ selector hoặc assertion. Failure Firefox cùng TC07 không được dùng làm evidence vì screenshot cho thấy session/login không hợp lệ, nên được phân loại là vấn đề môi trường/session của run.
+TC07 dùng selector theo row thật của đơn `#4` và assertion `toHaveCount(0)` cho button `Hủy đơn`. Screenshot trên cả 3 trình duyệt đều cho thấy bảng lịch sử đơn hàng đã tải đúng, user `test@eshop.com` đã đăng nhập, dòng `#4` có trạng thái `Đang giao`, và nút `Hủy đơn` xuất hiện. Do đó lỗi không đến từ selector hoặc assertion. Môi trường test ổn định.
 
 ### Workaround/impact
 
@@ -119,7 +119,7 @@ Không có workaround ổn định từ phía user ngoài việc không bấm n�
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; Chromium, Firefox và WebKit |
 | Severity / priority | Major / High — vi phạm trạng thái kết thúc `canceled`, cho phép admin chuyển đơn đã hủy sang `delivered` |
 | Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/3 |
 
 ### Preconditions
 
@@ -143,10 +143,10 @@ Dòng đơn `#2` trạng thái `Đã hủy` vẫn hiển thị nút `Đánh dấ
 
 ### Evidence
 
-- Screenshot: `test-results/fr11-order-history-FR-11-X-d9665-yển-canceled-sang-delivered-chromium-Run-by-23127104-2026-08-27T02-44-10-270Z/test-failed-1.png`; `test-results/fr11-order-history-FR-11-X-d9665-yển-canceled-sang-delivered-firefox-Run-by-23127104-2026-08-27T02-44-10-270Z/test-failed-1.png`; `test-results/fr11-order-history-FR-11-X-d9665-yển-canceled-sang-delivered-webkit-Run-by-23127104-2026-08-27T02-44-10-270Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T02:45:06.9436332Z`)
+- Screenshot: ![Chromium](../test-results/fr11/fr11-order-history-FR-11-X-d9665-yển-canceled-sang-delivered-chromium-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png)        
+- HTML report: `playwright-report/fr11/index.html`
 - Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên; lần chạy này không thấy trace/video riêng trong artifact.
-- ISO reproduction time: `2026-08-27T02:44:10.270Z`
+- ISO reproduction time: `2026-08-27T14:32:16.541Z`
 
 ### Triage notes
 
@@ -155,16 +155,6 @@ TC10 đăng nhập admin, vào bảng `Quản lý Đơn hàng`, lọc dòng theo
 ### Workaround/impact
 
 Admin phải tự tránh bấm nhầm nút này. Nếu thao tác được thực thi, hệ thống có thể hồi sinh đơn đã hủy thành đã giao, làm sai lịch sử đơn hàng và báo cáo trạng thái.
-
-## Summary Addendum - FR-17
-
-| Bug ID | Title | Feature/test ID | Severity | Reproducibility | GitHub Issue | Status |
-|---|---|---|---|---|---|---|
-| BUG-004 | Hệ thống chấp nhận discount_value không dương | FR-17 / TC10, TC11 | Major / High | 2 observed failures in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
-| BUG-005 | Hệ thống chấp nhận min_order_amount âm | FR-17 / TC12 | Major / High | 1 observed browser failure in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
-| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | FR-17 / TC16 | Major / High | 1 observed browser failure in latest run | Chưa tạo | Confirmed locally |
-| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | FR-17 / TC17 | Major / High | 2 observed browser failures in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
-| BUG-008 | Xóa coupon không có confirm dialog | FR-17 / TC19 | Major / Medium | 3/3 browser projects in latest run | Chưa tạo | Confirmed locally |
 
 ## BUG-004 – Hệ thống chấp nhận discount_value không dương
 
@@ -176,7 +166,7 @@ Admin phải tự tránh bấm nhầm nút này. Nếu thao tác được thực
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox; context exploration also reproduced by Playwright MCP |
 | Severity / priority | Major / High - coupon giảm giá có giá trị 0 hoặc âm làm sai nghiệp vụ khuyến mãi |
 | Reproducibility | Latest run observed failures for TC10 and TC11; FR17 context exploration also recorded `discount_value = 0` and `discount_value = -10` being accepted |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/4 |
 
 ### Preconditions
 
@@ -200,10 +190,10 @@ SUT tạo coupon dù `discount_value` không dương. Artifact mới nhất ghi 
 
 ### Evidence
 
-- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-b6646-nt-value-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-be834-unt-value-0-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html`
+- Screenshot: ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-b6646-nt-value-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) <br/> ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-be834-unt-value-0-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png)
+- HTML report: `playwright-report/fr17/index.html`
 - Trace/video/log: `error-context.md` trong các thư mục screenshot nêu trên; không thấy trace/video riêng trong artifact.
-- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+- ISO reproduction time: `2026-08-27T14:37:10.742Z`
 
 ### Triage notes
 
@@ -223,7 +213,7 @@ Admin phải tự tránh nhập giá trị 0 hoặc âm. Nếu không, hệ th�
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox; context exploration also reproduced by Playwright MCP |
 | Severity / priority | Major / High - điều kiện đơn tối thiểu âm làm sai rule áp dụng coupon |
 | Reproducibility | 1 observed browser failure in latest run; FR17 context exploration also recorded `min_order_amount = -1` being accepted |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/5 |
 
 ### Preconditions
 
@@ -247,10 +237,10 @@ SUT tạo coupon `FR17NEGMIN`; screenshot Firefox hiển thị row này với `�
 
 ### Evidence
 
-- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html`
-- Trace/video/log: `test-results/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/error-context.md`
-- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+- Screenshot: ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png)
+- HTML report: `playwright-report/fr17/index.html`
+- Trace/video/log: `error-context.md` trong thư mục screenshot nêu trên; không thấy trace/video riêng trong artifact.
+- ISO reproduction time: `2026-08-27T14:37:10.742Z`
 
 ### Triage notes
 
@@ -270,7 +260,7 @@ Admin phải tự không nhập giá trị âm. Coupon với đơn tối thiểu
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox |
 | Severity / priority | Major / High - discount percent trên 100% có thể làm tổng giảm giá vượt giá trị đơn hàng |
 | Reproducibility | 1 observed browser failure in latest run |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/6 |
 
 ### Preconditions
 
@@ -294,10 +284,10 @@ SUT tạo coupon `FR17P101`; screenshot Firefox hiển thị row `FR17P101` vớ
 
 ### Evidence
 
-- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html`
-- Trace/video/log: `test-results/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/error-context.md`
-- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+- Screenshot: ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png)
+- HTML report: `playwright-report/fr17/index.html`
+- Trace/video/log: `error-context.md` trong thư mục screenshot nêu trên; không thấy trace/video riêng trong artifact.
+- ISO reproduction time: `2026-08-27T14:37:10.742Z`
 
 ### Triage notes
 
@@ -317,7 +307,7 @@ Admin phải tự giới hạn percent không quá 100. Nếu lưu 101%, hệ th
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; Firefox and WebKit |
 | Severity / priority | Major / High - coupon mới tạo đã hết hạn là dữ liệu sai nghiệp vụ |
 | Reproducibility | 2 observed browser failures in latest run; FR17 context exploration also recorded past-date coupon being accepted |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/7 |
 
 ### Preconditions
 
@@ -341,10 +331,10 @@ SUT tạo coupon `FR17PAST`; screenshot hiển thị row `FR17PAST` với trạn
 
 ### Evidence
 
-- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-webkit-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html`
+- Screenshot: ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) <br/> ![WebKit](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-webkit-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png)
+- HTML report: `playwright-report/fr17/index.html`
 - Trace/video/log: `error-context.md` trong hai thư mục screenshot nêu trên
-- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+- ISO reproduction time: `2026-08-27T14:37:10.742Z`
 
 ### Triage notes
 
@@ -364,7 +354,7 @@ Admin phải tự kiểm tra ngày trước khi tạo coupon. Hệ thống có t
 | Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; Chromium, Firefox and WebKit |
 | Severity / priority | Major / Medium - thao tác destructive không có xác nhận, dễ xóa nhầm coupon |
 | Reproducibility | 3/3 browser projects in latest run |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/8 |
 
 ### Preconditions
 
@@ -389,10 +379,10 @@ Không có confirm dialog. Playwright chờ event `dialog` đến timeout trên 
 
 ### Evidence
 
-- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-chromium-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-webkit-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html`
+- Screenshot: ![Chromium](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-chromium-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) <br/> ![Firefox](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) <br/> ![WebKit](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-webkit-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png)
+- HTML report: `playwright-report/fr17/index.html`
 - Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên
-- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+- ISO reproduction time: `2026-08-27T14:37:10.742Z`
 
 ### Triage notes
 
@@ -411,7 +401,7 @@ Admin phải tự cẩn thận khi bấm `Xóa`; không có cơ chế hủy thao
 | Environment/browser | Playwright multi-browser run; user app `http://localhost:5173`; Chromium, Firefox và WebKit |
 | Severity / priority | Major / High — happy path quên mật khẩu không hoàn tất dù người dùng nhập OTP hiển thị và mật khẩu mới hợp lệ |
 | Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
-| GitHub Issue | Chưa tạo |
+| GitHub Issue | https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/9 |
 
 ### Preconditions
 
@@ -437,10 +427,10 @@ SUT vẫn đứng ở màn hình đặt lại mật khẩu và không hiển th�
 
 ### Evidence
 
-- Screenshot: `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-firefox-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-webkit-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T10:58:56+07:00`)
+- Screenshot: ![Chromium](../test-results/fr03/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) <br/> ![Firefox](../test-results/fr03/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-firefox-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) <br/> ![WebKit](../test-results/fr03/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-webkit-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png)
+- HTML report: `playwright-report/fr03/index.html`
 - Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên; lần chạy này không thấy trace/video riêng trong artifact.
-- ISO reproduction time: `2026-08-27T03:58:12.611Z`
+- ISO reproduction time: `2026-08-27T14:15:18.930Z`
 
 ### Triage notes
 

@@ -1,13 +1,11 @@
 # AI Critique (200–300 words)
 
-Trong bài tập này, tôi dùng bộ công cụ AI Agent để hỗ trợ phân tích yêu cầu, thiết kế dữ liệu và tạo mã Playwright cho ba chức năng Quên mật khẩu (FR-03), Lịch sử đơn hàng (FR-11) và Quản lý mã giảm giá (FR-17). Kết quả ban đầu giúp tạo nhanh bộ khung automation, nhưng chưa đủ tin cậy để dùng trực tiếp. Khó khăn lớn nhất là Agent ban đầu hiểu lầm yêu cầu, cố gắng đọc source code SUT thay vì thực hiện black-box testing qua giao diện như quy định. Ở bước khám phá ngữ cảnh, kỹ năng AI thỉnh thoảng mắc sai sót khi lẫn lộn giữa chuỗi placeholder của ô nhập liệu và nội dung các button, dẫn đến sinh test case bị lỗi assertion hàng loạt. Hơn nữa, dù đã có file dữ liệu chuẩn, AI thỉnh thoảng vẫn tự chế ra test data hoặc email sai định dạng. Đặc biệt khi thực thi trên SUT có chứa lỗi thực tế (ví dụ chức năng FR-03 hệ thống sinh OTP 4 số thay vì 6 số như specs), AI trở nên bối rối và sinh code test sai dây chuyền. Tôi đã khắc phục các lỗi này bằng cách chỉnh lại selector chính xác thông qua DevTools, chuẩn hóa các mảng dữ liệu, và buộc Agent áp dụng chiến lược wait động (như `waitForSelector`). Lý do chính AI mắc lỗi là nó chỉ suy luận từ cấu trúc HTML tĩnh mà thiếu trải nghiệm tương tác động, đồng thời có xu hướng coi kết quả UI hiện tại là "Oracle" đúng. Nguyên tắc quan trọng nhất tôi học được là phải luôn giữ quyền kiểm soát: con người quyết định expected result dựa trên tài liệu, đánh giá lỗi và verify thủ công thay vì phó mặc hoàn toàn cho Agent.
+In this assignment, I used an AI Agent toolkit to support requirement analysis, test data design, and Playwright code generation for three features: Forgot Password (FR-03), Order History (FR-11), and Discount Code Management (FR-17). The initial results helped quickly establish an automation framework, but they were not reliable enough to be used directly.
 
-**Final word count:** 279 words
+The biggest challenge was that the Agent initially misunderstood the requirements, attempting to read the SUT (System Under Test) source code instead of executing black-box testing through the user interface as mandated. During the context discovery phase, the AI capability occasionally made errors by confusing input field placeholder strings with button text, leading to widespread assertion failures in the generated test cases. Furthermore, despite having standard data files available, the AI sometimes hallucinated test data or generated improperly formatted emails.
 
-## Finalization checklist
+Particularly when executing on an SUT containing real-world bugs (for example, in feature FR-03 where the system generated a 4-digit OTP instead of 6 digits as per specifications), the AI became confused and produced cascading errors in the test code. I resolved these issues by manually refining selectors using DevTools, standardizing data arrays, and enforcing dynamic wait strategies (such as waitForSelector) on the Agent.
 
-- [x] Có ít nhất một sai sót AI cụ thể và có evidence.
-- [x] Giải thích vì sao AI không bắt được.
-- [x] Nêu correction và verification thật.
-- [x] Nêu nguyên tắc cộng tác rút ra.
-- [x] 200–300 words theo cách đếm nhất quán; không còn placeholder.
+The primary reason for the AI's mistakes is that it relies solely on static HTML structure reasoning without dynamic interaction experience, while tendentially treating the current UI state as the correct "Oracle." The most vital principle I learned is to always retain control: humans must define the expected results based on documentation, assess defects, and perform manual verification rather than delegating complete responsibility to the Agent.
+
+

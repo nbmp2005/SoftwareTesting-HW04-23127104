@@ -28,7 +28,9 @@ export default defineConfig({
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: [['html', { outputFolder: 'playwright-report', open: 'never' }], ['line']],
+  reporter: [['html', { outputFolder: process.env.PLAYWRIGHT_HTML_REPORT || 'playwright-report', open: 'never' }], ['line']],
+  /* Directory for artifacts like screenshots, videos, traces */
+  outputDir: process.env.PLAYWRIGHT_OUTPUT_DIR || 'test-results',
 
   // Timeout mỗi test action (ms)
   timeout: 30_000,
@@ -39,7 +41,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL for EShop SUT */
-    baseURL: 'http://localhost:5174',
+    baseURL: 'http://localhost:5173',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',

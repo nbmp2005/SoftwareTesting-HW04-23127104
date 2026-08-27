@@ -1,5 +1,0 @@
-- generic [ref=f3e4]:
-  - heading "Admin Login" [level=2] [ref=f3e5]
-  - textbox "Email" [ref=f3e6]
-  - textbox "Password" [ref=f3e7]
-  - button "Login" [ref=f3e8] [cursor=pointer]

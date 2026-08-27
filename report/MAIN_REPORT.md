@@ -1,10 +1,10 @@
 # HW04 – Automation Testing – Main Report
 
-**Họ tên:** Nguyễn Bình Minh Phương
-**MSSV:** 23127104
-**Lớp:** 23KTPM4
-**SUT:** EShop — https://github.com/ttbhanh/eshop-sut
-**GitHub repo bài làm:** https://github.com/nbmp2005/SoftwareTesting-HW04-23127104
+**Họ tên:** Nguyễn Bình Minh Phương   
+**MSSV:** 23127104  
+**Lớp:** 23KTPM4  
+**SUT:** EShop — https://github.com/ttbhanh/eshop-sut   
+**GitHub repo bài làm:** https://github.com/nbmp2005/SoftwareTesting-HW04-23127104  
 
 ---
 
@@ -78,11 +78,12 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | 11 | 8 | 2 | `playwright-report/index.html` |
-| Firefox | 11 | 7 | 3 | `playwright-report/index.html` |
-| WebKit | 11 | 8 | 2 | `playwright-report/index.html` |
+| Chromium | 11 | 8 | 2 | `playwright-report/fr03/index.html` |
+| Firefox | 11 | 8 | 2 | `playwright-report/fr03/index.html` |
+| WebKit | 11 | 8 | 2 | `playwright-report/fr03/index.html` |
 
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
+*Ghi chú:* `TC08` được skip trên cả 3 browser vì UI hiện tại không có trường xác nhận mật khẩu.
 
 
 ### 2.7. Review & Gap Analysis (AI đã sai/thiếu gì)
@@ -95,17 +96,17 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Wait không ổn định | dùng `waitForTimeout` cố định | đổi sang `waitForSelector`/`toBeVisible` auto-retry | Model chưa hiểu rõ cơ chế async của SUT |
 
 ### 2.8. Test case không automate được
-| TC | Lý do |
-|---|---|
-| TC08 | UI hiện tại không có trường xác nhận mật khẩu nên testcase mật khẩu không khớp không áp dụng. |
-| TC11 | Cần hai tài khoản và hai luồng OTP độc lập để kiểm tra OTP chéo email. |
-| TC12 | Phụ thuộc thời gian hết hạn OTP thực tế, không phù hợp chạy tự động trong suite hiện tại. |
+| TC | Attempt đã thử | Technical reason | Risk nếu bỏ tự động hóa | Next action |
+|---|---|---|---|---|
+| TC08 | Đã rà UI và DOM ở Bước 2 để tìm trường xác nhận mật khẩu. | UI hiện tại không có trường xác nhận mật khẩu nên testcase "mật khẩu không khớp" không thể thực thi đúng oracle. | Không kiểm được validation confirm password nếu SUT bổ sung trường này sau này. | Nếu UI bổ sung trường confirm password, chuyển ngay TC08 thành automated negative case. |
+| TC11 | Đã cân nhắc tách 2 browser context và 2 email song song. | Cần hai tài khoản hợp lệ và hai luồng OTP độc lập; bộ fixture hiện tại chưa ổn định để lặp lại tự động. | Chưa tự động hóa được rule OTP không dùng chéo giữa hai email. | Bổ sung fixture user thứ hai và helper lấy OTP song song để tự động hóa sau. |
+| TC12 | Đã đánh giá giải pháp `wait` dài hoặc mock thời gian. | Phụ thuộc thời gian hết hạn OTP thực tế; suite hiện tại không có quyền kiểm soát clock/backend để làm nhanh và ổn định. | Chưa có regression tự động cho timeout OTP. | Nếu có test seam/mocking clock hoặc TTL cấu hình được, bổ sung automation cho expired OTP. |
 
-### 2.9. Bug phát hiện (nếu có)
+### 2.9. Bug phát hiện 
 | Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
 |---|---|---|---|---|---|
-| BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | Vào `/forgot-password`; nhập `admin@eshop.com`; bấm `Lấy mã OTP`; quan sát OTP hiển thị | Vi phạm RULE-03 của FR-03, làm sai yêu cầu OTP 6 chữ số | Chưa tạo | `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png` |
-| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | Vào `/forgot-password`; nhập email hợp lệ; nhập đúng OTP đang hiển thị; nhập `Abc@12345`; bấm `Đặt lại mật khẩu` | Chặn happy path quên mật khẩu; người dùng không reset được mật khẩu qua UI | Chưa tạo | `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png` |
+| BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | Vào `/forgot-password`; nhập `admin@eshop.com`; bấm `Lấy mã OTP`; quan sát OTP hiển thị | Vi phạm RULE-03 của FR-03, làm sai yêu cầu OTP 6 chữ số | [BUG-001](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/1) | ![Screenshot](../test-results/fr03/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) |
+| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | Vào `/forgot-password`; nhập email hợp lệ; nhập đúng OTP đang hiển thị; nhập `Abc@12345`; bấm `Đặt lại mật khẩu` | Chặn happy path quên mật khẩu; người dùng không reset được mật khẩu qua UI | [BUG-009](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/9) | ![Screenshot](../test-results/fr03/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T14-15-18-930Z/test-failed-1.png) |
 
 ---
 
@@ -182,11 +183,10 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
-| Firefox | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
-| WebKit | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
+| Chromium | 12 | 8 | 4 | `playwright-report/fr11/index.html` |
+| Firefox | 12 | 7 | 5 | `playwright-report/fr11/index.html` |
+| WebKit | 12 | 8 | 4 | `playwright-report/fr11/index.html` |
 
-*(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
 ### 3.7. Review & Gap Analysis (AI đã sai/thiếu gì)
 
@@ -196,17 +196,17 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Hardcode giá trị | Cố gắng fix cứng mã đơn hàng trong test | Chuyển sang đọc từ env và data driven | AI có xu hướng sinh code chạy ngay |
 
 ### 3.8. Test case không automate được
-| TC | Lý do |
-|---|---|
-| TC02, TC03 | Cần hủy đơn, làm thay đổi trạng thái và không có cơ chế cleanup trên UI để chạy lại. |
-| TC13 | Phải tạo 11 đơn hàng để test phân trang, không cleanup được qua UI. |
-| TC15 | Tạo đơn qua checkout làm thay đổi trạng thái, không cleanup được. |
+| TC | Attempt đã thử | Technical reason | Risk nếu bỏ tự động hóa | Next action |
+|---|---|---|---|---|
+| TC02, TC03 | Đã thử mô hình hóa hủy đơn như happy-path state transition. | Hủy đơn làm thay đổi trạng thái thật và không có cơ chế reset/cleanup qua UI để giữ fixture lặp lại ổn định. | Không có regression tự động cho hai luồng cancel hợp lệ của user. | Nếu có API/setup script reset trạng thái đơn, chuyển hai case này sang automated. |
+| TC13 | Đã cân nhắc seed 11 đơn bằng thao tác UI trước test. | Tạo 11 đơn qua UI tốn thời gian và không có cleanup, dễ làm bẩn dữ liệu run sau. | Chưa tự động hóa được rủi ro volume/pagination. | Bổ sung script seed/reset dữ liệu order để tự động hóa case số lượng lớn. |
+| TC15 | Đã thử đi qua flow cart/checkout để tạo order mới. | Checkout tạo dữ liệu thật và không có cleanup tương ứng, nên suite sẽ không còn độc lập khi chạy lặp. | Chưa có check tự động cho toàn vẹn dữ liệu tổng tiền sau checkout. | Khi có môi trường seed lại dữ liệu hoặc database reset, đưa case này vào suite automation. |
 
 ### 3.9. Bug phát hiện (nếu có)
 | Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
 |---|---|---|---|---|---|
-| BUG-002 | User vẫn có thể hủy đơn đang giao | Đăng nhập test@eshop.com -> Mở lịch sử đơn hàng -> Quan sát đơn Đang giao | Trái với thiết kế state machine | Chưa tạo | Tham khảo BUG_REPORT |
-| BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | Đăng nhập admin -> Quản lý Đơn hàng -> Quan sát đơn Đã hủy | Hồi sinh đơn đã kết thúc | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-002 | User vẫn có thể hủy đơn đang giao | Đăng nhập user; vào `/profile`; tìm dòng trạng thái `Đang giao`; quan sát vẫn có nút `Hủy đơn` | Vi phạm state machine FR-11, cho phép user hủy đơn sau khi đã sang giai đoạn giao hàng | [BUG-002](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/2) | ![Screenshot](../test-results/fr11/fr11-order-history-FR-11-X-64dc6-không-được-hủy-đơn-shipping-chromium-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png) |
+| BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | Đăng nhập admin; vào quản lý đơn hàng; tìm dòng trạng thái `Đã hủy`; quan sát vẫn có nút `Đánh dấu Đã giao` | Làm sai lịch sử và trạng thái cuối của đơn hàng canceled | [BUG-003](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/3) | ![Screenshot](../test-results/fr11/fr11-order-history-FR-11-X-d9665-yển-canceled-sang-delivered-chromium-Run-by-23127104-2026-08-27T14-32-16-541Z/test-failed-1.png) |
 
 ---
 
@@ -223,7 +223,16 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
   - `max_uses_per_user`: >= 1
 
 ### 4.2. Quy trình dùng AI (AI-first, từng bước)
-*(giống cấu trúc bảng ở mục 2.2)*
+
+| Bước | Việc làm | Công cụ/Skill dùng | Ghi chú |
+|---|---|---|---|
+| 1 | Khám phá UI, rule nghiệp vụ, selector và dữ liệu mẫu coupon | `fr-context-explorer` | Black-box qua admin UI |
+| 2 | Sinh danh sách test case (≥12) | `testcase-generator` | Dựa trên `docs/fr-context/fr17-context.md` |
+| 3 | Review, bỏ case không ổn định, bổ sung boundary/spec case | Thủ công | Bổ sung thêm case percent > 100, past date, trim/case-insensitive |
+| 4 | Convert test case → Playwright spec data-driven | `playwright-script-writer` | Một spec duy nhất + JSON data |
+| 5 | Tách dữ liệu test ra file riêng | — | `automation/data/fr17-testcases-draft.json` |
+| 6 | Cấu hình multi-browser + HTML report | `multibrowser-runner-report` | Chromium, Firefox, WebKit |
+| 7 | Review & fix script AI sinh | Thủ công | Sửa locator, native validation và cleanup |
 
 ### 4.3. Danh sách Test Case (≥12)
 
@@ -265,9 +274,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
-| Firefox | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
-| WebKit | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
+| Chromium | 19 | 14 | 5 | `playwright-report/fr17/index.html` |
+| Firefox | 19 | 9 | 10 | `playwright-report/fr17/index.html` |
+| WebKit | 19 | 13 | 6 | `playwright-report/fr17/index.html` |
 
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
@@ -287,11 +296,11 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 ### 4.9. Bug phát hiện (nếu có)
 | Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
 |---|---|---|---|---|---|
-| BUG-004 | Chấp nhận discount_value không dương | Nhập discount = 0 hoặc -10 -> Tạo | Sai nghiệp vụ tính giảm giá | Chưa tạo | Tham khảo BUG_REPORT |
-| BUG-005 | Chấp nhận min_order_amount âm | Nhập min order = -1 -> Tạo | Sinh coupon với điều kiện sai | Chưa tạo | Tham khảo BUG_REPORT |
-| BUG-006 | Chấp nhận coupon percent > 100% | Nhập discount = 101% -> Tạo | Có thể giảm giá lớn hơn tổng đơn | Chưa tạo | Tham khảo BUG_REPORT |
-| BUG-007 | Chấp nhận ngày hết hạn trong quá khứ | Nhập ngày hết hạn năm 2020 -> Tạo | Lưu dữ liệu vô nghĩa | Chưa tạo | Tham khảo BUG_REPORT |
-| BUG-008 | Xóa coupon không có confirm dialog | Chọn Xóa 1 row coupon -> Bị xóa ngay | Người dùng dễ thao tác nhầm | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-004 | Hệ thống chấp nhận `discount_value` không dương | Tạo coupon với `discount_value = 0` hoặc `-10`; submit; quan sát row vẫn được tạo | Vi phạm rule giá trị giảm phải dương, làm sai nghiệp vụ coupon | [BUG-004](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/4) | ![Screenshot](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-b6646-nt-value-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) |
+| BUG-005 | Hệ thống chấp nhận `min_order_amount` âm | Tạo coupon với `min_order_amount = -1`; submit; quan sát row vẫn được tạo | Coupon có điều kiện đơn tối thiểu âm, sai rule áp dụng | [BUG-005](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/5) | ![Screenshot](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) |
+| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | Tạo coupon percent với `discount_value = 101`; submit; quan sát row `101%` xuất hiện | Có thể làm tổng giảm giá vượt giá trị đơn hàng | [BUG-006](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/6) | ![Screenshot](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) |
+| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | Tạo coupon với `expired_at = 2020-01-01`; submit; quan sát row được tạo ở trạng thái hết hạn | Tạo dữ liệu coupon rác ngay từ lúc sinh mới | [BUG-007](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/7) | ![Screenshot](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) |
+| BUG-008 | Xóa coupon không có confirm dialog | Tạo/chọn một coupon; bấm `Xóa`; quan sát không có confirm trước khi xóa | Thao tác destructive thiếu bước xác nhận, dễ xóa nhầm | [BUG-008](https://github.com/nbmp2005/SoftwareTesting-HW04-23127104/issues/8) | ![Screenshot](../test-results/fr17/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-chromium-Run-by-23127104-2026-08-27T14-37-10-742Z/test-failed-1.png) |
 ---
 
 ## 5. Tổng kết tự động hóa (Test Summary)
@@ -299,10 +308,11 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Chỉ số | Feature A (FR-03) | Feature B (Order History) | Feature C (FR-17) | Tổng |
 |---|---|---|---|---|
 | Số test case thiết kế | 13 | 16 | 19 | 48 |
-| Số test case automate | 10 | 12 | 19 | 41 |
+| Số test case automate | 10 + 1 skipped do UI không hỗ trợ | 12 | 19 | 41 automate + 1 skipped |
 | Số lượt chạy browser | 3 | 3 | 3 | 9 |
-| Pass | 23 trong artifact FR-03 gần nhất | Cần cập nhật sau khi chạy lại HTML report cuối | Cần cập nhật sau khi chạy lại HTML report cuối | Cần tổng hợp từ report cuối |
-| Fail | 7 trong artifact FR-03 gần nhất | Cần cập nhật sau khi chạy lại HTML report cuối | Cần cập nhật sau khi chạy lại HTML report cuối | Cần tổng hợp từ report cuối |
+| Pass | 24 | 23 | 36 | 83 |
+| Fail | 6 | 13 | 21 | 40 |
+| Skipped | 3 | 0 | 0 | 3 |
 | Số bug phát hiện | 2 | 2 | 5 | 9 |
 
 ---
@@ -312,15 +322,15 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 - [x] `report/AI_AUDIT_REPORT.md`
 - [x] `report/AI_CRITIQUE.md`
 - [x] `report/commit-log.txt`
-- [x] `playwright-report/` hiện có artifact FR-03 gần nhất; nên chạy/export lại đủ FR-03, FR-11, FR-17 trước khi đóng gói cuối.
+- [x] `playwright-report/fr03`, `playwright-report/fr11`, `playwright-report/fr17`
 - [x] `report/BUG_REPORT.md` + screenshot local trong `test-results/`
 - [x] `README.md` (self-assessment + test summary)
 - [ ] PDF export cho Main Report / AI Audit / AI Critique
-- [ ] GitHub Issues public cho 9 bug và screenshot đính kèm
-- [ ] Link video demo YouTube unlisted
+- [x] GitHub Issues public cho 9 bug
+- [x] Link video demo YouTube unlisted: https://youtu.be/jvRyudnSumI
 - [x] Link repo GitHub bài làm: https://github.com/nbmp2005/SoftwareTesting-HW04-23127104
 - [x] Agent Skill kit: `.agents/skills/`
-- [ ] Link video demo skill
+- [x] Link video demo skill: https://youtu.be/4YA5ceIhLCg
 
 ---
 
