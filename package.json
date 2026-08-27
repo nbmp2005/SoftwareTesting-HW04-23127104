@@ -13,6 +13,7 @@
     "test:webkit": "node automation/run-playwright.cjs --project=webkit*",
     "test:fr03": "node automation/run-playwright.cjs automation/tests/fr03-forgot-password.spec.ts",
     "test:fr11": "node automation/run-playwright.cjs automation/tests/fr11-order-history.spec.ts",
+    "test:fr17": "node automation/run-playwright.cjs automation/tests/fr17-coupon-crud.spec.ts",
     "report": "playwright show-report"
   },
   "repository": {

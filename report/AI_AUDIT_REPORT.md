@@ -915,6 +915,21 @@ TC02 của FR-03 fail chủ yếu do **lỗi từ Backend (API)**: Khi nhập em
 Đã tạo `automation/tests/fr17-coupon-crud.spec.ts` theo kiểu data-driven, import test data từ `automation/data/fr17-testcases-draft.json` và dùng selector từ `docs/fr-context/fr17-context.md`. Script bao phủ 19 test case tự động, có assertion visibility/state, text/content, URL/navigation, count, value và native validation; có cleanup cho coupon tạo trong test. Không chạy Playwright theo Human Review Gate. Chưa cập nhật MAIN_REPORT.md hoặc TEST_CASE_CATALOG.md vì cần người dùng review và xác nhận script trước.
 ```
 
+## Prompt 39
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T09:58:25.7340712+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) 1. Selector thực tế trên DOM. Cái này cần xác nhận thế nào
+
+1. `baseURL` lệch: context dùng `5174`, config dùng `5173`. URL của admin là 5174&#x20
+2. Credential trong JSON là `admin123`, cần đối chiếu với tài khoản thật.  cái này xác nhận thế nào
+```
+- AI Output:
+```
+Selector cần kiểm tra trên ứng dụng đang chạy bằng DevTools hoặc Playwright Inspector; xác nhận locator tìm đúng một phần tử và thao tác được. Với URL, context và thông tin người dùng xác nhận admin dùng port 5174, nên config cần đối chiếu/cập nhật theo URL này. Credential hiện chưa khớp: `.env` ghi `Admin123!` còn JSON ghi `admin123`; hãy đăng nhập thủ công tại http://localhost:5174/ bằng credential trong `.env`, rồi dùng credential đã xác nhận từ biến môi trường cho test thay vì giữ mật khẩu sai trong JSON.
+```
+
 
 ## Prompt 39
 - Name of the AI tool: Gemini 3.1 Pro (High)
@@ -927,3 +942,39 @@ TC02 của FR-03 fail chủ yếu do **lỗi từ Backend (API)**: Khi nhập em
 `
 Đã viết lại test script cho TC02 của FR-03 (fr03-forgot-password.spec.ts). Cụ thể, đã cô lập lỗi OTP 4 số bằng cách thêm padding '00' vào cuối mã OTP được sinh ra (paddedOtp = displayedOtp.padEnd(6, '0')) để vượt qua bước validate OTP trên frontend. Sau đó, thay đổi logic assertion từ expect(thành công) sang bắt trực tiếp thông báo lỗi /mật khẩu không hợp lệ/i để phát hiện và báo cáo đúng product bug về mật khẩu.
 `
+
+## Prompt 40
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T10:13:35.4351110+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) [$multibrowser-runner-report](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\multibrowser-runner-report\SKILL.md) fr17
+```
+- AI Output:
+```
+Đã kiểm tra cấu hình multi-browser cho FR-17: `playwright.config.ts` có 3 project Chromium/Firefox/WebKit, tên project chứa `Run by: 23127104` và timestamp ISO từ `PLAYWRIGHT_RUN_TIMESTAMP`, HTML reporter ghi vào `playwright-report`, `baseURL` đang là `http://localhost:5174`. Đã thêm script `test:fr17` vào `package.json` để chạy `automation/tests/fr17-coupon-crud.spec.ts` thông qua `automation/run-playwright.cjs`, giúp timestamp được sinh bằng thời gian thật khi người dùng tự chạy test. Không chạy Playwright và không tạo/giả lập report theo yêu cầu anti-cheat của skill.
+```
+
+## Prompt 41
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T10:22:30.7890386+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) [$bug-report-writer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\bug-report-writer\SKILL.md) fr17 cho lần chạy playwright gần nhất
+```
+- AI Output:
+```
+Đã triage artifact Playwright FR-17 gần nhất trong `test-results/` và `playwright-report/`. Lần chạy `2026-08-27T03:14:54.792Z` fail 57/57 test case-browser combinations (19 TC trên Chromium, Firefox, WebKit), nhưng tất cả đều fail trong `beforeEach` khi chờ click menu `Mã Giảm Giá` sau login. Screenshot và `error-context.md` cho thấy trang vẫn ở form `Admin Login` với email `admin@eshop.com` và mật khẩu đã nhập, nên test chưa vào được màn hình coupon. Vì không có evidence sản phẩm ở chức năng FR-17 và lỗi có tính chất login/setup/credential/auth chung, không append bug mới vào `report/BUG_REPORT.md`.
+```
+
+## Prompt 42
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T10:33:12.8424057+07:00
+- Prompt:
+```
+[$bug-report-writer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\bug-report-writer\SKILL.md) [$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) fr17 với lần chạy playwright gần nhất
+```
+- AI Output:
+```
+Đã triage lần chạy Playwright FR-17 mới nhất `2026-08-27T03:26:32.884Z` từ `test-results/` và `playwright-report/`. Run còn 22 failures: một số được loại là test/data/browser-message issue (native validation message khác giữa browser, dữ liệu rỗng bị helper ép number), còn 5 product bugs được append vào `report/BUG_REPORT.md`: BUG-004 discount_value không dương vẫn được tạo, BUG-005 min_order_amount âm vẫn được tạo, BUG-006 percent > 100 vẫn được tạo, BUG-007 expired_at quá khứ vẫn được tạo, BUG-008 xóa coupon không có confirm dialog. Không chạy lại test và không tạo evidence giả.
+```

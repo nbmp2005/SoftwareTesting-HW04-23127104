@@ -194,3 +194,249 @@ TC10 đăng nhập admin, vào bảng `Quản lý Đơn hàng`, lọc dòng theo
 ### Workaround/impact
 
 Admin phải tự tránh bấm nhầm nút này. Nếu thao tác được thực thi, hệ thống có thể hồi sinh đơn đã hủy thành đã giao, làm sai lịch sử đơn hàng và báo cáo trạng thái.
+
+## Summary Addendum - FR-17
+
+| Bug ID | Title | Feature/test ID | Severity | Reproducibility | GitHub Issue | Status |
+|---|---|---|---|---|---|---|
+| BUG-004 | Hệ thống chấp nhận discount_value không dương | FR-17 / TC10, TC11 | Major / High | 2 observed failures in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
+| BUG-005 | Hệ thống chấp nhận min_order_amount âm | FR-17 / TC12 | Major / High | 1 observed browser failure in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
+| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | FR-17 / TC16 | Major / High | 1 observed browser failure in latest run | Chưa tạo | Confirmed locally |
+| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | FR-17 / TC17 | Major / High | 2 observed browser failures in latest run; confirmed by FR17 context exploration | Chưa tạo | Confirmed locally |
+| BUG-008 | Xóa coupon không có confirm dialog | FR-17 / TC19 | Major / Medium | 3/3 browser projects in latest run | Chưa tạo | Confirmed locally |
+
+## BUG-004 – Hệ thống chấp nhận discount_value không dương
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-17 / TC10, TC11 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5174` công khai trong artifact |
+| Test repo commit | `402816fc2586a54be7442f6ff2c4b91e10c6a8c2` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox; context exploration also reproduced by Playwright MCP |
+| Severity / priority | Major / High - coupon giảm giá có giá trị 0 hoặc âm làm sai nghiệp vụ khuyến mãi |
+| Reproducibility | Latest run observed failures for TC10 and TC11; FR17 context exploration also recorded `discount_value = 0` and `discount_value = -10` being accepted |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT admin app đang chạy tại `http://localhost:5174`.
+- Đăng nhập admin bằng `admin@eshop.com`.
+- Mở màn hình `Mã Giảm Giá`.
+
+### Steps to reproduce
+
+1. Chọn type `percent`.
+2. Nhập coupon với `discount_value = 0` hoặc `discount_value = -10`, ngày hết hạn tương lai và `max_uses_per_user = 1`.
+3. Bấm `Tạo mã` và quan sát bảng coupon.
+
+### Expected result
+
+Theo FR-17, `discount_value` phải là số dương; coupon có `discount_value <= 0` phải bị từ chối và không xuất hiện trong bảng.
+
+### Actual result
+
+SUT tạo coupon dù `discount_value` không dương. Artifact mới nhất ghi nhận row `FR17ZERO`/`FR17NEGDISC` được tìm thấy thay vì bị từ chối; screenshot Firefox hiển thị row `FR17NEGDISC` với giá trị `-10%`.
+
+### Evidence
+
+- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-b6646-nt-value-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-be834-unt-value-0-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html`
+- Trace/video/log: `error-context.md` trong các thư mục screenshot nêu trên; không thấy trace/video riêng trong artifact.
+- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+
+### Triage notes
+
+Selector login/menu coupon đã qua được trong latest run, page snapshot ở đúng màn hình `Quản lý Mã Giảm Giá`. Assertion chỉ kiểm tra row theo mã coupon duy nhất phải có count `0`, nhưng thực tế locator resolve được `1` row. Context FR17 cũng đã ghi nhận cùng hành vi khi khám phá black-box, nên đây không phải lỗi selector hoặc dữ liệu test.
+
+### Workaround/impact
+
+Admin phải tự tránh nhập giá trị 0 hoặc âm. Nếu không, hệ thống có thể lưu coupon vô nghĩa hoặc coupon âm làm sai tính toán giảm giá.
+
+## BUG-005 – Hệ thống chấp nhận min_order_amount âm
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-17 / TC12 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5174` công khai trong artifact |
+| Test repo commit | `402816fc2586a54be7442f6ff2c4b91e10c6a8c2` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox; context exploration also reproduced by Playwright MCP |
+| Severity / priority | Major / High - điều kiện đơn tối thiểu âm làm sai rule áp dụng coupon |
+| Reproducibility | 1 observed browser failure in latest run; FR17 context exploration also recorded `min_order_amount = -1` being accepted |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT admin app đang chạy tại `http://localhost:5174`.
+- Đăng nhập admin bằng `admin@eshop.com`.
+- Mở màn hình `Mã Giảm Giá`.
+
+### Steps to reproduce
+
+1. Tạo coupon percent với `discount_value = 10`.
+2. Nhập `min_order_amount = -1`, ngày hết hạn tương lai và `max_uses_per_user = 1`.
+3. Bấm `Tạo mã` và quan sát bảng coupon.
+
+### Expected result
+
+Theo FR-17, `min_order_amount` phải `>= 0`; coupon có đơn tối thiểu âm phải bị từ chối và không xuất hiện trong bảng.
+
+### Actual result
+
+SUT tạo coupon `FR17NEGMIN`; screenshot Firefox hiển thị row này với `Đơn tối thiểu = -1 đ`.
+
+### Evidence
+
+- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html`
+- Trace/video/log: `test-results/fr17-coupon-crud-FR-17-Quả-3ffb5-r-amount-âm-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/error-context.md`
+- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+
+### Triage notes
+
+Page snapshot ở đúng màn coupon và form chứa `FR17NEGMIN`, `discount_value = 10`, `min_order_amount = -1`. Test expected row count `0`, nhưng locator theo code `FR17NEGMIN` nhận `1` row. Context FR17 đã ghi nhận cùng hành vi bằng black-box exploration.
+
+### Workaround/impact
+
+Admin phải tự không nhập giá trị âm. Coupon với đơn tối thiểu âm có thể được áp dụng ngoài điều kiện nghiệp vụ mong muốn.
+
+## BUG-006 – Hệ thống chấp nhận coupon percent lớn hơn 100%
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-17 / TC16 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5174` công khai trong artifact |
+| Test repo commit | `402816fc2586a54be7442f6ff2c4b91e10c6a8c2` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; latest direct evidence from Firefox |
+| Severity / priority | Major / High - discount percent trên 100% có thể làm tổng giảm giá vượt giá trị đơn hàng |
+| Reproducibility | 1 observed browser failure in latest run |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT admin app đang chạy tại `http://localhost:5174`.
+- Đăng nhập admin bằng `admin@eshop.com`.
+- Mở màn hình `Mã Giảm Giá`.
+
+### Steps to reproduce
+
+1. Chọn type `percent`.
+2. Nhập `discount_value = 101`, `min_order_amount = 0`, ngày hết hạn tương lai và `max_uses_per_user = 1`.
+3. Bấm `Tạo mã` và quan sát bảng coupon.
+
+### Expected result
+
+Theo xác nhận rule trong `docs/fr-context/fr17-context.md`, coupon percent không được vượt quá 100%; giá trị 101% phải bị từ chối.
+
+### Actual result
+
+SUT tạo coupon `FR17P101`; screenshot Firefox hiển thị row `FR17P101` với giá trị `101%`.
+
+### Evidence
+
+- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html`
+- Trace/video/log: `test-results/fr17-coupon-crud-FR-17-Quả-cca03-percent-100-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/error-context.md`
+- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+
+### Triage notes
+
+Failure là assertion row count: expected `0`, received `1`. Snapshot cho thấy màn coupon đã load đúng, row `FR17P101` tồn tại. Đây không phải lỗi selector vì row được định danh bằng chính mã coupon test.
+
+### Workaround/impact
+
+Admin phải tự giới hạn percent không quá 100. Nếu lưu 101%, hệ thống có thể giảm vượt giá trị đơn hàng.
+
+## BUG-007 – Hệ thống chấp nhận ngày hết hạn trong quá khứ
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-17 / TC17 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5174` công khai trong artifact |
+| Test repo commit | `402816fc2586a54be7442f6ff2c4b91e10c6a8c2` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; Firefox and WebKit |
+| Severity / priority | Major / High - coupon mới tạo đã hết hạn là dữ liệu sai nghiệp vụ |
+| Reproducibility | 2 observed browser failures in latest run; FR17 context exploration also recorded past-date coupon being accepted |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT admin app đang chạy tại `http://localhost:5174`.
+- Đăng nhập admin bằng `admin@eshop.com`.
+- Mở màn hình `Mã Giảm Giá`.
+
+### Steps to reproduce
+
+1. Tạo coupon percent hợp lệ nhưng nhập `expired_at = 2020-01-01`.
+2. Bấm `Tạo mã`.
+3. Quan sát bảng coupon.
+
+### Expected result
+
+Theo xác nhận nghiệp vụ trong `docs/fr-context/fr17-context.md`, ngày hết hạn bắt buộc phải là ngày tương lai; coupon có ngày trong quá khứ phải bị từ chối.
+
+### Actual result
+
+SUT tạo coupon `FR17PAST`; screenshot hiển thị row `FR17PAST` với trạng thái `Hết hạn`.
+
+### Evidence
+
+- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-b62fd-ong-quá-khứ-phải-bị-từ-chối-webkit-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html`
+- Trace/video/log: `error-context.md` trong hai thư mục screenshot nêu trên
+- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+
+### Triage notes
+
+Latest run vào đúng màn coupon và test chỉ kiểm tra coupon `FR17PAST` không được tạo. Thực tế locator theo row nhận `1` element. Context FR17 cũng đã ghi nhận UI tạo coupon quá hạn và đánh dấu `Hết hạn`.
+
+### Workaround/impact
+
+Admin phải tự kiểm tra ngày trước khi tạo coupon. Hệ thống có thể lưu coupon mới ở trạng thái hết hạn ngay khi tạo, gây dữ liệu rác và nhầm lẫn vận hành.
+
+## BUG-008 – Xóa coupon không có confirm dialog
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-17 / TC19 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5174` công khai trong artifact |
+| Test repo commit | `402816fc2586a54be7442f6ff2c4b91e10c6a8c2` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; admin app `http://localhost:5174`; Chromium, Firefox and WebKit |
+| Severity / priority | Major / Medium - thao tác destructive không có xác nhận, dễ xóa nhầm coupon |
+| Reproducibility | 3/3 browser projects in latest run |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT admin app đang chạy tại `http://localhost:5174`.
+- Đăng nhập admin bằng `admin@eshop.com`.
+- Mở màn hình `Mã Giảm Giá`.
+- Có ít nhất một coupon trong bảng.
+
+### Steps to reproduce
+
+1. Tạo hoặc chọn một coupon trong bảng.
+2. Click nút `Xóa` của row coupon.
+3. Quan sát browser có hiển thị confirm dialog trước khi xóa hay không.
+
+### Expected result
+
+Theo xác nhận nghiệp vụ trong `docs/fr-context/fr17-context.md`, xóa coupon phải có confirm dialog trước khi thực hiện.
+
+### Actual result
+
+Không có confirm dialog. Playwright chờ event `dialog` đến timeout trên Chromium/Firefox/WebKit; context FR17 cũng ghi nhận click `Xóa` làm row biến mất ngay.
+
+### Evidence
+
+- Screenshot: `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-chromium-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-firefox-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`; `test-results/fr17-coupon-crud-FR-17-Quả-dd0b8-upon-phải-có-confirm-dialog-webkit-Run-by-23127104-2026-08-27T03-26-32-884Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html`
+- Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên
+- ISO reproduction time: `2026-08-27T03:26:32.884Z`
+
+### Triage notes
+
+Failure xảy ra tại `page.waitForEvent('dialog')` sau khi click `Xóa`, không phải tại selector row. Vì cả ba browser đều timeout khi chờ dialog và context FR17 đã xác nhận xóa ngay không có dialog, đây là product defect về luồng xác nhận thao tác destructive.
+
+### Workaround/impact
+
+Admin phải tự cẩn thận khi bấm `Xóa`; không có cơ chế hủy thao tác nếu click nhầm.

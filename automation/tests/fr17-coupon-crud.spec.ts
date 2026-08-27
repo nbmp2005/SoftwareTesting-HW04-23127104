@@ -53,8 +53,8 @@ function adminCredentials(): { email: string; password: string } {
   const loginCase = typedData.find(tc => tc.id === 'TC01');
   if (!loginCase) throw new Error('TC01 is required for data-driven admin credentials');
   return {
-    email: inputString(loginCase, 'admin_email'),
-    password: inputString(loginCase, 'admin_password'),
+    email: process.env.FR17_ADMIN_EMAIL ?? process.env.FR11_ADMIN_EMAIL ?? inputString(loginCase, 'admin_email'),
+    password: process.env.FR17_ADMIN_PASSWORD ?? process.env.FR11_ADMIN_PASSWORD ?? inputString(loginCase, 'admin_password'),
   };
 }
 
