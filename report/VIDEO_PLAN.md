@@ -2,11 +2,11 @@
 
 ## Required metadata
 
-- Video URL: [TODO: unlisted YouTube]
-- Duration: [TODO; ≥5 minutes]
+- Video URL: Chưa gắn link YouTube unlisted
+- Duration: Chưa quay; yêu cầu tối thiểu 5 phút
 - Narration: Vietnamese
-- Demonstrated feature: [TODO]
-- Authorship evidence: [TODO: face-cam or `whoami` + `hostname`]
+- Demonstrated feature: FR-03 - Quên mật khẩu & Đặt lại mật khẩu
+- Authorship evidence: Terminal chạy `whoami` và `hostname`
 
 ## Suggested timeline (6–8 minutes)
 
@@ -35,14 +35,14 @@
 
 ### AI correction
 
-- AI originally produced: [TODO]
-- Why it was wrong/fragile: [TODO]
-- My correction: [TODO]
-- Evidence that correction works: [TODO]
+- AI originally produced: Test TC02 phụ thuộc vào giả định OTP 6 chữ số và không cô lập được lỗi reset mật khẩu.
+- Why it was wrong/fragile: SUT thực tế sinh OTP 4 chữ số, làm happy path reset bị che bởi lỗi OTP length.
+- My correction: Đọc OTP đang hiển thị trên UI, nhập đúng OTP đó, rồi kiểm tra riêng message thành công, redirect `/login`, và đăng nhập bằng mật khẩu mới.
+- Evidence that correction works: Lần chạy FR-03 mới nhất tạo BUG-009 với screenshot trên cả Chromium/Firefox/WebKit, chứng minh lỗi reset password độc lập với BUG-001.
 
 ### Run summary
 
-- Command: [TODO]
-- Commit SHA: [TODO]
-- Run timestamp: [TODO]
-- Actual pass/fail/skip: [TODO]
+- Command: `npm run test:fr03`
+- Commit SHA: `38028e7` hoặc commit cuối cùng sau khi hoàn tất tài liệu
+- Run timestamp: Lấy từ tên project trong HTML report sau khi quay video
+- Actual pass/fail/skip: FR-03 artifact gần nhất: 23 pass, 7 fail, 3 skip trên 3 browser

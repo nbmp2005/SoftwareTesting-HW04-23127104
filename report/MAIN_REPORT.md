@@ -19,7 +19,7 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Pool | FR | Tên chức năng |
 |---|---|---|
 | A | FR-03 | Quên mật khẩu & Đặt lại mật khẩu (2 bước) |
-| B | (User) Order History | Xem lịch sử đơn hàng (User) |
+| B | FR-11 | Xem lịch sử đơn hàng (User) |
 | C | FR-17 | Quản lý Mã Giảm Giá (Coupon CRUD) |
 
 
@@ -78,9 +78,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | | | | |
-| Firefox | | | | |
-| WebKit | | | | |
+| Chromium | 11 | 8 | 2 | `playwright-report/index.html` |
+| Firefox | 11 | 7 | 3 | `playwright-report/index.html` |
+| WebKit | 11 | 8 | 2 | `playwright-report/index.html` |
 
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
@@ -182,9 +182,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | | | | |
-| Firefox | | | | |
-| WebKit | | | | |
+| Chromium | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
+| Firefox | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
+| WebKit | 12 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr11` trước khi nộp |
 
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
@@ -265,9 +265,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | Browser | Số TC chạy | Pass | Fail | Link HTML report |
 |---|---|---|---|---|
-| Chromium | | | | |
-| Firefox | | | | |
-| WebKit | | | | |
+| Chromium | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
+| Firefox | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
+| WebKit | 19 | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Chưa có artifact HTML cuối cùng trong `playwright-report/` | Cần chạy lại `npm run test:fr17` trước khi nộp |
 
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
@@ -300,24 +300,27 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 |---|---|---|---|---|
 | Số test case thiết kế | 13 | 16 | 19 | 48 |
 | Số test case automate | 10 | 12 | 19 | 41 |
-| Số lượt chạy browser | [TODO: Cần cập nhật] | [TODO: Cần cập nhật] | [TODO: Cần cập nhật] | [TODO] (≥9) |
-| Pass | [TODO] | [TODO] | [TODO] | [TODO] |
-| Fail | [TODO] | [TODO] | [TODO] | [TODO] |
+| Số lượt chạy browser | 3 | 3 | 3 | 9 |
+| Pass | 23 trong artifact FR-03 gần nhất | Cần cập nhật sau khi chạy lại HTML report cuối | Cần cập nhật sau khi chạy lại HTML report cuối | Cần tổng hợp từ report cuối |
+| Fail | 7 trong artifact FR-03 gần nhất | Cần cập nhật sau khi chạy lại HTML report cuối | Cần cập nhật sau khi chạy lại HTML report cuối | Cần tổng hợp từ report cuối |
 | Số bug phát hiện | 2 | 2 | 5 | 9 |
 
 ---
 
 ## 6. Danh sách tài liệu đính kèm
 
-- [ ] `ai-audit-report.md` / `.pdf`
-- [ ] `ai-critique.md` / `.pdf`
-- [ ] `commit-log.txt`
-- [ ] `playwright-report/` (3 browser x 3 feature)
-- [ ] `bug-report.md` + screenshots trên GitHub Issues
-- [ ] `README.md` (self-assessment + test summary)
-- [ ] Link video demo YouTube (unlisted): [TODO: Gắn link video]
-- [ ] Link repo GitHub bài làm: https://github.com/nbmp2005/SoftwareTesting-HW04-23127104
-- [ ] Agent Skill kit (thư mục `.agents/skills/`) + video demo skill: [TODO: Gắn link video]
+- [x] `report/AI_AUDIT_REPORT.md`
+- [x] `report/AI_CRITIQUE.md`
+- [x] `report/commit-log.txt`
+- [x] `playwright-report/` hiện có artifact FR-03 gần nhất; nên chạy/export lại đủ FR-03, FR-11, FR-17 trước khi đóng gói cuối.
+- [x] `report/BUG_REPORT.md` + screenshot local trong `test-results/`
+- [x] `README.md` (self-assessment + test summary)
+- [ ] PDF export cho Main Report / AI Audit / AI Critique
+- [ ] GitHub Issues public cho 9 bug và screenshot đính kèm
+- [ ] Link video demo YouTube unlisted
+- [x] Link repo GitHub bài làm: https://github.com/nbmp2005/SoftwareTesting-HW04-23127104
+- [x] Agent Skill kit: `.agents/skills/`
+- [ ] Link video demo skill
 
 ---
 

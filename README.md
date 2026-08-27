@@ -3,11 +3,11 @@
 **Student ID:** 23127104  
 **Student name:** Nguyễn Bình Minh Phương  
 **Class:** 23KTPM4  
-**Public repository:** [TODO: Gắn link GitHub]  
-**Demo video:** [TODO: unlisted YouTube URL]  
-**Skill demo video:** [TODO: Gắn link Video Demo Skill]
+**Public repository:** https://github.com/nbmp2005/SoftwareTesting-HW04-23127104  
+**Demo video:** Chưa gắn link YouTube unlisted  
+**Skill demo video:** Chưa gắn link video demo skill
 
-> Status: Hoàn thành tự động hóa. Cần bổ sung kết quả báo cáo từ HTML Report sau khi chạy lệnh.
+> Status: Đã có source automation, data-driven tests, bug report và Playwright HTML artifact. Trước khi nộp cần gắn link video/skill demo và xuất PDF.
 
 ## Selected features
 
@@ -24,9 +24,9 @@
 | Features selected | 3 |
 | Test cases designed | 48 |
 | Test cases automated | 41 |
-| Test executions across browsers | [TODO: Cần chạy test] |
-| Passed | [TODO: Cần chạy test] |
-| Failed | [TODO: Cần chạy test] |
+| Test executions across browsers | 126 listed Playwright tests across 3 browsers |
+| Passed | Latest local artifact: FR-03 has 23 passed |
+| Failed | Latest local artifact: FR-03 has 7 failed product-defect/evidence checks |
 | Skipped/not automated | 7 |
 | Browser runs | 9 |
 | Confirmed product bugs | 9 |
@@ -35,18 +35,17 @@
 
 | No. | Criterion | Maximum | Self-assessed |
 |---:|---|---:|---:|
-| 1 | Task 1 – Feature A | 25 | [TODO] |
-| 2 | Task 1 – Feature B | 25 | [TODO] |
-| 3 | Task 1 – Feature C | 25 | [TODO] |
-| 4 | Task 2 – Demo video | 15 | [TODO] |
-| 5 | Agent Skill | 10 | [TODO] |
-| | **Total** | **100** | **[TODO: 000–100]** |
+| 1 | Task 1 – Feature A | 25 | 25 |
+| 2 | Task 1 – Feature B | 25 | 25 |
+| 3 | Task 1 – Feature C | 25 | 25 |
+| 4 | Task 2 – Demo video | 15 | Chưa chấm nếu chưa gắn video |
+| 5 | Agent Skill | 10 | Chưa chấm nếu chưa gắn skill demo |
+| | **Total** | **100** | **75 + phần video/skill sau khi gắn link** |
 
 ## Repository map
 
 - `docs/01-foundation.md`: kiến thức nền tảng cần hiểu.
-- `docs/02-task-guide.md`: quy trình thực hiện toàn bộ bài.
-- `docs/03-agent-skill-guide.md`: các phương án và cách dùng skill.
+- `docs/02-per-fr-workflow.md`: quy trình thực hiện theo từng FR.
 - `report/`: template báo cáo, audit, critique, bug, video và checklist.
 - `.agents/skills/`: Các Agent Skill được dùng trong bài.
 - `automation/tests/`, `playwright.config.ts`, `playwright-report/`: Chứa mã nguồn automation và cấu hình.

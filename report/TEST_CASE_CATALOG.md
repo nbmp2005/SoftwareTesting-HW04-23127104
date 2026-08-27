@@ -2,7 +2,7 @@
 
 > Copy the table section for each selected feature. Maintain one row per case and at least 12 rows per feature.
 
-## Feature [TODO: FR-XX]
+## Feature FR-03 — Quên mật khẩu & Đặt lại mật khẩu
 
 | ID | Requirement | Technique/type | Priority | Preconditions | Test data key | Steps summary | Expected result/oracle | Cleanup | Automated spec/title | Status |
 |---|---|---|---|---|---|---|---|---|---|---|

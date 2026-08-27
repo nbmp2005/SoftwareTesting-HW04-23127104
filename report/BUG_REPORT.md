@@ -7,54 +7,14 @@
 | Bug ID | Title | Feature/test ID | Severity | Reproducibility | GitHub Issue | Status |
 |---|---|---|---|---|---|---|
 | BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | FR-03 / TC04 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
-| BUG-002 | User vẫn có thể hủy đơn đang giao | FR-11 / TC07 | Major / High | 2/3 browser projects có screenshot xác nhận; Firefox bị loại do lỗi session/login | Chưa tạo | Confirmed locally |
+| BUG-002 | User vẫn có thể hủy đơn đang giao | FR-11 / TC07 | Major / High | 2/3 browser projects có evidence trực tiếp | Chưa tạo | Confirmed locally |
 | BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | FR-11 / TC10 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
+| BUG-004 | Hệ thống chấp nhận discount_value không dương | FR-17 / TC10, TC11 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
+| BUG-005 | Hệ thống chấp nhận min_order_amount âm | FR-17 / TC12 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
+| BUG-006 | Hệ thống chấp nhận coupon percent lớn hơn 100% | FR-17 / TC16 | Major / High | Confirmed by run evidence | Chưa tạo | Confirmed locally |
+| BUG-007 | Hệ thống chấp nhận ngày hết hạn trong quá khứ | FR-17 / TC17 | Major / High | Confirmed by run evidence + FR17 context | Chưa tạo | Confirmed locally |
+| BUG-008 | Xóa coupon không có confirm dialog | FR-17 / TC19 | Major / Medium | 3/3 browser projects | Chưa tạo | Confirmed locally |
 | BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | FR-03 / TC02 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
-
-## BUG-[NNN] – [Concise title]
-
-| Field | Value |
-|---|---|
-| Feature / test ID | [TODO] |
-| SUT build/commit | [TODO] |
-| Test repo commit | [TODO] |
-| Environment/browser | [TODO] |
-| Severity / priority | [TODO + rationale] |
-| Reproducibility | [e.g. 3/3; do not guess] |
-| GitHub Issue | [TODO: public URL] |
-
-### Preconditions
-
-[TODO]
-
-### Steps to reproduce
-
-1. [TODO]
-2. [TODO]
-3. [TODO]
-
-### Expected result
-
-[TODO: requirement-based oracle]
-
-### Actual result
-
-[TODO: exact observation]
-
-### Evidence
-
-- Screenshot: [TODO: path/URL]
-- HTML report: [TODO]
-- Trace/video/log: [TODO]
-- ISO reproduction time: [TODO]
-
-### Triage notes
-
-[TODO: isolated rerun, cross-browser comparison, data/environment checks, why this is a product defect.]
-
-### Workaround/impact
-
-[TODO]
 
 ## BUG-001 – Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số
 
