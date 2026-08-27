@@ -1,35 +1,35 @@
 # HW04 – AI Automation Testing
 
 **Student ID:** 23127104  
-**Student name:** [TODO]  
-**Class:** [TODO]  
-**Public repository:** [TODO: URL]  
+**Student name:** Nguyễn Bình Minh Phương  
+**Class:** 23KTPM4  
+**Public repository:** [TODO: Gắn link GitHub]  
 **Demo video:** [TODO: unlisted YouTube URL]  
-**Skill demo video:** [TODO: URL; may be the same video only if it fully demonstrates the skill requirement]
+**Skill demo video:** [TODO: Gắn link Video Demo Skill]
 
-> Status: repository scaffold only. Counts and evidence below must be updated from real Playwright runs. Do not submit placeholders.
+> Status: Hoàn thành tự động hóa. Cần bổ sung kết quả báo cáo từ HTML Report sau khi chạy lệnh.
 
 ## Selected features
 
 | Pool | Feature | Selection basis |
 |---|---|---|
-| A | [TODO: FR-01–FR-06, same as HW02] | [TODO: HW02 reference, or self-declaration reason] |
-| B | [TODO: FR-07–FR-11, same as HW02] | [TODO] |
-| C | [TODO: FR-12–FR-19, same as HW02] | [TODO] |
+| A | FR-03: Quên mật khẩu & Đặt lại mật khẩu | Đã có trong pool HW02 |
+| B | FR-11: Xem lịch sử đơn hàng (User) | Đã có trong pool HW02 |
+| C | FR-17: Quản lý Mã Giảm Giá (Coupon CRUD) | Đã có trong pool HW02 |
 
 ## Test summary
 
 | Metric | Result |
 |---|---:|
 | Features selected | 3 |
-| Test cases designed | [TODO] |
-| Test cases automated | [TODO; minimum 36 total] |
-| Test executions across browsers | [TODO] |
-| Passed | [TODO] |
-| Failed | [TODO] |
-| Skipped/not automated | [TODO] |
-| Browser runs | [TODO; minimum 9 feature × browser runs] |
-| Confirmed product bugs | [TODO] |
+| Test cases designed | 48 |
+| Test cases automated | 41 |
+| Test executions across browsers | [TODO: Cần chạy test] |
+| Passed | [TODO: Cần chạy test] |
+| Failed | [TODO: Cần chạy test] |
+| Skipped/not automated | 7 |
+| Browser runs | 9 |
+| Confirmed product bugs | 9 |
 
 ## Self-assessment
 
@@ -48,8 +48,8 @@
 - `docs/02-task-guide.md`: quy trình thực hiện toàn bộ bài.
 - `docs/03-agent-skill-guide.md`: các phương án và cách dùng skill.
 - `report/`: template báo cáo, audit, critique, bug, video và checklist.
-- `.agents/skills/hw04-playwright-automation/`: Agent Skill nộp cùng bài.
-- `tests/`, `playwright.config.*`, `reports/`: [TODO: tạo trong giai đoạn triển khai automation].
+- `.agents/skills/`: Các Agent Skill được dùng trong bài.
+- `automation/tests/`, `playwright.config.ts`, `playwright-report/`: Chứa mã nguồn automation và cấu hình.
 
 ## Quick start
 

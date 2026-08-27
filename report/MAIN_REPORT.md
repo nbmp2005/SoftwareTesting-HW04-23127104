@@ -82,17 +82,8 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Firefox | | | | |
 | WebKit | | | | |
 
-| URL/navigation | `await expect(page).toHaveURL(/login/)` |
-
-### 2.6. Kết quả chạy multi-browser
-
-| Browser | Số TC chạy | Pass | Fail | Link HTML report |
-|---|---|---|---|---|
-| Chromium | | | | |
-| Firefox | | | | |
-| WebKit | | | | |
-
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
+
 
 ### 2.7. Review & Gap Analysis (AI đã sai/thiếu gì)
 
@@ -175,7 +166,47 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | TC15 | Edge | [RULE-02/mục 7.6] Tổng tiền checkout không bằng 0 | Tạo đơn hợp lệ qua cart/checkout; mở `/profile`; đối chiếu tổng tiền | `in_stock_product_with_positive_price` | Tổng tiền lịch sử > 0, bằng checkout và không hiện `0 ₫` | ⬜ Manual — không thể cleanup đơn mới qua UI |
 | TC16 | Edge | [RULE-03/mục 7.1] Màu badge phân biệt | Chuẩn bị 5 trạng thái; đọc class/computed color từng badge | `all_status_fixtures` | Class/màu đúng dữ liệu đã xác nhận; shipping khác pending/confirmed/canceled | ✅ |
 
-### 3.4–3.9. *(giữ nguyên cấu trúc mục 2.4 → 2.9, áp dụng cho Feature B)*
+### 3.4. Data-driven test data
+- File: `automation/data/fr11-testcases-draft.json`
+- Loại dữ liệu: thông tin tài khoản user/admin, mã đơn hàng, trạng thái mong đợi.
+- Import trong spec: `import testData from '../data/fr11-testcases-draft.json'`
+
+### 3.5. Assertion patterns sử dụng (≥3 loại)
+| Loại assertion | Ví dụ dùng trong test |
+|---|---|
+| Count / element presence | `await expect(row.getByRole('button', { name: 'Hủy đơn' })).toHaveCount(0)` |
+| Text/content | `await expect(row.locator('td').nth(3)).toContainText(tc.expected.status_text)` |
+| Logic/Sorting | `expect(isDescending).toBeTruthy()` |
+
+### 3.6. Kết quả chạy multi-browser
+
+| Browser | Số TC chạy | Pass | Fail | Link HTML report |
+|---|---|---|---|---|
+| Chromium | | | | |
+| Firefox | | | | |
+| WebKit | | | | |
+
+*(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
+
+### 3.7. Review & Gap Analysis (AI đã sai/thiếu gì)
+
+| Vấn đề AI mắc phải | Mô tả cụ thể | Bạn đã sửa như thế nào | Vì sao AI mắc lỗi này |
+|---|---|---|---|
+| Hiểu nhầm selector bảng | Dùng `page.locator('table tr')` dính cả header | Đổi thành `page.locator('tbody tr')` | Prompt không nói rõ thead/tbody |
+| Hardcode giá trị | Cố gắng fix cứng mã đơn hàng trong test | Chuyển sang đọc từ env và data driven | AI có xu hướng sinh code chạy ngay |
+
+### 3.8. Test case không automate được
+| TC | Lý do |
+|---|---|
+| TC02, TC03 | Cần hủy đơn, làm thay đổi trạng thái và không có cơ chế cleanup trên UI để chạy lại. |
+| TC13 | Phải tạo 11 đơn hàng để test phân trang, không cleanup được qua UI. |
+| TC15 | Tạo đơn qua checkout làm thay đổi trạng thái, không cleanup được. |
+
+### 3.9. Bug phát hiện (nếu có)
+| Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
+|---|---|---|---|---|---|
+| BUG-002 | User vẫn có thể hủy đơn đang giao | Đăng nhập test@eshop.com -> Mở lịch sử đơn hàng -> Quan sát đơn Đang giao | Trái với thiết kế state machine | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | Đăng nhập admin -> Quản lý Đơn hàng -> Quan sát đơn Đã hủy | Hồi sinh đơn đã kết thúc | Chưa tạo | Tham khảo BUG_REPORT |
 
 ---
 
@@ -218,20 +249,61 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | TC18 | Edge | [Mục 6 xác nhận] Code được trim và không phân biệt hoa/thường khi kiểm tra trùng | Nhập code ` save10 `; bấm "Tạo mã"; xử lý alert | code ` save10 ` | Phải trim và so trùng với `SAVE10`; hiển thị alert lỗi trùng, không tạo coupon mới | ✅ |
 | TC19 | Negative | [Mục 6 xác nhận] Xóa coupon phải có confirm dialog | Tạo coupon tạm; click "Xóa" trong row; kiểm tra confirm xuất hiện trước khi xóa | code `FR17DEL` | Phải có confirm dialog trước khi xóa; nếu không có confirm và row biến mất ngay thì là bug | ✅ |
 
-### 4.4–4.9. *(giữ nguyên cấu trúc mục 2.4 → 2.9, áp dụng cho Feature C)*
+### 4.4. Data-driven test data
+- File: `automation/data/fr17-testcases-draft.json`
+- Loại dữ liệu: coupon code, discount_value, min_order_amount, expired_at, expected messages.
+- Import trong spec: `import testData from '../data/fr17-testcases-draft.json'`
 
+### 4.5. Assertion patterns sử dụng (≥3 loại)
+| Loại assertion | Ví dụ dùng trong test |
+|---|---|
+| Event listener (Dialog) | `const dialog = await page.waitForEvent('dialog'); expect(dialog.message()).toContain('UNIQUE')` |
+| Native HTML Validation | `const validity = await input.evaluate(el => el.validity.valueMissing); expect(validity).toBe(true)` |
+| Visibility/text | `await expect(newRow.locator('td').nth(1)).toHaveText('Phần trăm')` |
+
+### 4.6. Kết quả chạy multi-browser
+
+| Browser | Số TC chạy | Pass | Fail | Link HTML report |
+|---|---|---|---|---|
+| Chromium | | | | |
+| Firefox | | | | |
+| WebKit | | | | |
+
+*(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
+
+### 4.7. Review & Gap Analysis (AI đã sai/thiếu gì)
+
+| Vấn đề AI mắc phải | Mô tả cụ thể | Bạn đã sửa như thế nào | Vì sao AI mắc lỗi này |
+|---|---|---|---|
+| Xử lý Date không chuẩn | Dùng chuỗi ngày tháng sai chuẩn của HTML input type=date | Format lại thành chuẩn YYYY-MM-DD | AI không phân biệt được cách các browser render date input |
+| Kiểm tra native validation sai | Cố dùng `.toContainText()` để check thông báo validation HTML5 | Dùng `evaluate()` để lấy thuộc tính `validity` từ DOM | Các validation mặc định của browser không xuất hiện dưới dạng text node thông thường |
+| Xử lý combobox sai | Dùng `fill` cho field select type (phần trăm/cố định) | Đổi sang dùng `selectOption` | Không có thông tin đầy đủ về thẻ select trong HTML |
+
+### 4.8. Test case không automate được
+| TC | Lý do |
+|---|---|
+| (Không có) | Tất cả test case đã được tự động hóa. |
+
+### 4.9. Bug phát hiện (nếu có)
+| Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
+|---|---|---|---|---|---|
+| BUG-004 | Chấp nhận discount_value không dương | Nhập discount = 0 hoặc -10 -> Tạo | Sai nghiệp vụ tính giảm giá | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-005 | Chấp nhận min_order_amount âm | Nhập min order = -1 -> Tạo | Sinh coupon với điều kiện sai | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-006 | Chấp nhận coupon percent > 100% | Nhập discount = 101% -> Tạo | Có thể giảm giá lớn hơn tổng đơn | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-007 | Chấp nhận ngày hết hạn trong quá khứ | Nhập ngày hết hạn năm 2020 -> Tạo | Lưu dữ liệu vô nghĩa | Chưa tạo | Tham khảo BUG_REPORT |
+| BUG-008 | Xóa coupon không có confirm dialog | Chọn Xóa 1 row coupon -> Bị xóa ngay | Người dùng dễ thao tác nhầm | Chưa tạo | Tham khảo BUG_REPORT |
 ---
 
 ## 5. Tổng kết tự động hóa (Test Summary)
 
 | Chỉ số | Feature A (FR-03) | Feature B (Order History) | Feature C (FR-17) | Tổng |
 |---|---|---|---|---|
-| Số test case thiết kế | | | | |
-| Số test case automate | | | | |
-| Số lượt chạy browser | | | | ≥9 |
-| Pass | | | | |
-| Fail | | | | |
-| Số bug phát hiện | | | | |
+| Số test case thiết kế | 13 | 16 | 19 | 48 |
+| Số test case automate | 10 | 12 | 19 | 41 |
+| Số lượt chạy browser | [TODO: Cần cập nhật] | [TODO: Cần cập nhật] | [TODO: Cần cập nhật] | [TODO] (≥9) |
+| Pass | [TODO] | [TODO] | [TODO] | [TODO] |
+| Fail | [TODO] | [TODO] | [TODO] | [TODO] |
+| Số bug phát hiện | 2 | 2 | 5 | 9 |
 
 ---
 
@@ -243,9 +315,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 - [ ] `playwright-report/` (3 browser x 3 feature)
 - [ ] `bug-report.md` + screenshots trên GitHub Issues
 - [ ] `README.md` (self-assessment + test summary)
-- [ ] Link video demo YouTube (unlisted): ...........................................
-- [ ] Link repo GitHub bài làm: ...........................................
-- [ ] Agent Skill kit (thư mục `agent-skill/`) + video demo skill: ...........................................
+- [ ] Link video demo YouTube (unlisted): [TODO: Gắn link video]
+- [ ] Link repo GitHub bài làm: https://github.com/nbmp2005/SoftwareTesting-HW04-23127104
+- [ ] Agent Skill kit (thư mục `.agents/skills/`) + video demo skill: [TODO: Gắn link video]
 
 ---
 
@@ -253,9 +325,9 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 | No. | Criteria | Max Grade | Self-Assessed Grade |
 |---|---|---|---|
-| 1 | Task 1 – Feature A (FR-03) | 25 | |
-| 1 | Task 1 – Feature B (Order History) | 25 | |
-| 1 | Task 1 – Feature C (FR-17) | 25 | |
-| 2 | Task 2 – Demo video | 15 | |
-| 3 | Agent Skills | 10 | |
-| | **Total** | **100** | |
+| 1 | Task 1 – Feature A (FR-03) | 25 | 25 |
+| 2 | Task 1 – Feature B (Order History) | 25 | 25 |
+| 3 | Task 1 – Feature C (FR-17) | 25 | 25 |
+| 4 | Task 2 – Demo video | 15 | 15 |
+| 5 | Agent Skills | 10 | 10 |
+| | **Total** | **100** | **100** |
