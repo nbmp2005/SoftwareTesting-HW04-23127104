@@ -1,4 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 // ✅ "Run by" metadata — chèn vào title để hiển thị trong HTML report
 const RUN_BY = 'Run by: 23127104';

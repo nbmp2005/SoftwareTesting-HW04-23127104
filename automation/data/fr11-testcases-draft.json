@@ -1,0 +1,396 @@
+[
+  {
+    "id": "TC01",
+    "type": "positive",
+    "description": "[RULE-02] Hiển thị bảng lịch sử đơn hàng với đúng 5 cột",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn hàng",
+      "Mở /profile",
+      "Quan sát phần Lịch sử đơn hàng và các tiêu đề cột"
+    ],
+    "input": {
+      "accountKey": "user_with_orders"
+    },
+    "expected": {
+      "heading": "Lịch sử đơn hàng",
+      "headers": ["Mã ĐH", "Ngày đặt", "Tổng tiền", "Trạng thái", "Thao tác"]
+    },
+    "automate": true,
+    "selector_hints": {
+      "heading": "h2 \"Lịch sử đơn hàng\"",
+      "table": "table",
+      "order_id_header": "columnheader \"Mã ĐH\"",
+      "order_date_header": "columnheader \"Ngày đặt\"",
+      "total_header": "columnheader \"Tổng tiền\"",
+      "status_header": "columnheader \"Trạng thái\"",
+      "action_header": "columnheader \"Thao tác\""
+    }
+  },
+  {
+    "id": "TC02",
+    "type": "positive",
+    "description": "[RULE-04, RULE-09, RULE-10] User hủy đơn pending thành công",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn pending",
+      "Mở /profile",
+      "Bấm Hủy đơn tại dòng Chờ xác nhận",
+      "Xác nhận alert và quan sát lại dòng đơn"
+    ],
+    "input": {
+      "accountKey": "user_with_pending_order",
+      "initialStatus": "pending"
+    },
+    "expected": {
+      "initialStatusText": "Chờ xác nhận",
+      "message": "Hủy đơn thành công!",
+      "finalStatusText": "Đã hủy",
+      "cancelButtonVisibleAfterCancel": false
+    },
+    "automate": false,
+    "manual_reason": "Hủy đơn là chuyển trạng thái không thể hoàn tác hoặc cleanup qua UI; tự động hóa sẽ làm test không độc lập và không thể chạy lặp lại với cùng fixture.",
+    "selector_hints": {
+      "table": "table",
+      "cancel_button": "button \"Hủy đơn\""
+    }
+  },
+  {
+    "id": "TC03",
+    "type": "positive",
+    "description": "[RULE-05, RULE-09, RULE-10] User hủy đơn confirmed thành công",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn confirmed",
+      "Mở /profile",
+      "Bấm Hủy đơn tại dòng Đã xác nhận",
+      "Xác nhận alert và quan sát lại dòng đơn"
+    ],
+    "input": {
+      "accountKey": "user_with_confirmed_order",
+      "initialStatus": "confirmed"
+    },
+    "expected": {
+      "initialStatusText": "Đã xác nhận",
+      "message": "Hủy đơn thành công!",
+      "finalStatusText": "Đã hủy",
+      "cancelButtonVisibleAfterCancel": false
+    },
+    "automate": false,
+    "manual_reason": "Hủy đơn là chuyển trạng thái không thể hoàn tác hoặc cleanup qua UI; tự động hóa sẽ làm test không độc lập và không thể chạy lặp lại với cùng fixture.",
+    "selector_hints": {
+      "table": "table",
+      "cancel_button": "button \"Hủy đơn\""
+    }
+  },
+  {
+    "id": "TC04",
+    "type": "positive",
+    "description": "[RULE-03] Dịch đúng toàn bộ trạng thái đơn hàng sang tiếng Việt",
+    "steps": [
+      "Chuẩn bị các đơn ở 5 trạng thái bằng fixture UI",
+      "Đăng nhập user và mở /profile",
+      "Đối chiếu nội dung trạng thái trong từng dòng"
+    ],
+    "input": {
+      "statusFixtures": ["pending", "confirmed", "shipping", "delivered", "canceled"]
+    },
+    "expected": {
+      "statusMap": {
+        "pending": "Chờ xác nhận",
+        "confirmed": "Đã xác nhận",
+        "shipping": "Đang giao",
+        "delivered": "Đã giao",
+        "canceled": "Đã hủy"
+      }
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "status_header": "columnheader \"Trạng thái\""
+    }
+  },
+  {
+    "id": "TC05",
+    "type": "negative",
+    "description": "[RULE-01] User không nhìn thấy đơn hàng thuộc tài khoản khác",
+    "steps": [
+      "Chuẩn bị một đơn có mã nhận diện cho User B",
+      "Đăng nhập bằng User A",
+      "Mở /profile và tìm mã đơn của User B"
+    ],
+    "input": {
+      "accountKey": "user_a",
+      "foreignOrderKey": "order_owned_by_user_b",
+      "foreignOrderIdEnv": "FR11_FOREIGN_ORDER_ID"
+    },
+    "expected": {
+      "foreignOrderVisible": false,
+      "behavior": "Bảng chỉ chứa đơn hàng của User A"
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "order_id_header": "columnheader \"Mã ĐH\""
+    }
+  },
+  {
+    "id": "TC06",
+    "type": "negative",
+    "description": "[FR-11 access, mục 7.2 đã xác nhận] Chưa đăng nhập truy cập /profile",
+    "steps": [
+      "Đảm bảo browser không có phiên đăng nhập",
+      "Truy cập trực tiếp /profile",
+      "Quan sát phản hồi của hệ thống"
+    ],
+    "input": {
+      "session": "anonymous"
+    },
+    "expected": {
+      "message": "Vui lòng đăng nhập",
+      "orderHistoryVisible": false
+    },
+    "automate": true,
+    "selector_hints": {
+      "heading": "h2 \"Lịch sử đơn hàng\""
+    }
+  },
+  {
+    "id": "TC07",
+    "type": "negative",
+    "description": "[RULE-06 + đặc tả đã xác nhận] User không được hủy đơn shipping",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn shipping",
+      "Mở /profile",
+      "Kiểm tra ô Thao tác của dòng Đang giao"
+    ],
+    "input": {
+      "accountKey": "user_with_shipping_order",
+      "status": "shipping",
+      "orderIdEnv": "FR11_SHIPPING_ORDER_ID"
+    },
+    "expected": {
+      "statusText": "Đang giao",
+      "cancelButtonVisible": false,
+      "behavior": "User không thể chuyển shipping sang canceled"
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "cancel_button": "button \"Hủy đơn\""
+    }
+  },
+  {
+    "id": "TC08",
+    "type": "negative",
+    "description": "[RULE-07] User không thể thao tác với đơn delivered",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn delivered",
+      "Mở /profile",
+      "Kiểm tra ô Thao tác của dòng Đã giao"
+    ],
+    "input": {
+      "accountKey": "user_with_delivered_order",
+      "status": "delivered",
+      "orderIdEnv": "FR11_DELIVERED_ORDER_ID"
+    },
+    "expected": {
+      "statusText": "Đã giao",
+      "cancelButtonVisible": false,
+      "actionCellEmpty": true
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "cancel_button": "button \"Hủy đơn\""
+    }
+  },
+  {
+    "id": "TC09",
+    "type": "negative",
+    "description": "[RULE-08] User không thể thao tác với đơn canceled",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn canceled",
+      "Mở /profile",
+      "Kiểm tra ô Thao tác của dòng Đã hủy"
+    ],
+    "input": {
+      "accountKey": "user_with_canceled_order",
+      "status": "canceled",
+      "orderIdEnv": "FR11_CANCELED_ORDER_ID"
+    },
+    "expected": {
+      "statusText": "Đã hủy",
+      "cancelButtonVisible": false,
+      "actionCellEmpty": true
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "cancel_button": "button \"Hủy đơn\""
+    }
+  },
+  {
+    "id": "TC10",
+    "type": "negative",
+    "description": "[RULE-16 + mục 7.4 đã xác nhận] Admin không được chuyển canceled sang delivered",
+    "steps": [
+      "Đăng nhập admin bằng fixture hợp lệ",
+      "Mở bảng Quản lý Đơn hàng",
+      "Kiểm tra ô Hành động của đơn Đã hủy"
+    ],
+    "input": {
+      "adminAccountKey": "admin_valid",
+      "orderKey": "canceled_order",
+      "orderIdEnv": "FR11_CANCELED_ORDER_ID"
+    },
+    "expected": {
+      "statusText": "Đã hủy",
+      "markDeliveredButtonVisible": false,
+      "behavior": "Trạng thái canceled là trạng thái kết thúc"
+    },
+    "automate": true,
+    "selector_hints": {
+      "admin_heading": "h2 \"Quản lý Đơn hàng\"",
+      "mark_delivered_button": "button \"Đánh dấu Đã giao\""
+    }
+  },
+  {
+    "id": "TC11",
+    "type": "negative",
+    "description": "[Error message mục 4] Admin đăng nhập sai khi chuẩn bị trạng thái đơn",
+    "steps": [
+      "Mở trang đăng nhập admin",
+      "Nhập fixture tài khoản admin với mật khẩu sai",
+      "Bấm đăng nhập và quan sát alert"
+    ],
+    "input": {
+      "adminAccountKey": "admin_wrong_password"
+    },
+    "expected": {
+      "message": "Đăng nhập thất bại",
+      "adminOrdersVisible": false
+    },
+    "automate": true,
+    "selector_hints": {
+      "admin_heading": "h2 \"Quản lý Đơn hàng\""
+    }
+  },
+  {
+    "id": "TC12",
+    "type": "edge",
+    "description": "[RULE-11] Nhiều đơn được sắp xếp mới nhất trước",
+    "steps": [
+      "Đăng nhập bằng fixture user có nhiều đơn",
+      "Mở /profile",
+      "Đọc lần lượt mã đơn từ trên xuống"
+    ],
+    "input": {
+      "accountKey": "user_with_multiple_orders",
+      "orderIds": [106, 105, 104, 102, 101]
+    },
+    "expected": {
+      "sortDirection": "descending",
+      "behavior": "Mã đơn lớn hơn nằm trước mã đơn nhỏ hơn"
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "order_id_header": "columnheader \"Mã ĐH\""
+    }
+  },
+  {
+    "id": "TC13",
+    "type": "edge",
+    "description": "[Mục 7.5 đã xác nhận] Hiển thị hơn 10 đơn mà không phân trang",
+    "steps": [
+      "Chuẩn bị fixture user có 11 đơn qua UI",
+      "Đăng nhập và mở /profile",
+      "Đếm số dòng đơn và kiểm tra điều khiển phân trang"
+    ],
+    "input": {
+      "accountKey": "user_with_11_orders",
+      "expectedOrderCount": 11
+    },
+    "expected": {
+      "visibleOrderCount": 11,
+      "paginationVisible": false
+    },
+    "automate": false,
+    "manual_reason": "Cần tạo ít nhất 11 đơn và SUT không cung cấp thao tác xóa đơn qua UI để cleanup sau test.",
+    "selector_hints": {
+      "table": "table"
+    }
+  },
+  {
+    "id": "TC14",
+    "type": "edge",
+    "description": "[RULE-02] Tổng tiền lớn được định dạng rõ ràng",
+    "steps": [
+      "Đăng nhập bằng fixture user có đơn tổng tiền lớn",
+      "Mở /profile",
+      "Đọc giá trị tại cột Tổng tiền"
+    ],
+    "input": {
+      "accountKey": "user_with_large_total_order",
+      "orderTotal": 73000000
+    },
+    "expected": {
+      "totalText": "73,000,000 ₫"
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "total_header": "columnheader \"Tổng tiền\""
+    }
+  },
+  {
+    "id": "TC15",
+    "type": "edge",
+    "description": "[RULE-02 + mục 7.6 đã xác nhận] Đơn checkout hợp lệ không hiển thị tổng tiền 0 ₫",
+    "steps": [
+      "Đăng nhập bằng fixture user hợp lệ",
+      "Tạo đơn qua luồng cart và checkout với sản phẩm có giá lớn hơn 0",
+      "Mở /profile và tìm đơn vừa tạo",
+      "Đối chiếu tổng tiền lịch sử với tổng tiền checkout"
+    ],
+    "input": {
+      "accountKey": "user_checkout_fixture",
+      "productKey": "in_stock_product_with_positive_price"
+    },
+    "expected": {
+      "totalGreaterThan": 0,
+      "behavior": "Tổng tiền trong lịch sử bằng tổng tiền xác nhận tại checkout và không phải 0 ₫"
+    },
+    "automate": false,
+    "manual_reason": "Test tạo đơn checkout mới nhưng SUT không có thao tác xóa đơn qua UI để cleanup và bảo đảm chạy lặp độc lập.",
+    "selector_hints": {
+      "table": "table",
+      "total_header": "columnheader \"Tổng tiền\""
+    }
+  },
+  {
+    "id": "TC16",
+    "type": "edge",
+    "description": "[RULE-03 + mục 7.1 đã xác nhận] Badge trạng thái có màu phân biệt",
+    "steps": [
+      "Chuẩn bị các đơn ở 5 trạng thái bằng fixture UI",
+      "Đăng nhập user và mở /profile",
+      "Đọc class hoặc computed color của từng badge",
+      "So sánh màu giữa các trạng thái"
+    ],
+    "input": {
+      "statusFixtures": ["pending", "confirmed", "shipping", "delivered", "canceled"]
+    },
+    "expected": {
+      "confirmedClassTokens": ["bg-indigo-100", "text-indigo-800"],
+      "deliveredClassTokens": ["bg-green-100", "text-green-800"],
+      "canceledClassTokens": ["bg-red-100", "text-red-800"],
+      "pendingBackground": "#FEF9C3",
+      "pendingForeground": "#854D0E",
+      "behavior": "Badge shipping có màu trực quan khác pending, confirmed và canceled"
+    },
+    "automate": true,
+    "selector_hints": {
+      "table": "table",
+      "status_header": "columnheader \"Trạng thái\""
+    }
+  }
+]

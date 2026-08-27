@@ -1,0 +1,54 @@
+- generic [ref=f2e3]:
+  - banner [ref=f2e4]:
+    - link "EShop" [ref=f2e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=f2e6]:
+      - link "Giỏ hàng" [ref=f2e7] [cursor=pointer]:
+        - /url: /cart
+      - generic [ref=f2e8]:
+        - link "Chào, Test User" [ref=f2e9] [cursor=pointer]:
+          - /url: /profile
+        - button "Thoát" [ref=f2e10] [cursor=pointer]
+  - main [ref=f2e11]:
+    - generic [ref=f2e12]:
+      - generic [ref=f2e13]:
+        - heading "Hồ sơ của bạn" [level=2] [ref=f2e14]
+        - generic [ref=f2e15]:
+          - generic [ref=f2e16]:
+            - generic [ref=f2e17]: Email (Không đổi)
+            - textbox [disabled] [ref=f2e18]: test@eshop.com
+          - generic [ref=f2e19]:
+            - generic [ref=f2e20]: Họ Tên
+            - textbox [ref=f2e21]
+          - generic [ref=f2e22]:
+            - generic [ref=f2e23]: Số điện thoại
+            - 'textbox "VD: 0912345678" [ref=f2e24]'
+          - generic [ref=f2e25]:
+            - generic [ref=f2e26]: Địa chỉ giao hàng
+            - textbox "Nhập địa chỉ của bạn" [ref=f2e27]
+          - button "Cập nhật" [ref=f2e28] [cursor=pointer]
+      - generic [ref=f2e29]:
+        - heading "Lịch sử đơn hàng" [level=2] [ref=f2e30]
+        - table [ref=f2e31]:
+          - rowgroup [ref=f2e32]:
+            - row [ref=f2e33]:
+              - columnheader "Mã ĐH" [ref=f2e34]
+              - columnheader "Ngày đặt" [ref=f2e35]
+              - columnheader "Tổng tiền" [ref=f2e36]
+              - columnheader "Trạng thái" [ref=f2e37]
+              - columnheader "Thao tác" [ref=f2e38]
+          - rowgroup [ref=f2e39]:
+            - row [ref=f2e40]:
+              - cell "#2" [ref=f2e41]
+              - cell "26/08/2026" [ref=f2e42]
+              - cell "73,000,000 ₫" [ref=f2e43]
+              - cell "Đã giao" [ref=f2e44]
+              - cell [ref=f2e45]
+            - row [ref=f2e46]:
+              - cell "#1" [ref=f2e47]
+              - cell "26/08/2026" [ref=f2e48]
+              - cell "28,000,000 ₫" [ref=f2e49]
+              - cell "Chờ xác nhận" [ref=f2e50]
+              - cell [ref=f2e51]:
+                - button "Hủy đơn" [ref=f2e52] [cursor=pointer]
+  - contentinfo [ref=f2e53]: © 2026 EShop SUT. Dành cho mục đích kiểm thử.

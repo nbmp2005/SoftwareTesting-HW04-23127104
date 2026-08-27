@@ -1,0 +1,60 @@
+- generic [ref=f18e3]:
+  - banner [ref=f18e4]:
+    - link "EShop" [ref=f18e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=f18e6]:
+      - link "Giỏ hàng" [ref=f18e7] [cursor=pointer]:
+        - /url: /cart
+      - generic [ref=f18e8]:
+        - link "Chào, Test User" [ref=f18e9] [cursor=pointer]:
+          - /url: /profile
+        - button "Thoát" [ref=f18e10] [cursor=pointer]
+  - main [ref=f18e11]:
+    - generic [ref=f18e12]:
+      - generic [ref=f18e13]:
+        - heading "Hồ sơ của bạn" [level=2] [ref=f18e14]
+        - generic [ref=f18e15]:
+          - generic [ref=f18e16]:
+            - generic [ref=f18e17]: Email (Không đổi)
+            - textbox [disabled] [ref=f18e18]: test@eshop.com
+          - generic [ref=f18e19]:
+            - generic [ref=f18e20]: Họ Tên
+            - textbox [ref=f18e21]
+          - generic [ref=f18e22]:
+            - generic [ref=f18e23]: Số điện thoại
+            - 'textbox "VD: 0912345678" [ref=f18e24]'
+          - generic [ref=f18e25]:
+            - generic [ref=f18e26]: Địa chỉ giao hàng
+            - textbox "Nhập địa chỉ của bạn" [ref=f18e27]
+          - button "Cập nhật" [ref=f18e28] [cursor=pointer]
+      - generic [ref=f18e29]:
+        - heading "Lịch sử đơn hàng" [level=2] [ref=f18e30]
+        - table [ref=f18e31]:
+          - rowgroup [ref=f18e32]:
+            - row [ref=f18e33]:
+              - columnheader "Mã ĐH" [ref=f18e34]
+              - columnheader "Ngày đặt" [ref=f18e35]
+              - columnheader "Tổng tiền" [ref=f18e36]
+              - columnheader "Trạng thái" [ref=f18e37]
+              - columnheader "Thao tác" [ref=f18e38]
+          - rowgroup [ref=f18e39]:
+            - row [ref=f18e40]:
+              - cell "#4" [ref=f18e41]
+              - cell "26/08/2026" [ref=f18e42]
+              - cell "0 ₫" [ref=f18e43]
+              - cell "Chờ xác nhận" [ref=f18e44]
+              - cell [ref=f18e45]:
+                - button "Hủy đơn" [ref=f18e46] [cursor=pointer]
+            - row [ref=f18e47]:
+              - cell "#2" [ref=f18e48]
+              - cell "26/08/2026" [ref=f18e49]
+              - cell "73,000,000 ₫" [ref=f18e50]
+              - cell "Đã giao" [ref=f18e51]
+              - cell [ref=f18e52]
+            - row [ref=f18e53]:
+              - cell "#1" [ref=f18e54]
+              - cell "26/08/2026" [ref=f18e55]
+              - cell "28,000,000 ₫" [ref=f18e56]
+              - cell "Đã giao" [ref=f18e57]
+              - cell [ref=f18e58]
+  - contentinfo [ref=f18e59]: © 2026 EShop SUT. Dành cho mục đích kiểm thử.

@@ -12,6 +12,7 @@
     "test:firefox": "node automation/run-playwright.cjs --project=firefox*",
     "test:webkit": "node automation/run-playwright.cjs --project=webkit*",
     "test:fr03": "node automation/run-playwright.cjs automation/tests/fr03-forgot-password.spec.ts",
+    "test:fr11": "node automation/run-playwright.cjs automation/tests/fr11-order-history.spec.ts",
     "report": "playwright show-report"
   },
   "repository": {
@@ -28,6 +29,7 @@
   "homepage": "https://github.com/nbmp2005/SoftwareTesting-HW04-23127104#readme",
   "devDependencies": {
     "@playwright/test": "^1.62.1",
-    "@types/node": "^26.3.0"
+    "@types/node": "^26.3.0",
+    "dotenv": "^17.4.2"
   }
 }

@@ -1,0 +1,20 @@
+- generic [ref=f3e3]:
+  - generic [ref=f3e9]:
+    - heading "EShop Admin" [level=1] [ref=f3e10]
+    - list [ref=f3e11]:
+      - listitem [ref=f3e12] [cursor=pointer]: Dashboard
+      - listitem [ref=f3e13] [cursor=pointer]: Danh mục
+      - listitem [ref=f3e14] [cursor=pointer]: Sản phẩm
+      - listitem [ref=f3e15] [cursor=pointer]: Mã Giảm Giá
+      - listitem [ref=f3e16] [cursor=pointer]: Đơn hàng
+      - listitem [ref=f3e17] [cursor=pointer]: Người dùng
+      - listitem [ref=f3e18] [cursor=pointer]: Đăng xuất
+  - generic [ref=f3e20]:
+    - heading "Dashboard" [level=2] [ref=f3e21]
+    - generic [ref=f3e22]:
+      - generic [ref=f3e23]:
+        - heading "Tổng doanh thu (Delivered)" [level=3] [ref=f3e24]
+        - paragraph [ref=f3e25]: 292,000,000 ₫
+      - generic [ref=f3e26]:
+        - heading "Tổng số đơn hàng" [level=3] [ref=f3e27]
+        - paragraph [ref=f3e28]: "3"

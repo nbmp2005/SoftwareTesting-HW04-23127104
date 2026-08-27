@@ -726,3 +726,204 @@ TC02 đã chuyển được sang Bước 2 nhưng timeout vì script dùng getBy
 ```
 “Loại trừ” chỉ có nghĩa là không ghi selector/assertion sai thành product bug trong `BUG_REPORT.md`, vì lỗi nằm ở test code chứ không nằm ở SUT. Các lỗi này vẫn phải được giữ lại, sửa trong spec/data/context và ghi vào Gap Analysis hoặc AI_CRITIQUE. Ví dụ `getByPlaceholder(/OTP/i)` timeout vì UI không có placeholder là test-script defect; ngược lại SUT sinh OTP 4 số khi nghiệp vụ yêu cầu 6 số mới là potential product bug cần triage và evidence.
 ```
+
+## Prompt 32
+- Name of the AI tool: Claude Sonnet 4.6
+- Date/time: 2026-08-26T17:53:29+07:00
+- Prompt:
+`````
+fr-context-explorer
+ khám phá cho fr11
+
+### FR-11: Xem lịch sử đơn hàng (User)
+
+- Người dùng chỉ xem được đơn hàng của chính mình.
+- Hiển thị: Mã đơn, Ngày đặt, Tổng tiền, Trạng thái hiện tại.
+
+Trạng thái đơn hàng gồm:&#x20;
+```css
+             [Admin xác nhận]          [Admin giao hàng]      [Admin hoàn tất]
+```
+
+┌──────────┐ ─────────────────► ┌───────────┐ ──────────────► ┌──────────┐ ──────────► ┌───────────┐
+│ pending  │                    │ confirmed │                  │ shipping │             │ delivered │
+└──────────┘                    └───────────┘                  └──────────┘             └───────────┘
+│                               │
+│ [User/Admin hủy]              │ [User/Admin hủy]
+▼                               ▼
+┌──────────┐                    ┌──────────┐
+│ canceled │                    │ canceled │
+└──────────┘                    └──────────┘
+
+- Trạng thái phải được dịch sang tiếng Việt rõ ràng và phân biệt màu sắc.
+- Có thể phải đăng nhập vào cả tài khoản admin để xử lí trạng thái nếu cần
+Base URL (user): http://localhost:5173
+Base URL (admin): http://localhost:5174
+User: `test@eshop.com / `Test1234! &#x20;
+Admin: admin\@eshop.com  / Admin123!.
+Hình ảnh UI tham khảo
+`````
+- AI Output:
+
+`````
+MAIN_REPORT đã được cập nhật thành công. Bây giờ tổng kết kết quả cho người dùng.
+
+✅ Hoàn thành khám phá FR-11
+File context đã được tạo tại
+
+fr11-context.md
+ và mục 3 của
+
+MAIN_REPORT.md
+ đã được cập nhật.
+
+📋 Tóm tắt những gì khám phá được
+URL/Màn hình: /profile (user site) — bảng "Lịch sử đơn hàng" nằm bên phải trang hồ sơ.
+
+Bảng trạng thái thực tế:
+
+API value	Hiển thị	Nút User	Nút Admin
+pending	Chờ xác nhận 🟡	"Hủy đơn"	"Xác nhận" + "Hủy"
+confirmed	Đã xác nhận 🔵	"Hủy đơn"	"Giao hàng" + "Hủy"
+shipping	Đang giao 🟢	"Hủy đơn" ⚠️	"Hoàn thành" (không Hủy)
+delivered	Đã giao ✅	(trống)	(trống)
+canceled	Đã hủy 🔴	(trống)	"Đánh dấu Đã giao" ⚠️
+Success message: "Hủy đơn thành công!" (browser alert)
+
+⚠️ 2 điểm cần xác nhận với product owner:
+
+User hủy đơn "Đang giao" được — spec FR-11 nói chỉ Admin/User hủy được ở pending+confirmed, nhưng UI cho phép hủy ở shipping.
+Admin có nút "Đánh dấu Đã giao" cho đơn "Đã hủy" — canceled không nên chuyển về delivered theo spec.
+API: GET /api/orders/my-orders | POST /api/checkout
+
+📸 Screenshots
+
+
+fr11-profile-orders.png
+ — Profile với danh sách đơn
+
+
+fr11-admin-orders-all-states.png
+ — Admin orders với tất cả trạng thái
+🚀 Bước tiếp theo
+Khi bạn đã xác nhận các điểm chưa rõ, dùng lệnh sau để sinh test case:
+
+Dựa vào file docs/fr-context/fr11-context.md vừa được tạo,
+hãy sinh danh sách test case cho FR-11 theo yêu cầu:
+- Tối thiểu 14 test case, gồm ≥4 Positive, ≥4 Negative, ≥4 Edge
+- Format bảng: | ID | Loại | Mô tả | Bước | Dữ liệu vào | Kết quả mong đợi | Automate? |
+- Ưu tiên test case dựa trên các rule đã xác nhận trong mục 3 của context file
+- Các điểm "Không chắc chắn" trong mục 7 nên đánh dấu là "cần verify tay"
+`````
+-------------
+## Prompt 33
+- Name of the AI tool: Claude Sonnet 4.6
+- Date/time: 2026-08-26T18:01:29+07:00
+- Prompt:
+```
+[$testcase-generator](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\testcase-generator\SKILL.md) Dựa vào file docs/fr-context/fr11-context.md vừa được tạo, hãy sinh danh sách test case cho FR-11 theo yêu cầu:
+
+- Tối thiểu 14 test case, gồm ≥4 Positive, ≥4 Negative, ≥4 Edge
+- Format bảng: | ID | Loại | Mô tả | Bước | Dữ liệu vào | Kết quả mong đợi | Automate? |
+- Ưu tiên test case dựa trên các rule đã xác nhận trong mục 3 của context file
+- Các điểm "Không chắc chắn" trong mục 7 đã được người dùng xác nhận
+```
+- AI Output:
+```
+Đã sinh 16 test case cho FR-11 và cập nhật:
+- [MAIN_REPORT.md (line 156)](C:/Users/cpshc/Y3/SoftwareTesting/SoftwareTesting-HW04/SoftwareTesting-HW04-23127104/report/MAIN_REPORT.md:156)
+- [TEST_CASE_CATALOG.md (line 25)](C:/Users/cpshc/Y3/SoftwareTesting/SoftwareTesting-HW04/SoftwareTesting-HW04-23127104/report/TEST_CASE_CATALOG.md:25)
+- [fr11-testcases-draft.json](C:/Users/cpshc/Y3/SoftwareTesting/SoftwareTesting-HW04/SoftwareTesting-HW04-23127104/automation/data/fr11-testcases-draft.json)
+Phân bố:
+- Positive: 4
+- Negative: 7
+- Edge: 5
+- Có thể automate: 16/16
+- JSON hợp lệ, 16 ID duy nhất và đủ trường bắt buộc.
+Các hành vi đã xác nhận là lỗi được đặt expected theo đặc tả:
+- User không được hủy đơn shipping.
+- Admin không được chuyển canceled thành delivered.
+- Đơn checkout hợp lệ không được hiển thị tổng tiền 0 ₫.
+TC11 kiểm tra đăng nhập admin sai được giữ lại để bao phủ message "Đăng nhập thất bại" trong context.
+⏸️ Human Review Gate: vui lòng xác nhận bộ 16 test case này trước khi chuyển sang playwright-script-writer.
+```
+-------------
+## Prompt 34
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T18:20:58.5169486+07:00
+- Prompt:
+```
+[$playwright-script-writer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\playwright-script-writer\SKILL.md) [$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) dựa vào context và testcase, hãy tiếp tục làm fr11
+```
+- AI Output:
+```
+Đã tạo automation/tests/fr11-order-history.spec.ts theo kiểu data-driven, import dữ liệu từ automation/data/fr11-testcases-draft.json và dùng selector đã xác nhận trong docs/fr-context/fr11-context.md. Script triển khai 12 test tự động, sử dụng nhiều loại assertion gồm visibility/state, text/content, URL/navigation, count và CSS class/color. Bốn case TC02, TC03, TC13, TC15 được chuyển sang manual vì tạo side effect không thể cleanup qua UI. Đã bổ sung selector login user/admin vào context, đồng bộ MAIN_REPORT.md và TEST_CASE_CATALOG.md. Playwright --list parse thành công 36 lượt (12 case × 3 browser); không chạy test body. Self-review và Human Review Gate được giữ trước bước chạy test thực tế.
+```
+
+## Prompt 35
+- Name of the AI tool: Gemini 3.1 Pro (High)
+- Date/time: 2026-08-26T21:00:07+07:00
+- Prompt:
+```
+/ai-audit-logger Dùng skill multi runner report cho fr11
+```
+- AI Output:
+```
+Đã cấu hình xong theo skill multibrowser-runner-report cho FR-11: thêm script `test:fr11` vào package.json để chạy test file `fr11-order-history.spec.ts`. File playwright.config.ts đã chuẩn (chứa MSSV, ISO timestamp). Vui lòng tự chạy test (ví dụ: `npm run test:fr11`), xác nhận có "Run by: 23127104" trong HTML report và ghi kết quả thực tế vào bảng MAIN_REPORT.md và TEST_CASE_CATALOG.md. Nhắc nhở: KHÔNG được để AI tự bịa timestamp — phải đảm bảo thời gian ghi nhận là thời gian thật của phiên làm việc.
+```
+
+## Prompt 36
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T21:23:14.8541219+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) [$fr-context-explorer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\fr-context-explorer\SKILL.md) fr17 FR-17: Quản lý Mã Giảm Giá (Coupon CRUD)
+
+- Admin có thể Thêm / Xem / Xóa mã giảm giá.
+- Các trường bắt buộc: `code` (duy nhất), `type` (percent/fixed), `discount_value` (dương), `expired_at`, `min_order_amount` (>= 0), `max_uses_per_user` (>= 1).
+
+Email / Mật khẩu của admin: `admin@eshop.com` / `Admin123!`
+
+URL admin page: [http://localhost:5174/](http://localhost:5174/)
+```
+- AI Output:
+```
+Đã khám phá FR-17 bằng Playwright MCP theo nguyên tắc black-box và tạo `docs/fr-context/fr17-context.md`. Đã xác nhận selector form/list, HTML native validation, tạo coupon percent/fixed, xem danh sách và xóa coupon. Đã lưu 12 screenshot thật trong `docs/fr-context/`. Phát hiện ba hành vi trái đặc tả: hệ thống vẫn tạo coupon khi `discount_value = 0`, `discount_value = -10`, hoặc `min_order_amount = -1`. Duplicate code bị từ chối với alert nguyên văn lỗi UNIQUE constraint; `max_uses_per_user = 0` bị native validation chặn. Toàn bộ coupon tạm đã được xóa; các coupon có sẵn không bị thay đổi. Context giữ các oracle chưa rõ ở mục 6 để người dùng xác nhận trước khi sinh test case.
+```
+
+## Prompt 37
+- Name of the AI tool: Gemini 3.1 Pro (High)
+- Date/time: 2026-08-26T21:31:10+07:00
+- Prompt:
+```
+/ai-audit-logger ở tc2 của fr3 lí do tại sao fail
+```
+- AI Output:
+```
+TC02 của FR-03 fail chủ yếu do **lỗi từ Backend (API)**: Khi nhập email hợp lệ và bấm 'Lấy mã OTP', API backend của SUT (localhost:3000) luôn trả về lỗi 404 "User not found" với mọi email test. Hậu quả là ứng dụng bị kẹt, không thể chuyển sang Bước 2 (màn hình nhập OTP). Do kịch bản TC02 yêu cầu phải ở Bước 2 để nhập OTP và Pass mới, Playwright sẽ chờ các phần tử UI của Bước 2 xuất hiện cho đến khi bị Timeout và đánh fail test. (Trước đó TC02 cũng từng fail do sai selector trong script, nhưng lỗi đó đã được fix, nguyên nhân hiện tại hoàn toàn là lỗi hệ thống/Backend ngăn cản happy path).
+```
+
+## Prompt 38
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-26T22:21:13.6217532+07:00
+- Prompt:
+```
+[$playwright-script-writer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\playwright-script-writer\SKILL.md) fr17 [$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md)
+```
+- AI Output:
+```
+Đã tạo `automation/tests/fr17-coupon-crud.spec.ts` theo kiểu data-driven, import test data từ `automation/data/fr17-testcases-draft.json` và dùng selector từ `docs/fr-context/fr17-context.md`. Script bao phủ 19 test case tự động, có assertion visibility/state, text/content, URL/navigation, count, value và native validation; có cleanup cho coupon tạo trong test. Không chạy Playwright theo Human Review Gate. Chưa cập nhật MAIN_REPORT.md hoặc TEST_CASE_CATALOG.md vì cần người dùng review và xác nhận script trước.
+```
+
+
+## Prompt 39
+- Name of the AI tool: Gemini 3.1 Pro (High)
+- Date/time: 2026-08-27T08:37:02+07:00
+- Prompt:
+`
+/ai-audit-logger tôi phát hiện ra product bug ở tc2 của fr3 (đăng nhập đúng otp và mật khẩu mới), dù khi đăng nhập đúng mật khẩu vẫn bị từ chối và báo lỗi mật khẩu không hợp lệ, tuy nhiên lỗi này đang bị block lại vì otp sai nghiệp vụ, hãy viết lại test script cho tc2 của fr3 cô lập lỗi otp 4 số để phát hiện được lỗi mật khẩu
+`
+- AI Output:
+`
+Đã viết lại test script cho TC02 của FR-03 (fr03-forgot-password.spec.ts). Cụ thể, đã cô lập lỗi OTP 4 số bằng cách thêm padding '00' vào cuối mã OTP được sinh ra (paddedOtp = displayedOtp.padEnd(6, '0')) để vượt qua bước validate OTP trên frontend. Sau đó, thay đổi logic assertion từ expect(thành công) sang bắt trực tiếp thông báo lỗi /mật khẩu không hợp lệ/i để phát hiện và báo cáo đúng product bug về mật khẩu.
+`

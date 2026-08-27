@@ -1,0 +1,526 @@
+[
+  {
+    "id": "TC01",
+    "type": "positive",
+    "description": "[RULE-01/02] Admin đăng nhập và xem danh sách coupon",
+    "steps": [
+      "Vào /",
+      "Đăng nhập bằng admin hợp lệ",
+      "Chọn mục Mã Giảm Giá",
+      "Kiểm tra heading, table và 7 cột coupon"
+    ],
+    "input": {
+      "admin_email": "admin@eshop.com",
+      "admin_password": "admin123"
+    },
+    "expected": {
+      "heading": "Quản lý Mã Giảm Giá",
+      "headers": ["Mã", "Loại", "Giá trị", "Đơn tối thiểu", "Hết hạn", "Giới hạn/người", "Hành động"]
+    },
+    "automate": true,
+    "selector_hints": {
+      "login_email": "getByRole('textbox', { name: 'Email' })",
+      "login_password": "getByRole('textbox', { name: 'Password' })",
+      "login_button": "getByRole('button', { name: 'Login' })",
+      "coupon_nav": "getByText('Mã Giảm Giá', { exact: true })",
+      "heading": "getByRole('heading', { name: 'Quản lý Mã Giảm Giá' })",
+      "table": "getByRole('table')",
+      "column_header": "getByRole('columnheader', { name: ... })"
+    }
+  },
+  {
+    "id": "TC02",
+    "type": "positive",
+    "description": "[RULE-03/07] Tạo coupon percent hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Chọn type percent",
+      "Nhập code, discount, min order, expiry, max uses",
+      "Click Tạo mã",
+      "Kiểm tra row theo code"
+    ],
+    "input": {
+      "code": "FR17P001",
+      "type": "percent",
+      "discount_value": 15,
+      "min_order_amount": 100000,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 2
+    },
+    "expected": {
+      "successMessage": null,
+      "rowContains": ["FR17P001", "Phần trăm", "15%", "100,000 ₫", "2"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17P001 qua nút Xóa trong row",
+    "selector_hints": {
+      "code_field": "getByRole('textbox', { name: 'Mã coupon (VD: SAVE10)' })",
+      "type_select": "getByRole('combobox')",
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "min_order_field": "getByRole('spinbutton', { name: 'Đơn tối thiểu (₫)' })",
+      "expiry_field": "getByPlaceholder('Ngày hết hạn')",
+      "max_uses_field": "getByRole('spinbutton', { name: 'Số lần dùng tối đa/người' })",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })",
+      "delete_in_row": "row.getByRole('button', { name: 'Xóa' })"
+    }
+  },
+  {
+    "id": "TC03",
+    "type": "positive",
+    "description": "[RULE-03/08] Tạo coupon fixed hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Chọn type fixed",
+      "Nhập dữ liệu hợp lệ",
+      "Click Tạo mã",
+      "Kiểm tra row theo code"
+    ],
+    "input": {
+      "code": "FR17F001",
+      "type": "fixed",
+      "discount_value": 50000,
+      "min_order_amount": 200000,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 3
+    },
+    "expected": {
+      "successMessage": null,
+      "rowContains": ["FR17F001", "Cố định", "50,000 ₫", "200,000 ₫", "3"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17F001 qua nút Xóa trong row",
+    "selector_hints": {
+      "type_select": "getByRole('combobox')",
+      "discount_fixed_field": "getByRole('spinbutton', { name: 'Số tiền (VD: 50000)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })",
+      "delete_in_row": "row.getByRole('button', { name: 'Xóa' })"
+    }
+  },
+  {
+    "id": "TC04",
+    "type": "positive",
+    "description": "[RULE-05/07] Tạo coupon với default min/max hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập code, discount và expiry",
+      "Giữ min_order_amount mặc định 0 và max_uses_per_user mặc định 1",
+      "Click Tạo mã",
+      "Kiểm tra row mới"
+    ],
+    "input": {
+      "code": "FR17D001",
+      "type": "percent",
+      "discount_value": 10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "rowContains": ["FR17D001", "Phần trăm", "10%", "0 ₫", "1"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17D001 qua nút Xóa trong row",
+    "selector_hints": {
+      "min_order_field": "getByRole('spinbutton', { name: 'Đơn tối thiểu (₫)' })",
+      "max_uses_field": "getByRole('spinbutton', { name: 'Số lần dùng tối đa/người' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC05",
+    "type": "negative",
+    "description": "[RULE-04/Error] Bỏ trống code",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Để trống code",
+      "Nhập discount và expiry",
+      "Click Tạo mã",
+      "Đọc validationMessage của input code"
+    ],
+    "input": {
+      "code": "",
+      "discount_value": 10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "errorMessage": "Please fill in this field."
+    },
+    "automate": true,
+    "selector_hints": {
+      "code_field": "getByRole('textbox', { name: 'Mã coupon (VD: SAVE10)' })",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })"
+    }
+  },
+  {
+    "id": "TC06",
+    "type": "negative",
+    "description": "[RULE-04/Error] Bỏ trống discount_value",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập code và expiry",
+      "Để trống discount_value",
+      "Click Tạo mã",
+      "Đọc validationMessage của input discount"
+    ],
+    "input": {
+      "code": "FR17NODISC",
+      "discount_value": "",
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "errorMessage": "Please fill in this field."
+    },
+    "automate": true,
+    "selector_hints": {
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "discount_fixed_field": "getByRole('spinbutton', { name: 'Số tiền (VD: 50000)' })",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })"
+    }
+  },
+  {
+    "id": "TC07",
+    "type": "negative",
+    "description": "[RULE-04/Error] Bỏ trống expired_at",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập code và discount",
+      "Để trống expired_at",
+      "Click Tạo mã",
+      "Đọc validationMessage của input Ngày hết hạn"
+    ],
+    "input": {
+      "code": "FR17NOEXP",
+      "discount_value": 10,
+      "expired_at": ""
+    },
+    "expected": {
+      "errorMessage": "Please fill in this field."
+    },
+    "automate": true,
+    "selector_hints": {
+      "expiry_field": "getByPlaceholder('Ngày hết hạn')",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })"
+    }
+  },
+  {
+    "id": "TC08",
+    "type": "negative",
+    "description": "[RULE-06/Error] Code trùng bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập code SAVE10 đã tồn tại",
+      "Click Tạo mã",
+      "Chấp nhận browser alert",
+      "Kiểm tra không tạo thêm coupon mới"
+    ],
+    "input": {
+      "code": "SAVE10",
+      "type": "percent",
+      "discount_value": 10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "alertMessage": "Lỗi: SQLITE_CONSTRAINT: UNIQUE constraint failed: coupons.code",
+      "behavior": "Không tạo row mới"
+    },
+    "automate": true,
+    "selector_hints": {
+      "code_field": "getByRole('textbox', { name: 'Mã coupon (VD: SAVE10)' })",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC09",
+    "type": "negative",
+    "description": "[RULE-10/Error] max_uses_per_user = 0 bị chặn",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập dữ liệu hợp lệ nhưng max_uses_per_user = 0",
+      "Click Tạo mã",
+      "Đọc validationMessage của input max uses"
+    ],
+    "input": {
+      "code": "FR17MAX0",
+      "discount_value": 10,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 0
+    },
+    "expected": {
+      "errorMessage": "Value must be greater than or equal to 1."
+    },
+    "automate": true,
+    "selector_hints": {
+      "max_uses_field": "getByRole('spinbutton', { name: 'Số lần dùng tối đa/người' })"
+    }
+  },
+  {
+    "id": "TC10",
+    "type": "negative",
+    "description": "[RULE-12/spec] discount_value = 0 phải bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập discount_value = 0",
+      "Click Tạo mã",
+      "Kiểm tra không có row mới"
+    ],
+    "input": {
+      "code": "FR17ZERO",
+      "type": "percent",
+      "discount_value": 0,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "behavior": "Từ chối tạo coupon vì discount_value phải dương",
+      "known_current_behavior": "UI hiện tại tạo row 0%, đây là potential product bug"
+    },
+    "automate": true,
+    "cleanup": "Nếu SUT tạo row do bug, xóa coupon FR17ZERO",
+    "selector_hints": {
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC11",
+    "type": "negative",
+    "description": "[RULE-13/spec] discount_value âm phải bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập discount_value = -10",
+      "Click Tạo mã",
+      "Kiểm tra không có row mới"
+    ],
+    "input": {
+      "code": "FR17NEGDISC",
+      "type": "percent",
+      "discount_value": -10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "behavior": "Từ chối tạo coupon vì discount_value phải dương",
+      "known_current_behavior": "UI hiện tại tạo row -10%, đây là potential product bug"
+    },
+    "automate": true,
+    "cleanup": "Nếu SUT tạo row do bug, xóa coupon FR17NEGDISC",
+    "selector_hints": {
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC12",
+    "type": "negative",
+    "description": "[RULE-14/spec] min_order_amount âm phải bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập min_order_amount = -1",
+      "Click Tạo mã",
+      "Kiểm tra không có row mới"
+    ],
+    "input": {
+      "code": "FR17NEGMIN",
+      "type": "percent",
+      "discount_value": 10,
+      "min_order_amount": -1,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "behavior": "Từ chối tạo coupon vì min_order_amount phải >= 0",
+      "known_current_behavior": "UI hiện tại tạo row với -1 ₫, đây là potential product bug"
+    },
+    "automate": true,
+    "cleanup": "Nếu SUT tạo row do bug, xóa coupon FR17NEGMIN",
+    "selector_hints": {
+      "min_order_field": "getByRole('spinbutton', { name: 'Đơn tối thiểu (₫)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC13",
+    "type": "edge",
+    "description": "[RULE-05] min_order_amount = 0 là biên hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Tạo coupon fixed với min_order_amount = 0",
+      "Kiểm tra row hiển thị 0 ₫"
+    ],
+    "input": {
+      "code": "FR17MIN0",
+      "type": "fixed",
+      "discount_value": 25000,
+      "min_order_amount": 0,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 2
+    },
+    "expected": {
+      "rowContains": ["FR17MIN0", "Cố định", "25,000 ₫", "0 ₫", "2"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17MIN0 qua nút Xóa trong row",
+    "selector_hints": {
+      "type_select": "getByRole('combobox')",
+      "discount_fixed_field": "getByRole('spinbutton', { name: 'Số tiền (VD: 50000)' })",
+      "min_order_field": "getByRole('spinbutton', { name: 'Đơn tối thiểu (₫)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC14",
+    "type": "edge",
+    "description": "[RULE-10] max_uses_per_user = 1 là biên hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Tạo coupon percent với max_uses_per_user = 1",
+      "Kiểm tra row hiển thị giới hạn/người là 1"
+    ],
+    "input": {
+      "code": "FR17MAX1",
+      "type": "percent",
+      "discount_value": 20,
+      "min_order_amount": 50000,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 1
+    },
+    "expected": {
+      "rowContains": ["FR17MAX1", "Phần trăm", "20%", "50,000 ₫", "1"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17MAX1 qua nút Xóa trong row",
+    "selector_hints": {
+      "max_uses_field": "getByRole('spinbutton', { name: 'Số lần dùng tối đa/người' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC15",
+    "type": "edge",
+    "description": "[Mục 6 xác nhận] percent = 100 là biên hợp lệ",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Tạo coupon percent với discount_value = 100",
+      "Kiểm tra row hiển thị 100%"
+    ],
+    "input": {
+      "code": "FR17P100",
+      "type": "percent",
+      "discount_value": 100,
+      "min_order_amount": 0,
+      "expired_at": "2099-12-30",
+      "max_uses_per_user": 1
+    },
+    "expected": {
+      "rowContains": ["FR17P100", "Phần trăm", "100%"]
+    },
+    "automate": true,
+    "cleanup": "Xóa coupon FR17P100 qua nút Xóa trong row",
+    "selector_hints": {
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC16",
+    "type": "edge",
+    "description": "[Mục 6 xác nhận] percent > 100 phải bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Tạo coupon percent với discount_value = 101",
+      "Kiểm tra không có row mới"
+    ],
+    "input": {
+      "code": "FR17P101",
+      "type": "percent",
+      "discount_value": 101,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "behavior": "Từ chối tạo coupon vì percent không được vượt quá 100%"
+    },
+    "automate": true,
+    "cleanup": "Nếu SUT tạo row do bug, xóa coupon FR17P101",
+    "selector_hints": {
+      "discount_percent_field": "getByRole('spinbutton', { name: 'Giá trị % (VD: 10)' })",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC17",
+    "type": "edge",
+    "description": "[RULE-11/Mục 6 xác nhận] expired_at trong quá khứ phải bị từ chối",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập ngày hết hạn trong quá khứ",
+      "Click Tạo mã",
+      "Kiểm tra không có row mới"
+    ],
+    "input": {
+      "code": "FR17PAST",
+      "type": "percent",
+      "discount_value": 10,
+      "expired_at": "2020-01-01"
+    },
+    "expected": {
+      "behavior": "Từ chối tạo coupon vì ngày hết hạn phải là tương lai",
+      "known_current_behavior": "UI hiện tại tạo row và hiển thị Hết hạn, đây là potential product bug"
+    },
+    "automate": true,
+    "cleanup": "Nếu SUT tạo row do bug, xóa coupon FR17PAST",
+    "selector_hints": {
+      "expiry_field": "getByPlaceholder('Ngày hết hạn')",
+      "row_by_code": "getByRole('row').filter({ hasText: code })"
+    }
+  },
+  {
+    "id": "TC18",
+    "type": "edge",
+    "description": "[Mục 6 xác nhận] Code được trim và không phân biệt hoa/thường khi kiểm tra trùng",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Nhập code có khoảng trắng và khác hoa/thường: ' save10 '",
+      "Click Tạo mã",
+      "Kiểm tra alert trùng code"
+    ],
+    "input": {
+      "code": " save10 ",
+      "type": "percent",
+      "discount_value": 10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "alertMessage": "Lỗi: SQLITE_CONSTRAINT: UNIQUE constraint failed: coupons.code",
+      "behavior": "Code được trim, so sánh không phân biệt hoa/thường và không tạo coupon mới"
+    },
+    "automate": true,
+    "selector_hints": {
+      "code_field": "getByRole('textbox', { name: 'Mã coupon (VD: SAVE10)' })",
+      "submit_button": "getByRole('button', { name: 'Tạo mã' })"
+    }
+  },
+  {
+    "id": "TC19",
+    "type": "negative",
+    "description": "[Mục 6 xác nhận] Xóa coupon phải có confirm dialog",
+    "steps": [
+      "Đăng nhập admin và mở Mã Giảm Giá",
+      "Tạo coupon tạm",
+      "Click Xóa trong row coupon",
+      "Kiểm tra confirm dialog xuất hiện trước khi xóa"
+    ],
+    "input": {
+      "code": "FR17DEL",
+      "type": "percent",
+      "discount_value": 10,
+      "expired_at": "2099-12-30"
+    },
+    "expected": {
+      "behavior": "Phải có confirm dialog trước khi xóa",
+      "known_current_behavior": "UI hiện tại xóa ngay không có confirm dialog, đây là potential product bug"
+    },
+    "automate": true,
+    "cleanup": "Nếu coupon chưa bị xóa, xóa coupon FR17DEL",
+    "selector_hints": {
+      "row_by_code": "getByRole('row').filter({ hasText: code })",
+      "delete_in_row": "row.getByRole('button', { name: 'Xóa' })"
+    }
+  }
+]

@@ -82,6 +82,16 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 | Firefox | | | | |
 | WebKit | | | | |
 
+| URL/navigation | `await expect(page).toHaveURL(/login/)` |
+
+### 2.6. Kết quả chạy multi-browser
+
+| Browser | Số TC chạy | Pass | Fail | Link HTML report |
+|---|---|---|---|---|
+| Chromium | | | | |
+| Firefox | | | | |
+| WebKit | | | | |
+
 *(Mỗi report phải hiển thị "Run by: {MSSV}" + ISO timestamp.)*
 
 ### 2.7. Review & Gap Analysis (AI đã sai/thiếu gì)
@@ -107,41 +117,62 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 
 ---
 
-## 3. Feature B — Xem lịch sử đơn hàng (User)
+## 3. Feature B — FR-11: Xem lịch sử đơn hàng (User)
 
 ### 3.1. Mô tả chức năng
-- Người dùng chỉ xem được đơn hàng của chính mình.
-- Hiển thị: Mã đơn, Ngày đặt, Tổng tiền, Trạng thái hiện tại.
-- Sơ đồ trạng thái đơn hàng (Order State Machine):
 
-```
-pending --[Admin xác nhận]--> confirmed --[Admin giao hàng]--> shipping --[Admin hoàn tất]--> delivered
-   |                              |
-   |--[User/Admin hủy]            |--[User/Admin hủy]
-   v                              v
-canceled                      canceled
-```
-- Trạng thái phải dịch tiếng Việt rõ ràng, phân biệt bằng màu sắc.
+**Khám phá bởi:** fr-context-explorer (black-box UI, 2026-08-26) | **Context:** `docs/fr-context/fr11-context.md`
+
+- Người dùng đăng nhập → vào `/profile` → thấy bảng "Lịch sử đơn hàng".
+- Bảng hiển thị **5 cột**: Mã ĐH, Ngày đặt, Tổng tiền, Trạng thái, Thao tác.
+- User **chỉ thấy đơn của mình** (đơn của Admin User không xuất hiện — xác nhận từ UI).
+- Đơn sắp xếp từ **mới nhất → cũ nhất** (giảm dần theo ID/ngày).
+
+**Bảng trạng thái thực tế từ UI:**
+
+| API value | Hiển thị tiếng Việt | Nút Thao tác (User) |
+|---|---|---|
+| `pending` | Chờ xác nhận | "Hủy đơn" |
+| `confirmed` | Đã xác nhận | "Hủy đơn" |
+| `shipping` | Đang giao | "Hủy đơn" ⚠️ (khác spec) |
+| `delivered` | Đã giao | (trống) |
+| `canceled` | Đã hủy | (trống) |
+
+**Success message khi hủy:** `"Hủy đơn thành công!"` (browser native alert).
+**⚠️ Bug tiềm năng:** Admin có nút "Đánh dấu Đã giao" cho đơn "Đã hủy" — canceled không nên chuyển về delivered.
 
 ### 3.2. Quy trình dùng AI (AI-first, từng bước)
-*(giống cấu trúc bảng ở mục 2.2)*
+
+| Bước | Việc làm | Công cụ/Skill dùng | Ghi chú |
+|---|---|---|---|
+| 1 | Khám phá UI, business rule, selectors | `fr-context-explorer` | Playwright MCP black-box |
+| 2 | Sinh danh sách test case (≥12) | `testcase-generator` | Dựa trên fr11-context.md |
+| 3 | Review, chọn/sửa test case | Thủ công | — |
+| 4 | Convert test case → script Playwright | `playwright-script-writer` | — |
+| 5 | Tách dữ liệu test ra file riêng | — | `data/fr11-testcases-draft.json` |
+| 6 | Cấu hình chạy multi-browser + report | `multibrowser-runner-report` | — |
+| 7 | Review & fix script AI sinh | Thủ công | — |
 
 ### 3.3. Danh sách Test Case (≥12)
 
-| ID | Loại | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
-|---|---|---|---|---|---|
-| TC01 | Positive | User A xem danh sách đơn hàng của mình | tài khoản có đơn hàng | Hiển thị đúng danh sách đơn của A | ✅ |
-| TC02 | Positive | Kiểm tra hiển thị đủ 4 cột: Mã đơn, Ngày đặt, Tổng tiền, Trạng thái | - | Đủ thông tin | ✅ |
-| TC03 | Negative | User A cố truy cập chi tiết đơn hàng của User B (qua URL/order id) | order id của B | Từ chối truy cập | ✅ |
-| TC04 | Positive | Đơn ở trạng thái pending hiển thị đúng nhãn + màu tiếng Việt | - | "Chờ xác nhận" đúng màu | ✅ |
-| TC05 | Positive | Đơn ở trạng thái confirmed hiển thị đúng nhãn + màu | - | "Đã xác nhận" đúng màu | ✅ |
-| TC06 | Positive | Đơn ở trạng thái shipping hiển thị đúng nhãn + màu | - | "Đang giao" đúng màu | ✅ |
-| TC07 | Positive | Đơn ở trạng thái delivered hiển thị đúng nhãn + màu | - | "Đã giao" đúng màu | ✅ |
-| TC08 | Positive | Đơn ở trạng thái canceled hiển thị đúng nhãn + màu | - | "Đã hủy" đúng màu | ✅ |
-| TC09 | Edge | Danh sách rỗng (chưa từng đặt đơn) | tài khoản mới | Hiển thị thông báo "chưa có đơn hàng" | ✅ |
-| TC10 | Edge | User hủy đơn ở trạng thái pending | đơn pending | Chuyển sang canceled | ✅ |
-| TC11 | Negative | User hủy đơn ở trạng thái shipping (nếu không cho phép) | đơn shipping | Từ chối / không cho hủy | ✅ |
-| TC12 | Edge | Sắp xếp danh sách đơn theo ngày đặt mới nhất | nhiều đơn | Thứ tự đúng | ✅ |
+| ID | Loại | Mô tả | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
+|---|---|---|---|---|---|---|
+| TC01 | Positive | [RULE-02] Bảng lịch sử có đúng 5 cột | Đăng nhập user có đơn; mở `/profile`; kiểm tra heading, table và headers | `user_with_orders` | Hiện "Lịch sử đơn hàng" và đủ Mã ĐH, Ngày đặt, Tổng tiền, Trạng thái, Thao tác | ✅ |
+| TC02 | Positive | [RULE-04/09/10] Hủy đơn pending | Mở `/profile`; tại dòng Chờ xác nhận bấm "Hủy đơn"; xác nhận alert | `user_with_pending_order` | Alert "Hủy đơn thành công!"; trạng thái thành "Đã hủy"; nút biến mất | ⬜ Manual — không có UI cleanup trạng thái |
+| TC03 | Positive | [RULE-05/09/10] Hủy đơn confirmed | Mở `/profile`; tại dòng Đã xác nhận bấm "Hủy đơn"; xác nhận alert | `user_with_confirmed_order` | Alert "Hủy đơn thành công!"; trạng thái thành "Đã hủy"; nút biến mất | ⬜ Manual — không có UI cleanup trạng thái |
+| TC04 | Positive | [RULE-03] Dịch đúng 5 trạng thái | Chuẩn bị đơn ở 5 trạng thái; mở `/profile`; đối chiếu status từng dòng | `pending`, `confirmed`, `shipping`, `delivered`, `canceled` | Lần lượt hiện Chờ xác nhận, Đã xác nhận, Đang giao, Đã giao, Đã hủy | ✅ |
+| TC05 | Negative | [RULE-01] Không lộ đơn của user khác | Tạo đơn nhận diện cho User B; đăng nhập User A; tìm mã đơn B trong bảng | `user_a`, `order_owned_by_user_b` | Không thấy đơn B; bảng chỉ chứa đơn của User A | ✅ |
+| TC06 | Negative | [FR-11 access] Truy cập khi chưa đăng nhập | Xóa phiên; truy cập trực tiếp `/profile` | `anonymous` | Hiện nguyên văn "Vui lòng đăng nhập"; không hiện lịch sử đơn | ✅ |
+| TC07 | Negative | [RULE-06/spec] Không cho user hủy đơn shipping | Mở `/profile`; kiểm tra ô Thao tác của dòng Đang giao | `user_with_shipping_order` | Không có nút "Hủy đơn"; không thể chuyển shipping → canceled | ✅ |
+| TC08 | Negative | [RULE-07] Không thao tác đơn delivered | Mở `/profile`; kiểm tra dòng Đã giao | `user_with_delivered_order` | Ô Thao tác trống; không có nút "Hủy đơn" | ✅ |
+| TC09 | Negative | [RULE-08] Không thao tác đơn canceled | Mở `/profile`; kiểm tra dòng Đã hủy | `user_with_canceled_order` | Ô Thao tác trống; không có nút "Hủy đơn" | ✅ |
+| TC10 | Negative | [RULE-16/spec] Admin không hồi sinh đơn canceled | Admin mở Quản lý Đơn hàng; kiểm tra dòng Đã hủy | `admin_valid`, `canceled_order` | Không có nút "Đánh dấu Đã giao"; canceled là trạng thái kết thúc | ✅ |
+| TC11 | Negative | [Error mục 4] Admin đăng nhập sai | Mở login admin; dùng mật khẩu sai; submit | `admin_wrong_password` | Alert nguyên văn "Đăng nhập thất bại"; không hiện trang quản lý đơn | ✅ |
+| TC12 | Edge | [RULE-11] Sắp xếp nhiều đơn mới nhất trước | Mở `/profile`; đọc mã đơn từ trên xuống | `user_with_multiple_orders` | Danh sách ID giảm dần | ✅ |
+| TC13 | Edge | [Mục 7.5] Hơn 10 đơn không phân trang | Chuẩn bị 11 đơn qua UI; mở `/profile`; đếm dòng và tìm pagination | `user_with_11_orders` | Hiện đủ 11 dòng; không có điều khiển phân trang | ⬜ Manual — không thể cleanup 11 đơn qua UI |
+| TC14 | Edge | [RULE-02] Định dạng tổng tiền lớn | Mở `/profile`; đọc Tổng tiền của đơn 73.000.000 | `orderTotal=73000000` | Hiển thị đúng `73,000,000 ₫` | ✅ |
+| TC15 | Edge | [RULE-02/mục 7.6] Tổng tiền checkout không bằng 0 | Tạo đơn hợp lệ qua cart/checkout; mở `/profile`; đối chiếu tổng tiền | `in_stock_product_with_positive_price` | Tổng tiền lịch sử > 0, bằng checkout và không hiện `0 ₫` | ⬜ Manual — không thể cleanup đơn mới qua UI |
+| TC16 | Edge | [RULE-03/mục 7.1] Màu badge phân biệt | Chuẩn bị 5 trạng thái; đọc class/computed color từng badge | `all_status_fixtures` | Class/màu đúng dữ liệu đã xác nhận; shipping khác pending/confirmed/canceled | ✅ |
 
 ### 3.4–3.9. *(giữ nguyên cấu trúc mục 2.4 → 2.9, áp dụng cho Feature B)*
 
@@ -164,22 +195,27 @@ canceled                      canceled
 
 ### 4.3. Danh sách Test Case (≥12)
 
-| ID | Loại | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
-|---|---|---|---|---|---|
-| TC01 | Positive | Tạo coupon type=percent hợp lệ | code, %, ngày hết hạn hợp lệ | Tạo thành công | ✅ |
-| TC02 | Positive | Tạo coupon type=fixed hợp lệ | code, số tiền cố định | Tạo thành công | ✅ |
-| TC03 | Negative | Tạo coupon với `code` trùng | code đã tồn tại | Báo lỗi trùng | ✅ |
-| TC04 | Negative | `discount_value` âm | -10 | Báo lỗi validate | ✅ |
-| TC05 | Negative | `discount_value` = 0 | 0 | Báo lỗi validate | ✅ |
-| TC06 | Negative | `min_order_amount` âm | -1 | Báo lỗi validate | ✅ |
-| TC07 | Edge | `min_order_amount` = 0 | 0 | Chấp nhận (biên hợp lệ) | ✅ |
-| TC08 | Negative | `max_uses_per_user` = 0 | 0 | Báo lỗi (phải >=1) | ✅ |
-| TC09 | Edge | `max_uses_per_user` = 1 | 1 | Chấp nhận (biên hợp lệ) | ✅ |
-| TC10 | Negative | `expired_at` là ngày trong quá khứ | ngày cũ | Báo lỗi / không cho tạo | ✅ |
-| TC11 | Positive | Xem danh sách coupon | - | Hiển thị đầy đủ, đúng dữ liệu | ✅ |
-| TC12 | Positive | Xóa coupon | coupon tồn tại | Xóa thành công, biến mất khỏi danh sách | ✅ |
-| TC13 | Negative | `code` để trống | "" | Báo lỗi bắt buộc | ✅ |
-| TC14 | Negative | `type` không hợp lệ (không phải percent/fixed) | "abc" | Báo lỗi validate | ✅ |
+| ID | Loại | Mô tả | Bước thực hiện | Dữ liệu vào | Kết quả mong đợi | Tự động hóa? |
+|---|---|---|---|---|---|---|
+| TC01 | Positive | [RULE-01/02] Admin đăng nhập và xem danh sách coupon | Vào `/`; đăng nhập admin; chọn "Mã Giảm Giá"; kiểm tra heading, table và 7 cột | `admin_valid` | Hiện "Quản lý Mã Giảm Giá" và đủ cột Mã, Loại, Giá trị, Đơn tối thiểu, Hết hạn, Giới hạn/người, Hành động | ✅ |
+| TC02 | Positive | [RULE-03/07] Tạo coupon percent hợp lệ | Mở form coupon; chọn percent; nhập dữ liệu hợp lệ; bấm "Tạo mã"; tìm row theo code | `FR17P001`, 15%, min 100000, expiry 2099-12-30, max 2 | Không có success message; row mới xuất hiện với loại "Phần trăm" và giá trị dạng `%` | ✅ |
+| TC03 | Positive | [RULE-03/08] Tạo coupon fixed hợp lệ | Chọn fixed; nhập dữ liệu hợp lệ; bấm "Tạo mã"; tìm row theo code | `FR17F001`, 50000, min 200000, expiry 2099-12-30, max 3 | Không có success message; row mới xuất hiện với loại "Cố định" và giá trị tiền dạng `#,### ₫` | ✅ |
+| TC04 | Positive | [RULE-05/07] Tạo coupon với default min/max hợp lệ | Để `min_order_amount` mặc định 0 và `max_uses_per_user` mặc định 1; tạo percent hợp lệ | `FR17D001`, 10%, expiry 2099-12-30 | Row hiển thị Đơn tối thiểu `0 ₫` và Giới hạn/người `1` | ✅ |
+| TC05 | Negative | [RULE-04/Error] Bỏ trống code | Để trống field code; nhập discount và ngày hết hạn; bấm "Tạo mã" | code `""`, discount 10, expiry 2099-12-30 | HTML native validation: "Please fill in this field." tại input Mã coupon | ✅ |
+| TC06 | Negative | [RULE-04/Error] Bỏ trống discount_value | Nhập code và ngày hết hạn; để trống discount; bấm "Tạo mã" | code `FR17NODISC`, discount `""` | HTML native validation: "Please fill in this field." tại input discount đang hiển thị | ✅ |
+| TC07 | Negative | [RULE-04/Error] Bỏ trống expired_at | Nhập code và discount; để trống ngày hết hạn; bấm "Tạo mã" | code `FR17NOEXP`, discount 10, expiry `""` | HTML native validation: "Please fill in this field." tại input Ngày hết hạn | ✅ |
+| TC08 | Negative | [RULE-06/Error] Code trùng bị từ chối | Nhập code đã tồn tại `SAVE10`; bấm "Tạo mã"; xử lý alert | code `SAVE10`, percent 10, expiry 2099-12-30 | Browser alert: "Lỗi: SQLITE_CONSTRAINT: UNIQUE constraint failed: coupons.code"; không tạo row mới | ✅ |
+| TC09 | Negative | [RULE-10/Error] max_uses_per_user = 0 bị chặn | Nhập coupon hợp lệ nhưng đặt max uses = 0; bấm "Tạo mã" | code `FR17MAX0`, max 0 | HTML native validation: "Value must be greater than or equal to 1." | ✅ |
+| TC10 | Negative | [RULE-12/spec] discount_value = 0 phải bị từ chối | Nhập percent discount bằng 0; bấm "Tạo mã"; kiểm tra không có row mới | code `FR17ZERO`, discount 0 | Theo FR, `discount_value` phải dương nên phải từ chối; UI hiện tại tạo row là bug | ✅ |
+| TC11 | Negative | [RULE-13/spec] discount_value âm phải bị từ chối | Nhập percent discount âm; bấm "Tạo mã"; kiểm tra không có row mới | code `FR17NEGDISC`, discount -10 | Theo FR, `discount_value` phải dương nên phải từ chối; UI hiện tại tạo row là bug | ✅ |
+| TC12 | Negative | [RULE-14/spec] min_order_amount âm phải bị từ chối | Nhập min order âm; bấm "Tạo mã"; kiểm tra không có row mới | code `FR17NEGMIN`, min -1 | Theo FR, `min_order_amount >= 0` nên phải từ chối; UI hiện tại tạo row là bug | ✅ |
+| TC13 | Edge | [RULE-05] min_order_amount = 0 là biên hợp lệ | Tạo coupon fixed với min order bằng 0 | code `FR17MIN0`, fixed 25000, min 0 | Row được tạo và hiển thị Đơn tối thiểu `0 ₫` | ✅ |
+| TC14 | Edge | [RULE-10] max_uses_per_user = 1 là biên hợp lệ | Tạo coupon percent với max uses bằng 1 | code `FR17MAX1`, max 1 | Row được tạo và hiển thị Giới hạn/người `1` | ✅ |
+| TC15 | Edge | [Mục 6 xác nhận] percent = 100 là biên hợp lệ | Tạo coupon percent với discount 100 | code `FR17P100`, discount 100 | Row được tạo và hiển thị `100%` | ✅ |
+| TC16 | Edge | [Mục 6 xác nhận] percent > 100 phải bị từ chối | Tạo coupon percent với discount 101; kiểm tra không có row mới | code `FR17P101`, discount 101 | Theo xác nhận, percent không được vượt quá 100%; phải từ chối | ✅ |
+| TC17 | Edge | [RULE-11/Mục 6 xác nhận] expired_at trong quá khứ phải bị từ chối | Tạo coupon với ngày 2020-01-01; kiểm tra không có row mới | code `FR17PAST`, expiry 2020-01-01 | Theo xác nhận nghiệp vụ, ngày hết hạn phải là tương lai; UI hiện tại tạo row hết hạn là bug | ✅ |
+| TC18 | Edge | [Mục 6 xác nhận] Code được trim và không phân biệt hoa/thường khi kiểm tra trùng | Nhập code ` save10 `; bấm "Tạo mã"; xử lý alert | code ` save10 ` | Phải trim và so trùng với `SAVE10`; hiển thị alert lỗi trùng, không tạo coupon mới | ✅ |
+| TC19 | Negative | [Mục 6 xác nhận] Xóa coupon phải có confirm dialog | Tạo coupon tạm; click "Xóa" trong row; kiểm tra confirm xuất hiện trước khi xóa | code `FR17DEL` | Phải có confirm dialog trước khi xóa; nếu không có confirm và row biến mất ngay thì là bug | ✅ |
 
 ### 4.4–4.9. *(giữ nguyên cấu trúc mục 2.4 → 2.9, áp dụng cho Feature C)*
 

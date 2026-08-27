@@ -1,0 +1,56 @@
+- generic [ref=f1e3]:
+  - banner [ref=f1e4]:
+    - link "EShop" [ref=f1e5] [cursor=pointer]:
+      - /url: /
+    - navigation [ref=f1e6]:
+      - link "Giỏ hàng" [ref=f1e7] [cursor=pointer]:
+        - /url: /cart
+      - generic [ref=f1e26]:
+        - link "Chào, Test User" [ref=f1e27] [cursor=pointer]:
+          - /url: /profile
+        - button "Thoát" [ref=f1e28] [cursor=pointer]
+  - main [ref=f1e10]:
+    - generic [ref=f1e29]:
+      - generic [ref=f1e30]:
+        - heading "Danh sách sản phẩm" [level=1] [ref=f1e31]
+        - generic [ref=f1e32]:
+          - textbox "Tìm kiếm..." [ref=f1e33]
+          - button "Tìm" [ref=f1e34] [cursor=pointer]
+      - generic [ref=f1e35]:
+        - generic [ref=f1e36]:
+          - heading "iPhone 15 Pro Max" [level=2] [ref=f1e37]
+          - paragraph [ref=f1e38]: 30,000,000 VND
+          - generic [ref=f1e39]:
+            - link "Xem chi tiết" [ref=f1e40] [cursor=pointer]:
+              - /url: /product/1
+            - button "Thêm vào giỏ" [ref=f1e41] [cursor=pointer]
+        - generic [ref=f1e42]:
+          - heading "Samsung Galaxy S24 Ultra" [level=2] [ref=f1e43]
+          - paragraph [ref=f1e44]: 28,000,000 VND
+          - generic [ref=f1e45]:
+            - link "Xem chi tiết" [ref=f1e46] [cursor=pointer]:
+              - /url: /product/2
+            - button "Thêm vào giỏ" [ref=f1e47] [cursor=pointer]
+        - generic [ref=f1e48]:
+          - heading "MacBook Pro M3" [level=2] [ref=f1e49]
+          - paragraph [ref=f1e50]: 45,000,000 VND
+          - generic [ref=f1e51]:
+            - link "Xem chi tiết" [ref=f1e52] [cursor=pointer]:
+              - /url: /product/3
+            - button "Thêm vào giỏ" [ref=f1e53] [cursor=pointer]
+        - generic [ref=f1e54]:
+          - heading "Tai nghe AirPods Pro 2" [level=2] [ref=f1e55]
+          - paragraph [ref=f1e56]: 6,000,000 VND
+          - generic [ref=f1e57]:
+            - link "Xem chi tiết" [ref=f1e58] [cursor=pointer]:
+              - /url: /product/4
+            - button "Thêm vào giỏ" [ref=f1e59] [cursor=pointer]
+        - generic [ref=f1e60]:
+          - heading "Bàn phím cơ Keychron Q1" [level=2] [ref=f1e61]
+          - paragraph [ref=f1e62]: 4,000,000 VND
+          - generic [ref=f1e63]:
+            - link "Xem chi tiết" [ref=f1e64] [cursor=pointer]:
+              - /url: /product/5
+            - button "Thêm vào giỏ" [ref=f1e65] [cursor=pointer]
+      - heading "Hiển thị 5 sản phẩm" [level=1] [ref=f1e66]
+  - contentinfo [ref=f1e25]: © 2026 EShop SUT. Dành cho mục đích kiểm thử.
