@@ -9,6 +9,7 @@
 | BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | FR-03 / TC04 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
 | BUG-002 | User vẫn có thể hủy đơn đang giao | FR-11 / TC07 | Major / High | 2/3 browser projects có screenshot xác nhận; Firefox bị loại do lỗi session/login | Chưa tạo | Confirmed locally |
 | BUG-003 | Admin có thể đánh dấu đã giao cho đơn đã hủy | FR-11 / TC10 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
+| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | FR-03 / TC02 | Major / High | 3/3 browser projects | Chưa tạo | Confirmed locally |
 
 ## BUG-[NNN] – [Concise title]
 
@@ -61,7 +62,7 @@
 |---|---|
 | Feature / test ID | FR-03 / TC04 |
 | SUT build/commit | Không được SUT black-box tại `http://localhost:5173` công khai trong artifact |
-| Test repo commit | `074beed7b1c4940e1f7f2e54bd53f6bf907e6c7e` |
+| Test repo commit | `b334843ae4cbfec9b91a59cb485bbea97f0b063e` (working tree dirty/uncommitted tại thời điểm triage) |
 | Environment/browser | Microsoft Windows NT 10.0.26200.0; Playwright 1.62.1; Chromium, Firefox và WebKit; base URL `http://localhost:5173` |
 | Severity / priority | Major / High — vi phạm trực tiếp quy tắc OTP 6 chữ số của luồng đặt lại mật khẩu và xuất hiện trên cả ba trình duyệt |
 | Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
@@ -84,18 +85,18 @@ Theo RULE-03 của FR-03 và oracle của TC04, hệ thống phải sinh và hi�
 
 ### Actual result
 
-Hệ thống chỉ sinh OTP 4 chữ số trên cả ba trình duyệt: Chromium hiển thị `6235`, Firefox hiển thị `3977`, WebKit hiển thị `1186`. Giao diện đồng thời ghi nhãn **Mã OTP (4 số)**.
+Hệ thống chỉ sinh OTP 4 chữ số trên cả ba trình duyệt trong lần chạy mới nhất: Chromium hiển thị `6782`, Firefox hiển thị `4709`, WebKit hiển thị `4625`. Giao diện đồng thời ghi nhãn **Mã OTP (4 số)**.
 
 ### Evidence
 
-- Screenshot: `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-26T10-03-55-607Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-firefox-Run-by-23127104-2026-08-26T10-03-55-607Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-webkit-Run-by-23127104-2026-08-26T10-03-55-607Z/test-failed-1.png`
-- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-26T10:04:33.4448897Z`)
+- Screenshot: `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-firefox-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-webkit-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T10:58:56+07:00`)
 - Trace/video/log: ba file `error-context.md` nằm cùng thư mục với các screenshot nêu trên; lần chạy này không tạo trace hoặc video.
-- ISO reproduction time: `2026-08-26T10:03:55.607Z`
+- ISO reproduction time: `2026-08-27T03:58:12.611Z`
 
 ### Triage notes
 
-TC04 lấy chính chuỗi OTP mà UI hiển thị, xác nhận chuỗi chỉ chứa số rồi so độ dài với `expected_otp_length = 6` trong dữ liệu test. Vì vậy failure không bắt nguồn từ selector, dữ liệu nhập hay assertion sai. RULE-03 trong `docs/fr-context/fr03-context.md` cũng xác nhận yêu cầu OTP 6 chữ số. Cùng một sai lệch xuất hiện với ba giá trị ngẫu nhiên khác nhau trên Chromium, Firefox và WebKit, nên đã loại trừ nguyên nhân riêng của trình duyệt. TC02 cũng dừng ở bước 2 trên cả ba trình duyệt sau khi dùng OTP 4 chữ số được UI sinh ra; hiện chỉ ghi nhận đây là triệu chứng có thể liên quan, chưa tách thành bug khác khi chưa cô lập được nguyên nhân.
+TC04 lấy chính chuỗi OTP mà UI hiển thị, xác nhận chuỗi chỉ chứa số rồi so độ dài với `expected_otp_length = 6` trong dữ liệu test. Vì vậy failure không bắt nguồn từ selector, dữ liệu nhập hay assertion sai. RULE-03 trong `docs/fr-context/fr03-context.md` cũng xác nhận yêu cầu OTP 6 chữ số. Cùng một sai lệch xuất hiện với ba giá trị ngẫu nhiên khác nhau trên Chromium, Firefox và WebKit, nên đã loại trừ nguyên nhân riêng của trình duyệt. TC02 trong cùng lần chạy dùng đúng OTP 4 chữ số mà SUT hiển thị và vẫn không hoàn tất đặt lại mật khẩu; triệu chứng đó được ghi riêng ở BUG-009.
 
 ### Workaround/impact
 
@@ -440,3 +441,51 @@ Failure xảy ra tại `page.waitForEvent('dialog')` sau khi click `Xóa`, khôn
 ### Workaround/impact
 
 Admin phải tự cẩn thận khi bấm `Xóa`; không có cơ chế hủy thao tác nếu click nhầm.
+## BUG-009 – Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ
+
+| Field | Value |
+|---|---|
+| Feature / test ID | FR-03 / TC02 |
+| SUT build/commit | Không được SUT black-box tại `http://localhost:5173` công khai trong artifact |
+| Test repo commit | `b334843ae4cbfec9b91a59cb485bbea97f0b063e` (working tree dirty/uncommitted tại thời điểm triage) |
+| Environment/browser | Playwright multi-browser run; user app `http://localhost:5173`; Chromium, Firefox và WebKit |
+| Severity / priority | Major / High — happy path quên mật khẩu không hoàn tất dù người dùng nhập OTP hiển thị và mật khẩu mới hợp lệ |
+| Reproducibility | 3/3 browser projects trong lần chạy mới nhất: Chromium, Firefox và WebKit |
+| GitHub Issue | Chưa tạo |
+
+### Preconditions
+
+- SUT user app đang chạy tại `http://localhost:5173`.
+- Tài khoản `admin@eshop.com` tồn tại và đi được từ bước nhập email sang bước nhập OTP.
+- TC02 dùng mật khẩu mới hợp lệ `Abc@12345`.
+
+### Steps to reproduce
+
+1. Mở trang `/forgot-password`.
+2. Nhập `admin@eshop.com` và bấm **Lấy mã OTP**.
+3. Nhập đúng OTP đang hiển thị trên UI vào ô **Mã OTP (4 số)**.
+4. Nhập mật khẩu mới hợp lệ `Abc@12345`.
+5. Bấm **Đặt lại mật khẩu**.
+
+### Expected result
+
+Theo FR-03 và oracle TC02, khi nhập OTP đúng và mật khẩu mới hợp lệ, hệ thống phải cập nhật mật khẩu thành công, hiển thị thông báo `Cập nhật mật khẩu thành công`, sau đó chuyển về màn hình `/login`.
+
+### Actual result
+
+SUT vẫn đứng ở màn hình đặt lại mật khẩu và không hiển thị thông báo thành công. Artifact ghi nhận cả ba browser đều đã nhập đúng OTP đang hiển thị và mật khẩu mới hợp lệ: Chromium dùng OTP `7122`, Firefox dùng OTP `8292`, WebKit dùng OTP `6165`; cả ba đều vẫn ở form `Quên Mật Khẩu` sau khi bấm **Đặt lại mật khẩu**.
+
+### Evidence
+
+- Screenshot: `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-firefox-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`; `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-webkit-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png`
+- HTML report: `playwright-report/index.html` (artifact cập nhật lúc `2026-08-27T10:58:56+07:00`)
+- Trace/video/log: `error-context.md` trong ba thư mục screenshot nêu trên; lần chạy này không thấy trace/video riêng trong artifact.
+- ISO reproduction time: `2026-08-27T03:58:12.611Z`
+
+### Triage notes
+
+TC02 sau khi được sửa đã nhập chính OTP mà SUT hiển thị, không còn padding lên 6 số. Screenshot và `error-context.md` cho thấy OTP input khớp với OTP display trên cả ba browser (`7122`, `8292`, `6165`) và password input đã nhận `Abc@12345`. Assertion fail ở bước chờ message `Cập nhật mật khẩu thành công`, trong khi snapshot vẫn ở màn hình `/forgot-password`, nên đây không phải lỗi login assertion phía sau. Selector không phải nguyên nhân chính vì test đã tìm đúng OTP display, đúng OTP input, đúng password input và đúng button submit; dữ liệu test khớp TC02 trong `automation/data/fr03-testcases-draft.json`. TC07 Firefox trong cùng run bị loại khỏi bug report riêng vì failure là timeout locator đọc OTP dù screenshot có OTP hiển thị, chỉ xảy ra 1 browser và chưa chứng minh thêm product defect mới.
+
+### Workaround/impact
+
+Người dùng không có workaround đáng tin cậy để hoàn tất reset password qua UI. Lỗi chặn happy path quên mật khẩu, khiến tài khoản không thể đặt lại mật khẩu dù nhập OTP hiển thị và mật khẩu mới hợp lệ.

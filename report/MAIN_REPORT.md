@@ -113,7 +113,8 @@ I use AI tools for the following tasks: requirement analysis, test design, data-
 ### 2.9. Bug phát hiện (nếu có)
 | Bug ID | Mô tả | Steps to reproduce | Ảnh hưởng | GitHub Issue link | Screenshot |
 |---|---|---|---|---|---|
-| BUG-01 | | | | | |
+| BUG-001 | Hệ thống sinh OTP 4 chữ số thay vì 6 chữ số | Vào `/forgot-password`; nhập `admin@eshop.com`; bấm `Lấy mã OTP`; quan sát OTP hiển thị | Vi phạm RULE-03 của FR-03, làm sai yêu cầu OTP 6 chữ số | Chưa tạo | `test-results/fr03-forgot-password-FR-03-1149d-OTP-được-sinh-đúng-6-chữ-số-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png` |
+| BUG-009 | Không hoàn tất đặt lại mật khẩu với OTP hiển thị và mật khẩu hợp lệ | Vào `/forgot-password`; nhập email hợp lệ; nhập đúng OTP đang hiển thị; nhập `Abc@12345`; bấm `Đặt lại mật khẩu` | Chặn happy path quên mật khẩu; người dùng không reset được mật khẩu qua UI | Chưa tạo | `test-results/fr03-forgot-password-FR-03-aa19f-úng-OTP-mật-khẩu-mới-hợp-lệ-chromium-Run-by-23127104-2026-08-27T03-58-12-611Z/test-failed-1.png` |
 
 ---
 

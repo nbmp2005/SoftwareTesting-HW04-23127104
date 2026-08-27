@@ -136,12 +136,13 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
 
   test('TC02 - Nhập đúng OTP + mật khẩu mới hợp lệ', async ({ page }) => {
     const tc = typedData.find(t => t.id === 'TC02')!;
+    const newPassword = tc.input.new_pass ?? '';
 
     // Tiền điều kiện: sang Bước 2 bằng email hợp lệ
     const displayedOtp = await goToStep2(page, validEmail);
 
     await getOtpInput(page).fill(displayedOtp);
-    await getNewPasswordInput(page).fill(tc.input.new_pass ?? '');
+    await getNewPasswordInput(page).fill(newPassword);
     await getResetPasswordButton(page).click();
 
     // R2: Text/Content — success message
@@ -149,6 +150,25 @@ test.describe('FR-03: Quên mật khẩu & Đặt lại mật khẩu | Run by: 2
 
     // R2: URL/Navigation — chuyển về /login sau khi đặt lại pass thành công
     await expect(page).toHaveURL(/login/);
+
+    const loginDialogPromise = page.waitForEvent('dialog', { timeout: 3000 })
+      .then(async dialog => {
+        const message = dialog.message();
+        await dialog.dismiss();
+        return message;
+      })
+      .catch(() => undefined);
+
+    const loginInputs = page.locator('form input');
+    await expect(loginInputs).toHaveCount(2);
+    await loginInputs.nth(0).fill(validEmail);
+    await loginInputs.nth(1).fill(newPassword);
+    await page.getByRole('button', { name: 'Sign In', exact: true }).click();
+
+    const loginDialogMessage = await loginDialogPromise;
+    expect(loginDialogMessage, `Unexpected login dialog after password reset: ${loginDialogMessage}`).toBeUndefined();
+    expect(loginDialogMessage ?? '').not.toMatch(/máº­t kháº©u khÃ´ng há»£p lá»‡|invalid password|Ä‘Äƒng nháº­p tháº¥t báº¡i/i);
+    await expect(page).not.toHaveURL(/\/login(?:$|[?#])/);
   });
 
   test('TC03 - Bấm Quay lại đăng nhập', async ({ page }) => {

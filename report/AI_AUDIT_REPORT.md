@@ -978,3 +978,27 @@ Selector cần kiểm tra trên ứng dụng đang chạy bằng DevTools hoặc
 ```
 Đã triage lần chạy Playwright FR-17 mới nhất `2026-08-27T03:26:32.884Z` từ `test-results/` và `playwright-report/`. Run còn 22 failures: một số được loại là test/data/browser-message issue (native validation message khác giữa browser, dữ liệu rỗng bị helper ép number), còn 5 product bugs được append vào `report/BUG_REPORT.md`: BUG-004 discount_value không dương vẫn được tạo, BUG-005 min_order_amount âm vẫn được tạo, BUG-006 percent > 100 vẫn được tạo, BUG-007 expired_at quá khứ vẫn được tạo, BUG-008 xóa coupon không có confirm dialog. Không chạy lại test và không tạo evidence giả.
 ```
+
+## Prompt 43
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T10:41:53.0638026+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) tôi phát hiện ra product bug ở tc2 của fr3 (đăng nhập đúng otp và mật khẩu mới), dù khi đăng nhập đúng mật khẩu vẫn bị từ chối và báo lỗi mật khẩu không hợp lệ, tuy nhiên lỗi này đang bị block lại vì otp sai nghiệp vụ, hãy viết lại test script cho tc2 của fr3 cô lập lỗi otp 4 số để phát hiện được lỗi mật khẩu
+```
+- AI Output:
+```
+Đã sửa `automation/tests/fr03-forgot-password.spec.ts` để TC02 cô lập blocker OTP 4 số: thêm helper `otpForPasswordRuleIsolation()` padding OTP hiển thị lên 6 số khi cần, dùng OTP đã padding cho bước reset password, sau đó thử đăng nhập bằng mật khẩu mới để phát hiện lỗi login/password invalid. Đã chạy `node automation/run-playwright.cjs automation/tests/fr03-forgot-password.spec.ts --list` để kiểm tra Playwright parse/list được 33 tests; không chạy test body và không tạo report giả.
+```
+
+## Prompt 44
+- Name of the AI tool: OpenAI Codex (GPT-5)
+- Date/time: 2026-08-27T11:04:20.3578103+07:00
+- Prompt:
+```
+[$ai-audit-logger](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\ai-audit-logger\SKILL.md) [$bug-report-writer](C:\Users\cpshc\Y3\SoftwareTesting\SoftwareTesting-HW04\SoftwareTesting-HW04-23127104\\.agents\skills\bug-report-writer\SKILL.md) dựa vào playwright chạy gần nhất, cập nhật bug cho fr3 và các tài liệu report liên quan
+```
+- AI Output:
+```
+Đã dùng `bug-report-writer` để đọc lần chạy Playwright gần nhất dưới `test-results/` và `playwright-report/` (run `2026-08-27T03:58:12.611Z`, HTML report cập nhật `2026-08-27T10:58:56+07:00`). Đã cập nhật `report/BUG_REPORT.md`: làm mới BUG-001 bằng evidence OTP 4 số mới nhất trên Chromium/Firefox/WebKit và thêm BUG-009 cho TC02, trong đó SUT không hoàn tất đặt lại mật khẩu dù nhập đúng OTP hiển thị và mật khẩu hợp lệ `Abc@12345` trên 3/3 browser. Đã cập nhật `report/MAIN_REPORT.md` phần FR-03 Bug phát hiện với BUG-001 và BUG-009. TC07 Firefox được phân loại là locator/test flake, không ghi product bug riêng.
+```
